@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Калькулятор — Potolok.kh</title>
+  <link rel="stylesheet" href="styles.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-61EMVPPMDT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-61EMVPPMDT');
+</script>
+
+
+<style>
+/* === Callback button & modal (polished) === */
+.callback-btn-primary{
+  background:#16a34a; color:#fff !important;
+  padding:8px 14px; margin-right:10px;
+  border-radius:8px; font-weight:600;
+  text-decoration:none; display:inline-block;
+  line-height:1; transition:background .2s ease;
+}
+.callback-btn-primary:hover{ background:#15803d; }
+.callback-btn-primary:focus{ outline:2px solid rgba(22,163,74,.35); outline-offset:2px; }
+
+.callback-modal{ position:fixed; inset:0; background:rgba(0,0,0,.5);
+  display:flex; align-items:center; justify-content:center; z-index:9999; }
+.callback-card{ background:#fff; padding:25px 20px; border-radius:12px;
+  box-shadow:0 8px 30px rgba(0,0,0,.2); width:min(420px,92vw); position:relative; }
+.close-btn{ position:absolute; top:10px; right:14px; font-size:22px;
+  border:none; background:transparent; cursor:pointer; }
+#callbackForm label{ display:block; margin:10px 0 4px; font-weight:600; }
+#callbackForm input{ width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; }
+#callbackForm .submit-btn{ margin-top:14px; width:100%; padding:12px; border:0; border-radius:8px;
+  font-size:16px; background:#16a34a; color:#fff; cursor:pointer; font-weight:600; }
+#callbackForm .submit-btn:hover{ background:#15803d; }
+.status{ min-height:20px; margin-top:10px; font-size:14px; }
+.status.ok{ color:#16a34a; } .status.err{ color:#dc2626; }
+</style>
+
+
+<style>
+/* Floating CTA on mobile */
+@media (max-width: 768px){
+  .callback-fab{
+    position: fixed; right: 14px; bottom: 18px;
+    background:#16a34a; color:#fff; border:0;
+    border-radius: 999px; padding: 14px 18px;
+    font-weight:700; box-shadow:0 8px 24px rgba(0,0,0,.25);
+    z-index: 10000; text-decoration:none;
+  }
+  .callback-fab:hover{ background:#15803d; }
+}
+</style>
+
+</head>
+<body>
+<div class="nav-inline"><a class="btn" href="gallery.html">Наші роботи</a></div>
+
+  
+<nav class="nav">
+  <div class="row container">
+    <div class="brand">Potolok.kh</div>
+    <div class="links"><a href="index.html" class="">Головна</a><a href="gallery.html" class="">Галерея</a><a href="price.html" class="">Прайс</a><a href="calculator.html" class="active">Калькулятор</a><a href="reviews.html" class="">Відгуки</a></div>
+  </div>
+</nav>
+
+  <main class="container">
+    <h1>Калькулятор вартості</h1>
+    <div class="card"><div class="pad">
+      <div class="row">
+        <div>
+          <label>Площа (м²)</label>
+          <input id="area" type="number" class="input" value="15" min="1" step="0.1">
+        </div>
+        <div>
+          <label>Периметр (м.п.)</label>
+          <input id="perimeter" type="number" class="input" value="16" min="1" step="0.1">
+        </div>
+        <div>
+          <label>Кути (шт)</label>
+          <input id="corners" type="number" class="input" value="4" min="0" step="1">
+        </div>
+        <div>
+          <label>Точкові світильники (шт)</label>
+          \1
+        <div class="row" style="margin-top:12px">
+          <div>
+            <label>Люстри (шт)</label>
+            <input id="chandQty" type="number" class="input" value="1" min="0" step="1">
+          </div>
+          <div>
+            <label>Карниз вбудований (м.п.)</label>
+            <input id="len_cornice" class="input" type="number" value="0" min="0" step="0.1">
+          </div>
+        </div>
+      <h3 style="margin-top:14px">Тарифи</h3>
+      <div class="row">
+        <div><label>Стеля базова (грн/м²)</label><input id="p_base" class="input" type="number" value="400"></div>
+        <div><label>Паряща лінія (грн/м.п.)</label><input id="p_floating" class="input" type="number" value="550"></div>
+        <div><label>Трек‑системи (грн/м.п.)</label><input id="p_track" class="input" type="number" value="200"></div>
+        <div><label>Світильник (грн/шт)</label><input id="p_spot" class="input" type="number" value="150"></div>
+        <div><label>Кут (грн/шт)</label><input id="p_corner" class="input" type="number" value="50"></div>
+        \1
+      <div class="row" style="margin-top:12px">
+        <div><label>Люстра (грн/шт)</label><input id="p_chandelier" class="input" type="number" value="400"></div>
+        <div><label>Карниз вбудований (грн/м.п.)</label><input id="p_cornice" class="input" type="number" value="1000"></div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <div><label>Довжина парячої лінії (м.п.)</label><input id="len_floating" class="input" type="number" value="0"></div>
+        <div><label>Довжина треку (м.п.)</label><input id="len_track" class="input" type="number" value="0"></div>
+        \1
+      <div class="row" style="margin-top:12px">
+        <div><label>Довжина карниза (м.п.)</label><input id="len_cornice" class="input" type="number" value="0"></div>
+      </div>
+      <p style="margin-top:14px"><button class="btn" onclick="calc()">Порахувати</button></p>
+      <div id="result" class="small"></div>
+    </div></div>
+  </main>
+  <footer class="footer">© 2025 Potolok.kh • Харків • Монтаж натяжних стель</footer>
+<script>
+function fmt(n){return new Intl.NumberFormat('uk-UA').format(Math.round(n));}
+function val(id){return parseFloat(document.getElementById(id).value)||0;}
+function calc(){
+  \1
+  const chandQty=val('chandQty');
+  const l_cornice=val('len_cornice');
+  \1
+  const p_chandelier=val('p_chandelier');
+  const p_cornice=val('p_cornice');
+  const l_float=val('len_floating'), l_track=val('len_track'), l_insert=val('len_insert');
+  const base=area*p_base;
+  const floating=l_float*p_float;
+  const track=l_track*p_track;
+  const spot=spots*p_spot;
+  const corner=corners*p_corner;
+  \1
+  const chandelier=chandQty*p_chandelier;
+  const cornice=l_cornice*p_cornice;
+  const total=base+floating+track+spot+corner+insert+chandelier+cornice;
+  const html=`
+    <div class="card" style="margin-top:10px"><div class="pad">
+    <strong>Орієнтовна вартість:</strong> <span class="badge">${fmt(total)} грн</span><br>
+    <span class="small">База: ${fmt(base)} • Паряща: ${fmt(floating)} • Трек: ${fmt(track)} • Світильники: ${fmt(spot)} • Кути: ${fmt(corner)} • Вставка: ${fmt(insert)}</span>
+    </div></div>`;
+  document.getElementById('result').innerHTML=html;
+}
+calc();
+</script>
+
+<div id="callbackModal" class="callback-modal" style="display:none;">
+  <div class="callback-card">
+    <button id="closeCallback" class="close-btn" aria-label="Закрити">×</button>
+    <h3>Заявка на дзвінок</h3>
+    <form id="callbackForm" novalidate>
+      <label for="cbName">Ваше ім'я (необов'язково)</label>
+      <input type="text" id="cbName" name="name" placeholder="Іван">
+      <label for="cbPhone">Номер телефону</label>
+      <input type="tel" id="cbPhone" name="phone" placeholder="+380XXXXXXXXX" required>
+      <input type="text" name="company" id="cbCompany" style="display:none" tabindex="-1" autocomplete="off">
+      <button type="submit" class="submit-btn">Відправити</button>
+      <p id="cbStatus" class="status"></p>
+    </form>
+  </div>
+</div>
+
+
+<script>(function(){
+  const openBtn=document.getElementById('openCallback');
+  const modal=document.getElementById('callbackModal');
+  const closeBtn=document.getElementById('closeCallback');
+  const form=document.getElementById('callbackForm');
+  const phone=document.getElementById('cbPhone');
+  const status=document.getElementById('cbStatus');
+  const honeypot=document.getElementById('cbCompany');
+  if(openBtn&&modal){openBtn.addEventListener('click',e=>{e.preventDefault();modal.style.display='flex';});}
+  if(closeBtn){closeBtn.addEventListener('click',()=>{modal.style.display='none';status.textContent='';status.className='status';});}
+  if(modal){modal.addEventListener('click',e=>{if(e.target===modal){modal.style.display='none';status.textContent='';status.className='status';}});}
+  if(phone){phone.addEventListener('input',()=>{let v=phone.value.replace(/[^\d+]/g,'');if(!v.startsWith('+')) v='+38'+v.replace(/^\+/,'');phone.value=v;});}
+  if(form){form.addEventListener('submit',async e=>{
+    e.preventDefault();status.textContent='';status.className='status';
+    if(honeypot.value){return;}
+    const name=(document.getElementById('cbName')||{}).value?.trim()||'';
+    const ph=phone.value.trim();
+    if(!/^\+?38\d{10}$/.test(ph.replace(/\s/g,''))){status.textContent='Перевірте номер телефону у форматі +380XXXXXXXXX';status.classList.add('err');return;}
+    try{
+      const res=await fetch('/.netlify/functions/telegram-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone:ph})});
+      const data=await res.json().catch(()=>({}));
+      if(res.ok&&data.ok){status.textContent='Дякуємо! Ми передзвонимо найближчим часом.';status.classList.add('ok');form.reset();setTimeout(()=>{modal.style.display='none';status.textContent='';status.className='status';},1200);}
+      else{status.textContent='Помилка відправки. Спробуйте ще раз або напишіть нам.';status.classList.add('err');}
+    }catch(e){status.textContent='Сталася помилка. Спробуйте ще раз або напишіть нам.';status.classList.add('err');}
+  });}
+})();</script>
+
+
+<a id="openCallbackFab" href="#" class="callback-fab">Залишити заявку</a>
+
+
+<script>
+// Link floating CTA to modal
+(function(){
+  const fab=document.getElementById('openCallbackFab');
+  const modal=document.getElementById('callbackModal');
+  if(fab&&modal){
+    fab.addEventListener('click',function(e){ e.preventDefault(); modal.style.display='flex'; });
+  }
+})();
+</script>
+
+</body>
+</html>

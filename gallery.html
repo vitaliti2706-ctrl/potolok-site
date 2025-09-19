@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Галерея — Potolok.kh</title>
+  <link rel="stylesheet" href="styles.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-61EMVPPMDT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-61EMVPPMDT');
+</script>
+
+
+<style>
+/* === Callback button & modal (polished) === */
+.callback-btn-primary{
+  background:#16a34a; color:#fff !important;
+  padding:8px 14px; margin-right:10px;
+  border-radius:8px; font-weight:600;
+  text-decoration:none; display:inline-block;
+  line-height:1; transition:background .2s ease;
+}
+.callback-btn-primary:hover{ background:#15803d; }
+.callback-btn-primary:focus{ outline:2px solid rgba(22,163,74,.35); outline-offset:2px; }
+
+.callback-modal{ position:fixed; inset:0; background:rgba(0,0,0,.5);
+  display:flex; align-items:center; justify-content:center; z-index:9999; }
+.callback-card{ background:#fff; padding:25px 20px; border-radius:12px;
+  box-shadow:0 8px 30px rgba(0,0,0,.2); width:min(420px,92vw); position:relative; }
+.close-btn{ position:absolute; top:10px; right:14px; font-size:22px;
+  border:none; background:transparent; cursor:pointer; }
+#callbackForm label{ display:block; margin:10px 0 4px; font-weight:600; }
+#callbackForm input{ width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; }
+#callbackForm .submit-btn{ margin-top:14px; width:100%; padding:12px; border:0; border-radius:8px;
+  font-size:16px; background:#16a34a; color:#fff; cursor:pointer; font-weight:600; }
+#callbackForm .submit-btn:hover{ background:#15803d; }
+.status{ min-height:20px; margin-top:10px; font-size:14px; }
+.status.ok{ color:#16a34a; } .status.err{ color:#dc2626; }
+</style>
+
+
+<style>
+/* Floating CTA on mobile */
+@media (max-width: 768px){
+  .callback-fab{
+    position: fixed; right: 14px; bottom: 18px;
+    background:#16a34a; color:#fff; border:0;
+    border-radius: 999px; padding: 14px 18px;
+    font-weight:700; box-shadow:0 8px 24px rgba(0,0,0,.25);
+    z-index: 10000; text-decoration:none;
+  }
+  .callback-fab:hover{ background:#15803d; }
+}
+</style>
+
+</head>
+<body>
+  
+<nav class="nav">
+  <div class="row container">
+    <div class="brand">Potolok.kh</div>
+    <div class="links"><a href="index.html" class="">Головна</a><a href="gallery.html" class="active">Галерея</a><a href="price.html" class="">Прайс</a><a href="calculator.html" class="">Калькулятор</a><a href="reviews.html" class="">Відгуки</a></div>
+  </div>
+</nav>
+
+  <main class="container">
+    <h1>Галерея робіт <span class="badge">20 фото</span></h1>
+    <div class="grid">
+      <figure class="card">
+        <img src="images/img01.jpg" alt="Натяжні стелі — робота №01 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №01 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img02.jpg" alt="Натяжні стелі — робота №02 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №02 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img03.jpg" alt="Натяжні стелі — робота №03 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №03 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img04.jpg" alt="Натяжні стелі — робота №04 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №04 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img05.jpg" alt="Натяжні стелі — робота №05 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №05 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img06.jpg" alt="Натяжні стелі — робота №06 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №06 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img07.jpg" alt="Натяжні стелі — робота №07 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №07 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img08.jpg" alt="Натяжні стелі — робота №08 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №08 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img09.jpg" alt="Натяжні стелі — робота №09 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №09 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img10.jpg" alt="Натяжні стелі — робота №10 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №10 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img11.jpg" alt="Натяжні стелі — робота №11 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №11 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img12.jpg" alt="Натяжні стелі — робота №12 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №12 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img13.jpg" alt="Натяжні стелі — робота №13 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №13 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img14.jpg" alt="Натяжні стелі — робота №14 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №14 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img15.jpg" alt="Натяжні стелі — робота №15 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №15 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img16.jpg" alt="Натяжні стелі — робота №16 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №16 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img17.jpg" alt="Натяжні стелі — робота №17 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №17 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img18.jpg" alt="Натяжні стелі — робота №18 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №18 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img19.jpg" alt="Натяжні стелі — робота №19 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №19 (Potolok.kh)</figcaption>
+      </figure>
+      <figure class="card">
+        <img src="images/img20.jpg" alt="Натяжні стелі — робота №20 (Potolok.kh)" style="width:100%;height:100%;object-fit:cover;aspect-ratio:4/3">
+        <figcaption class="pad small">Натяжні стелі — робота №20 (Potolok.kh)</figcaption>
+      </figure>
+
+    
+  <figure class="gallery-item">
+    <img src="images/new_img01.jpg" alt="Наші роботи — new_img01" loading="lazy">
+    <figcaption>Наші роботи — new_img01</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img02.jpg" alt="Наші роботи — new_img02" loading="lazy">
+    <figcaption>Наші роботи — new_img02</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img03.jpg" alt="Наші роботи — new_img03" loading="lazy">
+    <figcaption>Наші роботи — new_img03</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img04.jpg" alt="Наші роботи — new_img04" loading="lazy">
+    <figcaption>Наші роботи — new_img04</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img05.jpg" alt="Наші роботи — new_img05" loading="lazy">
+    <figcaption>Наші роботи — new_img05</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img06.jpg" alt="Наші роботи — new_img06" loading="lazy">
+    <figcaption>Наші роботи — new_img06</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img07.jpg" alt="Наші роботи — new_img07" loading="lazy">
+    <figcaption>Наші роботи — new_img07</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img08.jpg" alt="Наші роботи — new_img08" loading="lazy">
+    <figcaption>Наші роботи — new_img08</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img09.jpg" alt="Наші роботи — new_img09" loading="lazy">
+    <figcaption>Наші роботи — new_img09</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img10.jpg" alt="Наші роботи — new_img10" loading="lazy">
+    <figcaption>Наші роботи — new_img10</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img11.jpg" alt="Наші роботи — new_img11" loading="lazy">
+    <figcaption>Наші роботи — new_img11</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img12.jpg" alt="Наші роботи — new_img12" loading="lazy">
+    <figcaption>Наші роботи — new_img12</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img13.jpg" alt="Наші роботи — new_img13" loading="lazy">
+    <figcaption>Наші роботи — new_img13</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img14.jpg" alt="Наші роботи — new_img14" loading="lazy">
+    <figcaption>Наші роботи — new_img14</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img15.jpg" alt="Наші роботи — new_img15" loading="lazy">
+    <figcaption>Наші роботи — new_img15</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img16.jpg" alt="Наші роботи — new_img16" loading="lazy">
+    <figcaption>Наші роботи — new_img16</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img17.jpg" alt="Наші роботи — new_img17" loading="lazy">
+    <figcaption>Наші роботи — new_img17</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img18.jpg" alt="Наші роботи — new_img18" loading="lazy">
+    <figcaption>Наші роботи — new_img18</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img19.jpg" alt="Наші роботи — new_img19" loading="lazy">
+    <figcaption>Наші роботи — new_img19</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/new_img20.jpg" alt="Наші роботи — new_img20" loading="lazy">
+    <figcaption>Наші роботи — new_img20</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/img21.jpg" alt="Наші роботи — img21" loading="lazy">
+    <figcaption>Наші роботи — img21</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/img22.jpg" alt="Наші роботи — img22" loading="lazy">
+    <figcaption>Наші роботи — img22</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/img23.jpg" alt="Наші роботи — img23" loading="lazy">
+    <figcaption>Наші роботи — img23</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/img24.jpg" alt="Наші роботи — img24" loading="lazy">
+    <figcaption>Наші роботи — img24</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/img25.jpg" alt="Наші роботи — img25" loading="lazy">
+    <figcaption>Наші роботи — img25</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/img26.jpg" alt="Наші роботи — img26" loading="lazy">
+    <figcaption>Наші роботи — img26</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/img27.jpg" alt="Наші роботи — img27" loading="lazy">
+    <figcaption>Наші роботи — img27</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/img28.jpg" alt="Наші роботи — img28" loading="lazy">
+    <figcaption>Наші роботи — img28</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/img29.jpg" alt="Наші роботи — img29" loading="lazy">
+    <figcaption>Наші роботи — img29</figcaption>
+  </figure>
+  <figure class="gallery-item">
+    <img src="images/img30.jpg" alt="Наші роботи — img30" loading="lazy">
+    <figcaption>Наші роботи — img30</figcaption>
+  </figure>
+</div>
+  </main>
+  <footer class="footer">© 2025 Potolok.kh • Харків • Монтаж натяжних стель</footer>
+
+<div id="callbackModal" class="callback-modal" style="display:none;">
+  <div class="callback-card">
+    <button id="closeCallback" class="close-btn" aria-label="Закрити">×</button>
+    <h3>Заявка на дзвінок</h3>
+    <form id="callbackForm" novalidate>
+      <label for="cbName">Ваше ім'я (необов'язково)</label>
+      <input type="text" id="cbName" name="name" placeholder="Іван">
+      <label for="cbPhone">Номер телефону</label>
+      <input type="tel" id="cbPhone" name="phone" placeholder="+380XXXXXXXXX" required>
+      <input type="text" name="company" id="cbCompany" style="display:none" tabindex="-1" autocomplete="off">
+      <button type="submit" class="submit-btn">Відправити</button>
+      <p id="cbStatus" class="status"></p>
+    </form>
+  </div>
+</div>
+
+
+<script>(function(){
+  const openBtn=document.getElementById('openCallback');
+  const modal=document.getElementById('callbackModal');
+  const closeBtn=document.getElementById('closeCallback');
+  const form=document.getElementById('callbackForm');
+  const phone=document.getElementById('cbPhone');
+  const status=document.getElementById('cbStatus');
+  const honeypot=document.getElementById('cbCompany');
+  if(openBtn&&modal){openBtn.addEventListener('click',e=>{e.preventDefault();modal.style.display='flex';});}
+  if(closeBtn){closeBtn.addEventListener('click',()=>{modal.style.display='none';status.textContent='';status.className='status';});}
+  if(modal){modal.addEventListener('click',e=>{if(e.target===modal){modal.style.display='none';status.textContent='';status.className='status';}});}
+  if(phone){phone.addEventListener('input',()=>{let v=phone.value.replace(/[^\d+]/g,'');if(!v.startsWith('+')) v='+38'+v.replace(/^\+/,'');phone.value=v;});}
+  if(form){form.addEventListener('submit',async e=>{
+    e.preventDefault();status.textContent='';status.className='status';
+    if(honeypot.value){return;}
+    const name=(document.getElementById('cbName')||{}).value?.trim()||'';
+    const ph=phone.value.trim();
+    if(!/^\+?38\d{10}$/.test(ph.replace(/\s/g,''))){status.textContent='Перевірте номер телефону у форматі +380XXXXXXXXX';status.classList.add('err');return;}
+    try{
+      const res=await fetch('/.netlify/functions/telegram-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone:ph})});
+      const data=await res.json().catch(()=>({}));
+      if(res.ok&&data.ok){status.textContent='Дякуємо! Ми передзвонимо найближчим часом.';status.classList.add('ok');form.reset();setTimeout(()=>{modal.style.display='none';status.textContent='';status.className='status';},1200);}
+      else{status.textContent='Помилка відправки. Спробуйте ще раз або напишіть нам.';status.classList.add('err');}
+    }catch(e){status.textContent='Сталася помилка. Спробуйте ще раз або напишіть нам.';status.classList.add('err');}
+  });}
+})();</script>
+
+
+<a id="openCallbackFab" href="#" class="callback-fab">Залишити заявку</a>
+
+
+<script>
+// Link floating CTA to modal
+(function(){
+  const fab=document.getElementById('openCallbackFab');
+  const modal=document.getElementById('callbackModal');
+  if(fab&&modal){
+    fab.addEventListener('click',function(e){ e.preventDefault(); modal.style.display='flex'; });
+  }
+})();
+</script>
+
+</body>
+</html>
