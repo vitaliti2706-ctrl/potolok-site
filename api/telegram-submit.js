@@ -1,4 +1,4 @@
-// /api/telegram-submit.js
+// api/telegram-submit.js
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -8,12 +8,12 @@ export default async function handler(req, res) {
   const { name = "", phone = "", message = "" } = body;
 
   try {
-    // ВАЖНО: обратные кавычки! и /bot (без s)
+    // 👇 Обязательно косые кавычки (backticks ` )
     const url = `https://api.telegram.org/bot{process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
 
     const payload = {
       chat_id: process.env.TELEGRAM_CHAT_ID,
-      text: `Заявка с сайта\nИмя: ${name}\n📞 Телефон: ${phone}\n💬 Сообщение: ${message}`,
+      text: `Заявка с сайта\nИмя: ${name}\n📞 Телефон: ${phone}\n💬 Сообщение: ${message}`
     };
 
     const telegramRes = await fetch(url, {
@@ -22,14 +22,9 @@ export default async function handler(req, res) {
       body: JSON.stringify(payload),
     });
 
-    const raw = await telegramRes.text();
-    let data;
-    try { data = JSON.parse(raw); } catch { data = raw; }
+    const data = await telegramRes.json();
 
-    // В логах Vercel увидим точный ответ Telegram
-    console.log("Ответ Telegram API:", data);
-
-    if (!telegramRes.ok || (data && data.ok === false)) {
+    if (!telegramRes.ok || data.ok === false) {
       return res.status(500).json({ error: "Ошибка Telegram API", details: data });
     }
 
@@ -38,6 +33,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "Server error", details: String(err) });
   }
 }
+
 
 
 
