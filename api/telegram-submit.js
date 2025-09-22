@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Надёжно читаем тело: либо уже объект, либо строка JSON
+    // Безопасно читаем тело: на Vercel req.body может быть строкой или объектом
     let body = {};
     try {
       if (typeof req.body === "string") {
@@ -14,7 +14,14 @@ export default async function handler(req, res) {
       } else if (req.body && typeof req.body === "object") {
         body = req.body;
       } else {
-        body = {};
+        // запасной вариант: ручное чтение потока
+        const raw = await new Promise((resolve, reject) => {
+          let data = "";
+          req.on("data", (ch) => (data += ch));
+          req.on("end", () => resolve(data));
+          req.on("error", reject);
+        });
+        body = raw ? JSON.parse(raw) : {};
       }
     } catch {
       body = {};
@@ -38,7 +45,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // Текст сообщения
+    // Текст сообщения для Telegram
     const text =
       "Заявка с сайта\n" +
       "Имя: " + name + "\n" +
@@ -57,7 +64,6 @@ export default async function handler(req, res) {
 
     const data = await tgRes.json();
 
-    // Обработка ошибок Telegram API
     if (!tgRes.ok || data.ok === false) {
       return res.status(500).json({
         error: "Telegram API error",
@@ -68,9 +74,6 @@ export default async function handler(req, res) {
     // Успех
     return res.status(200).json({ ok: true, result: data.result });
   } catch (e) {
-    return res.status(500).json({
-      error: "Server error",
-      details: String(e),
-    });
+    return res.status(500).json({ error: "Server error", details: String(e) });
   }
 }
