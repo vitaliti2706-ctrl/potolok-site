@@ -1,22 +1,27 @@
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
     const { name, phone, message } = req.body;
 
-    // Проверим что данные пришли
-    if (!name  !phone  !message) {
-      return res.status(400).json({ error: 'Missing fields' });
-    }
+    const url = https://api.telegram.org/bot{process.env.TELEGRAM_BOT_TOKEN}/sendMessage;
+    const payload = {
+      chat_id: process.env.TELEGRAM_CHAT_ID,
+      text: Заявка с сайта\nИмя: ${name}\nТелефон: ${phone}\nСообщение: ${message}
+    };
 
-    // Здесь будет логика отправки в Telegram
-    console.log("Отправка сообщения:", name, phone, message);
+    const tgRes = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
 
-    return res.status(200).json({ ok: true, msg: 'Заявка отправлена' });
+    const data = await tgRes.json();
+    return res.status(200).json({ ok: true, data });
   } catch (err) {
-    console.error("Ошибка в API:", err);
-    return res.status(500).json({ error: 'Server error' });
+    console.error("API error:", err);
+    return res.status(500).json({ error: "Internal Server Error", details: String(err) });
   }
 }
