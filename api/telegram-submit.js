@@ -1,14 +1,12 @@
 // /api/telegram-submit.js
-module.exports = async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const body = req.body || {};
-    const { name = "", phone = "", message = "" } = body;
+    const { name = "", phone = "", message = "" } = req.body || {};
 
-    // важно: /bot (без s)
     const url = https://api.telegram.org/bot{process.env.TELEGRAM_BOT_TOKEN}/sendMessage;
 
     const payload = {
@@ -27,13 +25,16 @@ module.exports = async function handler(req, res) {
     try { data = JSON.parse(raw); } catch { data = raw; }
 
     if (!tgRes.ok || (data && data.ok === false)) {
-      // выведем в логи, чтобы видеть первопричину
-      console.log("Ответ Telegram API:", data);
+      console.error("Ответ Telegram API:", data);
       return res.status(500).json({ error: "Ошибка Telegram API", details: data });
     }
 
     return res.status(200).json({ ok: true, result: data });
   } catch (err) {
+    console.error("Server error:", err);
     return res.status(500).json({ error: "Server error", details: String(err) });
   }
-};
+}
+
+// ✅ Экспорт через CommonJS
+module.exports = handler;
