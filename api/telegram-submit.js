@@ -11,30 +11,28 @@ export default async function handler(req, res) {
 
     const payload = {
       chat_id: process.env.TELEGRAM_CHAT_ID,
-      text: Заявка с сайта\nИмя: ${name}\n📞 Телефон: ${phone}\n💬 Сообщение: ${message},
+      text: Заявка с сайта\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n💬 Сообщение: ${message},
     };
 
+    // Запрос к Telegram
     const tgRes = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
-    const data = await tgRes.json(); // ответ Telegram API
+    // читаем ответ как текст
+    const raw = await tgRes.text();
+    let data;
+    try {
+      data = JSON.parse(raw); // если это JSON
+    } catch (e) {
+      data = { error: "Not JSON", raw }; // если пришёл текст
+    }
 
-    // 🔹 Всегда возвращаем JSON клиенту
-    return res.status(200).json({
-      ok: true,
-      telegram: data,
-    });
-
+    return res.status(200).json({ fromTelegram: data });
   } catch (err) {
-    console.error("Ошибка Telegram API:", err);
-
-    // 🔹 Ошибку тоже отдаём в JSON
-    return res.status(500).json({
-      ok: false,
-      error: err.message || "Internal Server Error",
-    });
+    console.error("Ошибка на сервере:", err);
+    return res.status(500).json({ error: "Internal Server Error", details: err.message });
   }
 }
