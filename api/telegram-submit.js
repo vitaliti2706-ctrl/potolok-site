@@ -7,12 +7,12 @@ export default async function handler(req, res) {
   try {
     const { name = "", phone = "", message = "" } = req.body || {};
 
-    // ВАЖНО: bot (без s)
+    // URL Telegram API (без "s" в /bot/)
     const url = https://api.telegram.org/bot{process.env.TELEGRAM_BOT_TOKEN}/sendMessage;
 
     const payload = {
       chat_id: process.env.TELEGRAM_CHAT_ID,
-      text: Заявка с сайта\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n💬 Сообщение: ${message},
+      text: 📩 Заявка с сайта\n\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n💬 Сообщение: ${message}
     };
 
     const tgRes = await fetch(url, {
@@ -23,12 +23,15 @@ export default async function handler(req, res) {
 
     const data = await tgRes.json();
 
-    if (!tgRes.ok || data.ok === false) {
+    if (!data.ok) {
+      // Telegram вернул ошибку
       return res.status(500).json({ error: "Ошибка Telegram API", details: data });
     }
 
-    return res.status(200).json({ ok: true, result: data });
+    // Успех
+    return res.status(200).json({ success: true, data });
   } catch (err) {
-    return res.status(500).json({ error: "Server error", details: String(err) });
+    console.error("Server error:", err);
+    return res.status(500).json({ error: "Internal Server Error", details: err.message });
   }
 }
