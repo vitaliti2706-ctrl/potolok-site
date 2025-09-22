@@ -6,7 +6,6 @@ export default async function handler(req, res) {
   try {
     const { name = '', phone = '', message = '' } = req.body || {};
 
-    // ВАЖНО: URL в кавычках и без лишних символов!
     const url = https://api.telegram.org/bot{process.env.TELEGRAM_BOT_TOKEN}/sendMessage;
 
     const payload = {
@@ -22,7 +21,11 @@ export default async function handler(req, res) {
 
     const txt = await tgRes.text();
     let data;
-    try { data = JSON.parse(txt); } catch { data = { raw: txt }; }
+    try { 
+      data = JSON.parse(txt); 
+    } catch { 
+      data = { raw: txt }; 
+    }
 
     if (!tgRes.ok || (data && data.ok === false)) {
       return res.status(500).json({ error: 'Ошибка Telegram API', details: data });
