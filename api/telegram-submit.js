@@ -18,11 +18,17 @@ export default async function handler(req, res) {
   const phone = body.phone || "";
   const message = body.message || "";
 
-  const BOT_TOKEN = "ТВОЙ_ТОКЕН";   // вставь
-  const CHAT_ID  = "ТВОЙ_CHAT_ID";  // вставь
+  const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+  const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
   if (!BOT_TOKEN || !CHAT_ID) {
-    return res.status(500).json({ error: "Env vars missing" });
+    return res.status(500).json({
+      error: "Env vars missing",
+      have: {
+        TELEGRAM_BOT_TOKEN: !!BOT_TOKEN,
+        TELEGRAM_CHAT_ID: !!CHAT_ID,
+      },
+    });
   }
 
   const text =
