@@ -1,19 +1,14 @@
-// /api/telegram-submit.js
 export default async function handler(req, res) {
-  // Разрешаем только POST. Для отладки можно временно вернуть ок на GET:
   if (req.method !== "POST") {
-    return res.status(405).json({ ok: false, error: "Method not allowed" });
+    return res.status(200).json({ ok: true, method: req.method });
   }
 
   try {
-    // Надёжный парсинг тела: на Vercel req.body может быть строкой или объектом
-    let body;
+    let body = {};
     if (typeof req.body === "string") {
-      body = req.body.trim() ? JSON.parse(req.body) : {};
-    } else if (req.body && typeof req.body === "object") {
+      body = JSON.parse(req.body);
+    } else if (typeof req.body === "object") {
       body = req.body;
-    } else {
-      body = {};
     }
 
     const name = body.name || "";
@@ -21,7 +16,7 @@ export default async function handler(req, res) {
     const message = body.message || "";
 
     const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-    const CHAT_ID   = process.env.TELEGRAM_CHAT_ID;
+    const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
     if (!BOT_TOKEN || !CHAT_ID) {
       return res.status(500).json({
@@ -51,16 +46,12 @@ export default async function handler(req, res) {
 
     const data = await tgRes.json();
 
-    if (!tgRes.ok || data?.ok === false) {
-      return res
-        .status(500)
-        .json({ ok: false, error: "Telegram API error", details: data });
+    if (!tgRes.ok || data.ok === false) {
+      return res.status(500).json({ ok: false, error: "Telegram API error", details: data });
     }
 
     return res.status(200).json({ ok: true, result: data.result });
   } catch (e) {
-    return res
-      .status(500)
-      .json({ ok: false, error: "Server error", details: String(e) });
+    return res.status(500).json({ ok: false, error: "Server error", details: String(e) });
   }
 }
