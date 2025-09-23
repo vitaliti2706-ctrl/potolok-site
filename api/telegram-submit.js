@@ -5,49 +5,51 @@ export default async function handler(req, res) {
   }
 
   try {
-    // аккуратно читаем тело: на Vercel оно может быть строкой или объектом
+    // читаем тело запроса вручную
+    const raw = await new Promise((resolve, reject) => {
+      let data = "";
+      req.on("data", (chunk) => (data += chunk));
+      req.on("end", () => resolve(data));
+      req.on("error", reject);
+    });
+
     let body = {};
-    if (req.body) {
-      if (typeof req.body === "string") {
-        try { body = JSON.parse(req.body); } catch { body = {}; }
-      } else if (typeof req.body === "object") {
-        body = req.body;
-      }
+    try {
+      body = raw ? JSON.parse(raw) : {};
+    } catch {
+      body = {};
     }
 
-    const name = String(body.name || "");
-    const phone = String(body.phone || "");
-    const message = String(body.message || "");
+    const name = body.name || "";
+    const phone = body.phone || "";
+    const message = body.message || "";
 
     const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-    const CHAT_ID  = process.env.TELEGRAM_CHAT_ID;
+    const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
     if (!BOT_TOKEN || !CHAT_ID) {
       return res.status(500).json({
         error: "Env vars missing",
         have: {
           TELEGRAM_BOT_TOKEN: !!BOT_TOKEN,
-          TELEGRAM_CHAT_ID:  !!CHAT_ID,
+          TELEGRAM_CHAT_ID: !!CHAT_ID,
         },
       });
     }
 
     const text =
       "Заявка с сайта\n" +
-      "Имя: "      + name    + "\n" +
-      "Телефон: "  + phone   + "\n" +
-      "Сообщение: "+ message;
+      Имя: ${name}\n +
+      Телефон: ${phone}\n +
+      Сообщение: ${message};
 
-    const tgRes = await fetch(
-      https://api.telegram.org/bot${BOT_TOKEN}/sendMessage,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: CHAT_ID, text }),
-      }
-    );
+    const tgRes = await fetch(https://api.telegram.org/bot${BOT_TOKEN}/sendMessage, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: CHAT_ID, text }),
+    });
 
-    const data = await tgRes.json().catch(() => ({}));
+    const data = await tgRes.json();
 
     if (!tgRes.ok || data.ok === false) {
       return res.status(500).json({ error: "Telegram API error", details: data });
