@@ -4,7 +4,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // тело может прийти строкой или объектом
     const payload =
       typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
 
