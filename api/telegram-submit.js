@@ -5,11 +5,7 @@ export default async function handler(req, res) {
 
   let body = {};
   try {
-    if (typeof req.body === "string") {
-      body = JSON.parse(req.body || "{}");
-    } else {
-      body = req.body || {};
-    }
+    body = req.body ? (typeof req.body === "string" ? JSON.parse(req.body) : req.body) : {};
   } catch {
     body = {};
   }
