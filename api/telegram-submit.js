@@ -40,7 +40,10 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await tgRes.json().catch(() => ({}));
+    // попробуем распарсить тело ответа, если это JSON
+    const data = await tgRes.text().then((t) => {
+      try { return JSON.parse(t); } catch { return { raw: t }; }
+    });
 
     if (!tgRes.ok || data?.ok === false) {
       return res
