@@ -1,18 +1,14 @@
 export default async function handler(req, res) {
-  // Разрешим только POST
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  // Надёжно читаем тело (на Vercel req.body может быть строкой)
   let body = {};
   try {
     if (typeof req.body === "string") {
       body = JSON.parse(req.body || "{}");
-    } else if (typeof req.body === "object" && req.body !== null) {
-      body = req.body;
     } else {
-      body = {};
+      body = req.body || {};
     }
   } catch {
     body = {};
@@ -22,15 +18,13 @@ export default async function handler(req, res) {
   const phone = body.phone || "";
   const message = body.message || "";
 
-  // >>> ВСТАВЬ СВОИ ДАННЫЕ ЗДЕСЬ <<<
-  const BOT_TOKEN = "ВАШ_ТОКЕН_БОТА_ТЕЛЕГРАМ";   // например: 1234567890:AA...Z
-  const CHAT_ID   = "ВАШ_CHAT_ID";                // например: 123456789 (ID чата/канала)
+  const BOT_TOKEN = "ТВОЙ_ТОКЕН";   // вставь
+  const CHAT_ID  = "ТВОЙ_CHAT_ID";  // вставь
 
   if (!BOT_TOKEN || !CHAT_ID) {
-    return res.status(500).json({ error: "BOT_TOKEN or CHAT_ID is empty" });
+    return res.status(500).json({ error: "Env vars missing" });
   }
 
-  // Текст сообщения (внимание на кавычки и плюсы — всё закрыто корректно)
   const text =
     "Заявка с сайта\n" +
     "Имя: " + name + "\n" +
