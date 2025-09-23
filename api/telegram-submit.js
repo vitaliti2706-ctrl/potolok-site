@@ -4,19 +4,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    let body = {};
-    if (typeof req.body === "string") {
-      body = JSON.parse(req.body);
-    } else if (typeof req.body === "object") {
-      body = req.body;
-    }
+    // тело может прийти строкой или объектом
+    const payload =
+      typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
 
-    const name = body.name || "";
-    const phone = body.phone || "";
-    const message = body.message || "";
+    const name = String(payload.name || "");
+    const phone = String(payload.phone || "");
+    const message = String(payload.message || "");
 
-    const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-    const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+    const { TELEGRAM_BOT_TOKEN: BOT_TOKEN, TELEGRAM_CHAT_ID: CHAT_ID } =
+      process.env;
 
     if (!BOT_TOKEN || !CHAT_ID) {
       return res.status(500).json({
@@ -44,14 +41,18 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await tgRes.json();
+    const data = await tgRes.json().catch(() => ({}));
 
-    if (!tgRes.ok || data.ok === false) {
-      return res.status(500).json({ ok: false, error: "Telegram API error", details: data });
+    if (!tgRes.ok || data?.ok === false) {
+      return res
+        .status(500)
+        .json({ ok: false, error: "Telegram API error", details: data });
     }
 
-    return res.status(200).json({ ok: true, result: data.result });
+    return res.status(200).json({ ok: true, result: data?.result ?? null });
   } catch (e) {
-    return res.status(500).json({ ok: false, error: "Server error", details: String(e) });
+    return res
+      .status(500)
+      .json({ ok: false, error: "Server error", details: String(e) });
   }
 }
