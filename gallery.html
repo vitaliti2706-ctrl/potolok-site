@@ -1,61 +1,70 @@
-// ==== Автоплей ====
-    function play(){ playing = true; pauseBtn.textContent = '⏸'; tick(); }
-    function pause(){ playing = false; pauseBtn.textContent = '▶'; clearTimeout(timer); }
-    function tick(){
-      clearTimeout(timer);
-      if(playing){ timer = setTimeout(()=>{ next(); tick(); }, INTERVAL); }
+// ----- состояние -----
+    let idx = 0;
+    let timer = null;
+    const INTERVAL = 2000; // автопрокрутка 2 сек
+
+    // точки
+    const dots = images.map((_,i)=>{
+      const d = document.createElement('span');
+      d.className = 'dot'; d.title = ${i+1}/${images.length};
+      d.addEventListener('click', ()=>go(i));
+      dotsWrap.appendChild(d);
+      return d;
+    });
+
+    function show(i){
+      idx = (i + images.length) % images.length;
+      const src = images[idx];
+      view.src = src;
+      caption.textContent = ${idx+1} / ${images.length};
+      dots.forEach((d,j)=>d.classList.toggle('active', j===idx));
+      // предзагрузка следующего
+      const next = new Image();
+      next.src = images[(idx+1)%images.length];
     }
+    function next(){ show(idx+1); }
+    function prev(){ show(idx-1); }
 
-    pauseBtn.addEventListener('click', ()=> playing ? pause() : play());
-    prevBtn.addEventListener('click', ()=>{ pause(); prev(); });
+    function play(){
+      pauseBtn.textContent = '⏸';
+      clearInterval(timer);
+      timer = setInterval(next, INTERVAL);
+    }
+    function pause(){
+      pauseBtn.textContent = '▶';
+      clearInterval(timer);
+      timer = null;
+    }
+    pauseBtn.addEventListener('click', ()=> timer ? pause() : play());
     nextBtn.addEventListener('click', ()=>{ pause(); next(); });
+    prevBtn.addEventListener('click', ()=>{ pause(); prev(); });
 
-    // ==== Свайп ====
-    let sx=0, sy=0;
-    stage.addEventListener('touchstart', e=>{ const t=e.touches[0]; sx=t.clientX; sy=t.clientY; }, {passive:true});
-    stage.addEventListener('touchend', e=>{
-      const t=e.changedTouches[0]; const dx=t.clientX-sx; const dy=t.clientY-sy;
-      if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)){ pause(); (dx>0?prev:next)(); }
+    // свайп
+    let sx = 0;
+    frame.addEventListener('touchstart', e=>{ sx = e.touches[0].clientX; }, {passive:true});
+    frame.addEventListener('touchend', e=>{
+      const dx = e.changedTouches[0].clientX - sx;
+      if(Math.abs(dx) > 40){ pause(); (dx<0?next:prev)(); }
+    }, {passive:true});
+
+    // клавиатура
+    window.addEventListener('keydown', e=>{
+      if(e.key === 'ArrowRight'){ pause(); next(); }
+      if(e.key === 'ArrowLeft'){ pause(); prev(); }
+      if(e.key === ' '){ e.preventDefault(); (timer?pause:play)(); }
+      if(e.key === 'f'){ toggleFull(); }
+      if(e.key === 'Escape'){ if(document.fullscreenElement) document.exitFullscreen(); }
     });
 
-    // ==== Клік по кадру — лайтбокс ====
-    imgEl.addEventListener('click', ()=>{
-      lb.classList.add('open');
-      lbImg.src = images[idx];
-    });
-    lbClose.addEventListener('click', ()=> lb.classList.remove('open'));
-    lb.addEventListener('click', e=>{ if(e.target===lb) lb.classList.remove('open'); });
-    lbPrev.addEventListener('click', ()=>{ prev(); lbImg.src = images[idx]; });
-    lbNext.addEventListener('click', ()=>{ next(); lbImg.src = images[idx]; });
-
-    // Клавіші
-    document.addEventListener('keydown', e=>{
-      if(lb.classList.contains('open')){
-        if(e.key==='Escape') lb.classList.remove('open');
-        else if(e.key==='ArrowLeft') { prev(); lbImg.src = images[idx]; }
-        else if(e.key==='ArrowRight'){ next(); lbImg.src = images[idx]; }
-      }else{
-        if(e.key==='ArrowLeft') prev();
-        else if(e.key==='ArrowRight') next();
-        else if(e.key===' ') { e.preventDefault(); playing?pause():play(); }
-      }
-    });
-
-    // ==== Повний екран ====
-    fsBtn.addEventListener('click', ()=>{
+    function toggleFull(){
       const el = document.documentElement;
-      const goFS = el.requestFullscreen  el.webkitRequestFullscreen  el.msRequestFullscreen;
-      if(goFS){ goFS.call(el); }
-    });
+      if(!document.fullscreenElement){ (el.requestFullscreenel.webkitRequestFullscreenel.msRequestFullscreen).call(el); }
+      else { (document.exitFullscreendocument.webkitExitFullscreendocument.msExitFullscreen).call(document); }
+    }
+    fullBtn.addEventListener('click', toggleFull);
 
-    // Старт
-    render(); play();
-
-    // Попереднє завантаження наступного кадру (трошки допомагає)
-    setInterval(()=>{
-      const n = (idx+1)%images.length;
-      const pre = new Image(); pre.src = images[n];
-    }, 1500);
+    // старт
+    show(0); play();
   </script>
 </body>
 </html>
