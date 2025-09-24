@@ -1,12 +1,61 @@
-<!doctype html>
-<html lang="uk">
-<head>
-  <meta charset="utf-8">
-  <title>Gallery</title>
-  <meta http-equiv="refresh" content="0; url=/#gallery">
-  <script>location.replace('/#gallery');</script>
-</head>
-<body>
-  <p>Redirecting to <a href="/#gallery">Gallery</a>...</p>
+// ==== Автоплей ====
+    function play(){ playing = true; pauseBtn.textContent = '⏸'; tick(); }
+    function pause(){ playing = false; pauseBtn.textContent = '▶'; clearTimeout(timer); }
+    function tick(){
+      clearTimeout(timer);
+      if(playing){ timer = setTimeout(()=>{ next(); tick(); }, INTERVAL); }
+    }
+
+    pauseBtn.addEventListener('click', ()=> playing ? pause() : play());
+    prevBtn.addEventListener('click', ()=>{ pause(); prev(); });
+    nextBtn.addEventListener('click', ()=>{ pause(); next(); });
+
+    // ==== Свайп ====
+    let sx=0, sy=0;
+    stage.addEventListener('touchstart', e=>{ const t=e.touches[0]; sx=t.clientX; sy=t.clientY; }, {passive:true});
+    stage.addEventListener('touchend', e=>{
+      const t=e.changedTouches[0]; const dx=t.clientX-sx; const dy=t.clientY-sy;
+      if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)){ pause(); (dx>0?prev:next)(); }
+    });
+
+    // ==== Клік по кадру — лайтбокс ====
+    imgEl.addEventListener('click', ()=>{
+      lb.classList.add('open');
+      lbImg.src = images[idx];
+    });
+    lbClose.addEventListener('click', ()=> lb.classList.remove('open'));
+    lb.addEventListener('click', e=>{ if(e.target===lb) lb.classList.remove('open'); });
+    lbPrev.addEventListener('click', ()=>{ prev(); lbImg.src = images[idx]; });
+    lbNext.addEventListener('click', ()=>{ next(); lbImg.src = images[idx]; });
+
+    // Клавіші
+    document.addEventListener('keydown', e=>{
+      if(lb.classList.contains('open')){
+        if(e.key==='Escape') lb.classList.remove('open');
+        else if(e.key==='ArrowLeft') { prev(); lbImg.src = images[idx]; }
+        else if(e.key==='ArrowRight'){ next(); lbImg.src = images[idx]; }
+      }else{
+        if(e.key==='ArrowLeft') prev();
+        else if(e.key==='ArrowRight') next();
+        else if(e.key===' ') { e.preventDefault(); playing?pause():play(); }
+      }
+    });
+
+    // ==== Повний екран ====
+    fsBtn.addEventListener('click', ()=>{
+      const el = document.documentElement;
+      const goFS = el.requestFullscreen  el.webkitRequestFullscreen  el.msRequestFullscreen;
+      if(goFS){ goFS.call(el); }
+    });
+
+    // Старт
+    render(); play();
+
+    // Попереднє завантаження наступного кадру (трошки допомагає)
+    setInterval(()=>{
+      const n = (idx+1)%images.length;
+      const pre = new Image(); pre.src = images[n];
+    }, 1500);
+  </script>
 </body>
 </html>
