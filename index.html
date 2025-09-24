@@ -283,5 +283,61 @@ function checkImage(src){
       if(e.key==='ArrowRight') lbGo(1);
     });
   </script>
-</body>
+<script>
+  // Масив фото (30 старих + 20 нових)
+  const images = [
+    "images/img01.jpg","images/img02.jpg","images/img03.jpg","images/img04.jpg","images/img05.jpg",
+    "images/img06.jpg","images/img07.jpg","images/img08.jpg","images/img09.jpg","images/img10.jpg",
+    "images/img11.jpg","images/img12.jpg","images/img13.jpg","images/img14.jpg","images/img15.jpg",
+    "images/img16.jpg","images/img17.jpg","images/img18.jpg","images/img19.jpg","images/img20.jpg",
+    "images/img21.jpg","images/img22.jpg","images/img23.jpg","images/img24.jpg","images/img25.jpg",
+    "images/img26.jpg","images/img27.jpg","images/img28.jpg","images/img29.jpg","images/img30.jpg",
+    "images/new_img01.jpg","images/new_img02.jpg","images/new_img03.jpg","images/new_img04.jpg","images/new_img05.jpg",
+    "images/new_img06.jpg","images/new_img07.jpg","images/new_img08.jpg","images/new_img09.jpg","images/new_img10.jpg",
+    "images/new_img11.jpg","images/new_img12.jpg","images/new_img13.jpg","images/new_img14.jpg","images/new_img15.jpg",
+    "images/new_img16.jpg","images/new_img17.jpg","images/new_img18.jpg","images/new_img19.jpg","images/new_img20.jpg"
+  ];
+
+  const slidesContainer = document.getElementById("slides");
+  const dotsContainer = document.getElementById("dots");
+
+  // створюємо слайди та точки
+  images.forEach((src, index) => {
+    const slide = document.createElement("div");
+    slide.className = "slide fade";
+    slide.innerHTML = <img src="${src}" alt="Робота ${index+1}">;
+    slidesContainer.appendChild(slide);
+
+    const dot = document.createElement("span");
+    dot.className = "dot";
+    dot.addEventListener("click", () => showSlide(index));
+    dotsContainer.appendChild(dot);
+  });
+
+  let currentSlide = 0;
+  const slides = document.getElementsByClassName("slide");
+  const dots = document.getElementsByClassName("dot");
+
+  function showSlide(n) {
+    if (n >= slides.length) currentSlide = 0;
+    else if (n < 0) currentSlide = slides.length - 1;
+    else currentSlide = n;
+
+    for (let i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+      dots[i].classList.remove("active");
+    }
+
+    slides[currentSlide].style.display = "block";
+    dots[currentSlide].classList.add("active");
+  }
+
+  function nextSlide() {
+    showSlide(currentSlide + 1);
+  }
+
+  // запуск
+  showSlide(0);
+  setInterval(nextSlide, 2000); // автоперегортання кожні 2 сек
+</script></body>
 </html>
