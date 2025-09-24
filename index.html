@@ -1,201 +1,287 @@
 <!doctype html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Potolok.kh — Натяжні стелі у Харкові</title>
-  <link rel="stylesheet" href="styles.css">
-  <meta name="description" content="Монтаж натяжних стель у Харкові: класичні, тіньові, парящі, трек-системи, підсвітка. Гарантія та чіткі терміни.">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Натяжні стелі Харків — Потолок KH</title>
+  <meta name="description" content="Натяжні стелі у Харкові: монтаж від 1 дня. Гарантія. Безкоштовний замір. Галерея робіт.">
+  <style>
+    :root{
+      --bg:#ffffff; --muted:#f6f7f9; --text:#0f172a; --text-2:#334155;
+      --primary:#16a34a; --primary-2:#22c55e; --accent:#0ea5e9; --ring:#e2e8f0;
+      --shadow:0 8px 24px rgba(2,6,23,.08); --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif;line-height:1.45}
+    a{color:inherit;text-decoration:none} img{max-width:100%;height:auto;display:block}
+    .container{max-width:1200px;margin-inline:auto;padding:0 20px}
+    html{scroll-behavior:smooth}
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-61EMVPPMDT"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-61EMVPPMDT');
-</script>
+    /* Header */
+    .header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--ring)}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .brand{display:flex;gap:10px;align-items:center;font-weight:700}
+    .brand .dot{width:10px;height:10px;border-radius:999px;background:var(--accent)}
+    .menu{display:flex;gap:18px;align-items:center}
+    .menu a{color:var(--text-2)}
+    .cta{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:#fff;padding:10px 16px;border-radius:12px;box-shadow:var(--shadow);font-weight:600}
+    .cta:hover{background:var(--primary-2)}
 
+    /* Section */
+    .section{padding:28px 0}
+    .section h2{margin:0 0 16px;font-size:clamp(22px,3vw,28px)}
+    .muted{color:var(--text-2);margin:0 0 16px}
 
-<style>
-/* === Callback button & modal (polished) === */
-.callback-btn-primary{
-  background:#16a34a; color:#fff !important;
-  padding:8px 14px; margin-right:10px;
-  border-radius:8px; font-weight:600;
-  text-decoration:none; display:inline-block;
-  line-height:1; transition:background .2s ease;
-}
-.callback-btn-primary:hover{ background:#15803d; }
-.callback-btn-primary:focus{ outline:2px solid rgba(22,163,74,.35); outline-offset:2px; }
+    /* Footer */
+    .footer{padding:26px 0;color:var(--text-2);border-top:1px solid var(--ring);margin-top:20px}
 
-.callback-modal{ position:fixed; inset:0; background:rgba(0,0,0,.5);
-  display:flex; align-items:center; justify-content:center; z-index:9999; }
-.callback-card{ background:#fff; padding:25px 20px; border-radius:12px;
-  box-shadow:0 8px 30px rgba(0,0,0,.2); width:min(420px,92vw); position:relative; }
-.close-btn{ position:absolute; top:10px; right:14px; font-size:22px;
-  border:none; background:transparent; cursor:pointer; }
-#callbackForm label{ display:block; margin:10px 0 4px; font-weight:600; }
-#callbackForm input{ width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; }
-#callbackForm .submit-btn{ margin-top:14px; width:100%; padding:12px; border:0; border-radius:8px;
-  font-size:16px; background:#16a34a; color:#fff; cursor:pointer; font-weight:600; }
-#callbackForm .submit-btn:hover{ background:#15803d; }
-.status{ min-height:20px; margin-top:10px; font-size:14px; }
-.status.ok{ color:#16a34a; } .status.err{ color:#dc2626; }
-</style>
+    /* ===== ГАЛЕРЕЯ ===== */
+    #gallery{scroll-margin-top:80px}
+    .slider{
+      position:relative; overflow:hidden; border:1px solid var(--ring); border-radius:16px;
+      background:#000;
+    }
+    .slides{display:flex; transition:transform .5s ease}
+    .slide{min-width:100%; display:flex; align-items:center; justify-content:center}
+    .slide img{max-height:70vh; width:100%; object-fit:contain; background:#000}
 
+    /* Арки/кнопки */
+    .btn{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:#fff;
+      padding:8px 12px;border-radius:10px;border:1px solid var(--ring);cursor:pointer}
+    .btn.ghost{background:#fff;color:var(--text)}
+    .btn.secondary{background:#0ea5e9}
 
-<style>
-/* Floating CTA on mobile */
-@media (max-width: 768px){
-  .callback-fab{
-    position: fixed; right: 14px; bottom: 18px;
-    background:#16a34a; color:#fff; border:0;
-    border-radius: 999px; padding: 14px 18px;
-    font-weight:700; box-shadow:0 8px 24px rgba(0,0,0,.25);
-    z-index: 10000; text-decoration:none;
-  }
-  .callback-fab:hover{ background:#15803d; }
-}
-</style>
+    .arrow{
+      position:absolute; top:50%; transform:translateY(-50%); z-index:10;
+      width:40px;height:40px;border-radius:999px;display:flex;align-items:center;justify-content:center;
+      background:rgba(255,255,255,.95); border:1px solid var(--ring); cursor:pointer; font-weight:800;
+    }
+    .arrow:hover{background:#fff}
+    #prev{left:10px} #next{right:10px}
 
+    /* Кнопки зверху справа */
+    .top-controls{position:absolute; top:10px; right:10px; display:flex; gap:8px; z-index:10}
+    .tiny-btn{
+      background:rgba(255,255,255,.95); border:1px solid var(--ring);
+      width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+      cursor:pointer; font-weight:800;
+    }
+    .tiny-btn:hover{background:#fff}
+
+    /* Точки + підпис */
+    .dots{position:absolute; left:50%; transform:translateX(-50%); bottom:10px; display:flex; gap:6px; z-index:9}
+    .dot{width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.6); border:1px solid rgba(0,0,0,.2)}
+    .dot.active{background:#fff}
+    .caption{
+      position:absolute; left:50%; transform:translateX(-50%); bottom:44px;
+      background:rgba(0,0,0,.5); color:#fff; padding:6px 10px; border-radius:8px; font-size:14px; z-index:9;
+      max-width:min(90%,780px); text-align:center;
+    }
+/* Лайтбокс */
+    .lightbox{display:none; position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,.92); align-items:center; justify-content:center}
+    .lightbox.active{display:flex}
+    .lightbox img{max-width:90%; max-height:90%; border-radius:10px; box-shadow:0 0 20px rgba(0,0,0,.6)}
+    .lb-close,.lb-prev,.lb-next{position:absolute; color:#fff; font-size:40px; font-weight:800; cursor:pointer; user-select:none}
+    .lb-close{top:10px; right:20px}
+    .lb-prev{top:50%; left:30px; transform:translateY(-50%)}
+    .lb-next{top:50%; right:30px; transform:translateY(-50%)}
+    .lb-prev:hover,.lb-next:hover,.lb-close:hover{color:#0ea5e9}
+  </style>
 </head>
 <body>
-<div class="nav-inline"><a class="btn" href="gallery.html">Наші роботи</a></div>
+  <!-- Header -->
+  <header class="header">
+    <div class="container nav">
+      <div class="brand"><span class="dot"></span><span>Потолок KH</span></div>
+      <nav class="menu">
+        <a href="#gallery">Наші роботи</a>
+        <a class="cta" href="tel:+380974546713">+38 (097) 454-67-13</a>
+      </nav>
+    </div>
+  </header>
 
-  
-<nav class="nav">
-  <div class="row container">
-    <div class="brand">Potolok.kh</div>
-    <div class="links"><a href="index.html" class="active">Головна</a><a href="gallery.html" class="">Галерея</a><a href="price.html" class="">Прайс</a><a href="calculator.html" class="">Калькулятор</a><a href="reviews.html" class="">Відгуки</a></div>
+  <!-- Gallery -->
+  <section class="section" id="gallery">
+    <div class="container">
+      <h2>Наші роботи</h2>
+      <p class="muted">50 фото. Автоперегортання кожні 2 секунди. Стрілки, точки, свайп і повноекранний перегляд.</p>
+
+      <div class="slider" id="slider">
+        <div class="slides" id="slides"></div>
+
+        <!-- Стрілки -->
+        <button id="prev" class="arrow">⟨</button>
+        <button id="next" class="arrow">⟩</button>
+
+        <!-- Кнопки зверху справа -->
+        <div class="top-controls">
+          <button id="pauseBtn" class="tiny-btn" title="Пауза">❚❚</button>
+          <button id="fullscreenBtn" class="tiny-btn" title="Повний екран">⛶</button>
+        </div>
+
+        <!-- Точки + підпис -->
+        <div class="dots" id="dots"></div>
+        <div class="caption" id="caption"></div>
+      </div>
+
+      <p style="text-align:center;margin-top:10px;">
+        Якщо потрібні додаткові приклади — напишіть нам у Telegram або зателефонуйте.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">© Потолок KH • Харків • <a href="tel:+380974546713">+38 (097) 454-67-13</a></div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="lb-close" id="lbClose">×</span>
+    <span class="lb-prev" id="lbPrev">‹</span>
+    <span class="lb-next" id="lbNext">›</span>
+    <img id="lbImg" alt="Фото у повноекранному режимі">
   </div>
-</nav>
 
-  <main class="container hero">
-    <section class="panel">
-      <h1>Натяжні стелі під ключ</h1>
-      <p>Класичні, тіньові, парящі, з трек‑системами, підсвіткою та точковими світильниками. Швидко, акуратно, з гарантією.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
-        <a class="cta" href="calculator.html">💡 Розрахувати вартість</a>
-        <a class="btn-secondary" href="galereya.html">📷 Дивитись галерею</a>
-      </div>
-    </section>
+  <script>
+    // ===== Джерела зображень (50 шт) =====
+    function buildSources(){
+      const list = [];
+      for(let i=1;i<=30;i++) list.push(/images/img${String(i).padStart(2,'0')}.jpg);
+      for(let i=1;i<=20;i++) list.push(/images/new_img${String(i).padStart(2,'0')}.jpg);
+      return list;
+    }
 
-    <section class="grid">
-      <div class="card">
-        <div class="pad">
-          <h3>Чому ми?</h3>
-          <ul class="list">
-            <li>Власний монтаж — без посередників</li>
-            <li>Якісні матеріали (MSD Premium тощо)</li>
-            <li>Акуратний демонтаж та прибирання</li>
-            <li>Гарантія та підтримка після робіт</li>
-          </ul>
-        </div>
-      </div>
-      <div class="card">
-        <div class="pad">
-          <h3>Послуги</h3>
-          <ul class="list">
-            <li>Класичні натяжні стелі</li>
-            <li>Тіньовий профіль, парящі лінії</li>
-            <li>Трек‑системи, ніші під штори</li>
-            <li>Електрика: треки, точкові, підсвітка</li>
-          </ul>
-        </div>
-      </div>
-      <div class="card">
-        <div class="pad">
-          <h3>Контакти</h3>
-          <p class="small">Тел.: 097‑454‑67‑13 (Viber / Telegram)</p>
-          <p class="small">Сайт: potolok-kharkov.netlify.app</p>
-        </div>
-      </div>
-    </section>
-  </main>
-  <footer class="footer">© 2025 Potolok.kh • Харків • Монтаж натяжних стель</footer>
+    // ===== Підписи для 50 фото: "Фото 1..50" =====
+    const customCaptions = {};
+    for (let i = 1; i <= 30; i++) {
+      const num = String(i).padStart(2,'0');
+      customCaptions[/images/img${num}.jpg] = Фото ${i};
+    }
+    for (let i = 1; i <= 20; i++) {
+      const num = String(i).padStart(2,'0');
+      customCaptions[/images/new_img${num}.jpg] = Фото ${30+i};
+    }
 
-<script>(function(){
-  const openBtn=document.getElementById('openCallback');
-  const modal=document.getElementById('callbackModal');
-  const closeBtn=document.getElementById('closeCallback');
-  const form=document.getElementById('callbackForm');
-  const phone=document.getElementById('cbPhone');
-  const status=document.getElementById('cbStatus');
-  const honeypot=document.getElementById('cbCompany');
-  if(openBtn&&modal){openBtn.addEventListener('click',e=>{e.preventDefault();modal.style.display='flex';});}
-  if(closeBtn){closeBtn.addEventListener('click',()=>{modal.style.display='none';status.textContent='';status.className='status';});}
-  if(modal){modal.addEventListener('click',e=>{if(e.target===modal){modal.style.display='none';status.textContent='';status.className='status';}});}
-  if(phone){phone.addEventListener('input',()=>{let v=phone.value.replace(/[^\d+]/g,'');if(!v.startsWith('+')) v='+38'+v.replace(/^\+/,'');phone.value=v;});}
-  <script>(function(){
-  const openBtn=document.getElementById('openCallback');
-  const modal=document.getElementById('callbackModal');
-  const closeBtn=document.getElementById('closeCallback');
-  const form=document.getElementById('callbackForm');
-  const phone=document.getElementById('cbPhone');
-  const status=document.getElementById('cbStatus');
-  const honeypot=document.getElementById('cbCompany');
+    // ===== Ініціалізація слайдера =====
+    const sources = buildSources();
+    const slidesEl = document.getElementById('slides');
+    const dotsEl = document.getElementById('dots');
+    const captionEl = document.getElementById('caption');
+    const slider = document.getElementById('slider');
 
-  if(openBtn&&modal){
-    openBtn.addEventListener('click',e=>{
-      e.preventDefault();
-      modal.style.display='block';
+    let images = []; // тільки існуючі (пройшли onload)
+    let index = 0, timer = null, AUTOPLAY = 2000, isPaused = false;
+
+    // Підвантажуємо і фільтруємо відсутні
+    (async function loadAll(){
+      const checks = await Promise.all(sources.map(src => checkImage(src)));
+      images = checks.filter(Boolean); // тільки ті, що існують
+      renderSlides(images);
+      renderDots(images);
+      showSlide(0, true);
+      restart();
+    })();
+function checkImage(src){
+      return new Promise(resolve=>{
+        const img = new Image();
+        img.onload = ()=> resolve(src);
+        img.onerror = ()=> resolve(null);
+        img.src = src;
+      });
+    }
+
+    function renderSlides(list){
+      slidesEl.innerHTML = list.map(src =>
+        <div class="slide"><img src="${src}" alt="Фото натяжної стелі"></div>
+      ).join('');
+    }
+    function renderDots(list){
+      dotsEl.innerHTML = '';
+      list.forEach((_,i)=>{
+        const d = document.createElement('div');
+        d.className = 'dot';
+        d.addEventListener('click', ()=> showSlide(i));
+        dotsEl.appendChild(d);
+      });
+    }
+
+    function updateCaption(i){
+      if(!images.length) return;
+      const src = images[i];
+      captionEl.textContent = customCaptions[src] || Фото ${i+1} з ${images.length};
+    }
+
+    function showSlide(i, instant){
+      if(!images.length) return;
+      index = (i + images.length) % images.length;
+      slidesEl.style.transform = translateX(-${index*100}%);
+      // активні точки
+      [...dotsEl.children].forEach((d,idx)=> d.classList.toggle('active', idx===index));
+      updateCaption(index);
+      if(!instant) restart();
+    }
+
+    function next(){ showSlide(index+1); }
+    function prev(){ showSlide(index-1); }
+
+    document.getElementById('next').onclick = next;
+    document.getElementById('prev').onclick = prev;
+
+    // Пауза/Старт
+    const pauseBtn = document.getElementById('pauseBtn');
+    function restart(){
+      clearInterval(timer);
+      if(!isPaused) timer = setInterval(next, AUTOPLAY);
+    }
+    pauseBtn.addEventListener('click', ()=>{
+      isPaused = !isPaused;
+      pauseBtn.textContent = isPaused ? '▶' : '❚❚';
+      pauseBtn.title = isPaused ? 'Старт' : 'Пауза';
+      restart();
     });
-  }
 
-  if(closeBtn){
-    closeBtn.addEventListener('click',()=>{
-      modal.style.display='none';
+    // Свайп на мобілці
+    let sx=0;
+    slider.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+    slider.addEventListener('touchend',e=>{
+      const dx=(e.changedTouches[0].clientX - sx);
+      if(Math.abs(dx)>40){ dx<0 ? next() : prev(); }
     });
-  }
 
-  if(modal){
-    modal.addEventListener('click',e=>{
-      if(e.target===modal) modal.style.display='none';
+    // Повний екран (на поточному слайді)
+    const fsBtn = document.getElementById('fullscreenBtn');
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbClose = document.getElementById('lbClose');
+    const lbPrev = document.getElementById('lbPrev');
+    const lbNext = document.getElementById('lbNext');
+
+    function openLightbox(i){
+      if(!images.length) return;
+      index = (i + images.length) % images.length;
+      lbImg.src = images[index];
+      lb.classList.add('active');
+    }
+    function closeLightbox(){ lb.classList.remove('active'); }
+    function lbGo(offset){
+      if(!images.length) return;
+      index = (index + offset + images.length) % images.length;
+      lbImg.src = images[index];
+    }
+
+    fsBtn.addEventListener('click', ()=> openLightbox(index));
+    lbClose.addEventListener('click', closeLightbox);
+    lbPrev.addEventListener('click', ()=> lbGo(-1));
+    lbNext.addEventListener('click', ()=> lbGo(1));
+    lb.addEventListener('click', e=>{ if(e.target===lb) closeLightbox(); });
+    document.addEventListener('keydown', e=>{
+      if(!lb.classList.contains('active')) return;
+      if(e.key==='Escape') closeLightbox();
+      if(e.key==='ArrowLeft') lbGo(-1);
+      if(e.key==='ArrowRight') lbGo(1);
     });
-  }
-
-  if(phone){
-    phone.addEventListener('input',()=>{
-      let v=phone.value.replace(/[^0-9\+]/g,'');
-      phone.value=v;
-    });
-  }
-
-  // обработка отправки формы
-  if(form){
-    form.addEventListener('submit', async e=>{
-      e.preventDefault();
-      status.textContent = "Відправка...";
-      status.className = "status sending";
-
-      if(honeypot.value){return;}
-
-      const formData = {
-        name: document.getElementById('cbName').value,
-        phone: document.getElementById('cbPhone').value,
-        message: "Заявка з сайту"
-      };
-
-      try {
-        const res = await fetch("/api/telegram-submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData)
-        });
-
-        const data = await res.json();
-
-        if(data.ok){
-          status.textContent = "✅ Заявку відправлено!";
-          form.reset();
-        } else {
-          status.textContent = "❌ Помилка: " + (data.error || "невідома");
-        }
-      } catch (err) {
-        console.error(err);
-        status.textContent = "⚠️ Сервер недоступний";
-      }
-    });
-  }
-})();</script>
+  </script>
+</body>
+</html>
