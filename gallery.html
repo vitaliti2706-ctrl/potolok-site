@@ -3,123 +3,176 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Наші роботи — Потолок KH</title>
-  <meta name="description" content="Галерея натяжних стель. 50 фото. Автоперегортання, повноекранний перегляд.">
+  <title>Наші роботи — Potolok.kh</title>
+  <meta name="description" content="Галерея натяжних стель у Харкові. 50 фото. Автоперегортання, повноекранний перегляд.">
   <style>
-    :root {
-      --bg:#0b1220; --panel:#0f172a; --ring:#1f2a44; --text:#e5e7eb;
-      --muted:#94a3b8; --accent:#22d3ee; --btn:#16a34a;
-      --shadow:0 8px 30px rgba(2,6,23,.35); --radius:16px;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:sans-serif}
-    a{text-decoration:none;color:inherit}
-    .container{max-width:1100px;margin:0 auto;padding:16px}
+    :root{--bg:#0b1220;--panel:#0f172a;--ring:#1f2a44;--text:#e5e7eb;--muted:#94a3b8;--accent:#22d3ee;--btn:#16a34a;--shadow:0 8px 30px rgba(2,6,23,.35);--radius:16px}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif}
+    a{color:inherit;text-decoration:none} .container{max-width:1100px;margin:0 auto;padding:16px}
     header{display:flex;justify-content:space-between;align-items:center}
-    .brand{font-weight:800;display:flex;align-items:center;gap:8px}
+    .brand{font-weight:800;display:flex;align-items:center;gap:10px}
+    .brand .dot{width:10px;height:10px;border-radius:999px;background:var(--accent)}
     .phone{background:var(--btn);color:#fff;padding:8px 12px;border-radius:12px;box-shadow:var(--shadow)}
-    h1{margin:12px 0;font-size:28px}
-    .muted{color:var(--muted)}
+    h1{margin:12px 0;font-size:28px} .muted{color:var(--muted)}
     .stage-wrap{background:var(--panel);border:1px solid var(--ring);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-    .stage{position:relative;aspect-ratio:16/10;width:100%;background:#050a18;display:flex;align-items:center;justify-content:center}
-    .stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
     .top-controls{display:flex;justify-content:flex-end;gap:8px;padding:8px;border-bottom:1px solid var(--ring)}
     .tiny-btn{background:#101b33;border:1px solid var(--ring);color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer}
+    .stage{position:relative;aspect-ratio:16/10;width:100%;background:#050a18;display:flex;align-items:center;justify-content:center}
+    .stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
     .nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(17,24,39,.6);border:1px solid var(--ring);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer}
     .prev{left:10px}.next{right:10px}
     .dots{display:flex;gap:6px;justify-content:center;padding:10px}
-    .dot{width:10px;height:10px;border-radius:50%;background:#243554;cursor:pointer;opacity:.5}
-    .dot.active{opacity:1;background:var(--accent)}
-    .caption{color:var(--muted);text-align:center;padding:0 0 14px}
-    footer{color:var(--muted);padding:18px 0;border-top:1px solid var(--ring);margin-top:14px}
-    .lightbox{position:fixed;inset:0;background:rgba(3,6,17,.9);display:none;align-items:center;justify-content:center;z-index:100}
-    .lightbox.open{display:flex}
-    .lightbox img{max-width:95vw;max-height:90vh;border-radius:12px;box-shadow:var(--shadow)}
-    .lb-close,.lb-prev,.lb-next{position:absolute;background:rgba(17,24,39,.8);color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer}
-    .lb-close{top:10px;right:10px}.lb-prev{left:10px;top:50%;transform:translateY(-50%)}.lb-next{right:10px;top:50%;transform:translateY(-50%)}
+    .dot{width:8px;height:8px;border-radius:999px;background:#25314f;cursor:pointer}
+    .dot.active{background:#7dd3fc}
+    .caption{color:var(--muted);text-align:center;margin:0 0 14px}
+    /* lightbox */
+    .lightbox{position:fixed;inset:0;background:rgba(2,6,23,.9);display:none;align-items:center;justify-content:center;z-index:50}
+    .lightbox.open{display:flex} .lightbox img{max-width:92vw;max-height:92vh;border-radius:12px;border:1px solid var(--ring);box-shadow:var(--shadow)}
+    .lb-close,.lb-prev,.lb-next{position:absolute;top:20px;background:#101b33;border:1px solid var(--ring);color:#fff;padding:10px 12px;border-radius:10px;cursor:pointer}
+    .lb-close{right:20px} .lb-prev{left:20px;top:50%;transform:translateY(-50%)} .lb-next{right:20px;top:50%;transform:translateY(-50%)}
+    @media (max-width:700px){h1{font-size:24px}.nav-btn{width:36px;height:36px}}
   </style>
 </head>
 <body>
-<div class="container">
-  <header>
-    <div class="brand"><span>⬤</span> Потолок KH</div>
-    <a class="phone" href="tel:+380974546713">+38 (097) 454-67-13</a>
+  <header class="container">
+    <div class="brand"><span class="dot"></span><span>Potolok.kh</span></div>
+    <a href="tel:+380974546713" class="phone">+38 (097) 454-67-13</a>
   </header>
 
-  <h1>Наші роботи</h1>
-  <p class="muted">50 фото. Автоперегортання кожні 2 секунди. Стрілки, точки, свайп і повноекранний перегляд.</p>
+  <main class="container">
+    <h1>Наші роботи</h1>
+    <p class="muted">50 фото. Автоперегортання кожні 2 секунди. Стрілки, точки, свайп і повноекранний перегляд.</p>
 
-  <div class="stage-wrap">
-    <div class="top-controls">
-      <button id="pauseBtn" class="tiny-btn">⏸️</button>
-      <button id="fullBtn" class="tiny-btn">⛶</button>
+    <div class="stage-wrap">
+      <div class="top-controls">
+        <button id="pauseBtn" class="tiny-btn" title="Пауза">⏸</button>
+        <button id="fullBtn" class="tiny-btn" title="Повний екран">⤢</button>
+      </div>
+      <div class="stage" id="stage">
+        <button class="nav-btn prev" id="prevBtn" aria-label="Попереднє">‹</button>
+        <img id="view" src="" alt="Фото робіт">
+        <button class="nav-btn next" id="nextBtn" aria-label="Наступне">›</button>
+      </div>
+      <div class="dots" id="dots"></div>
+      <div class="caption" id="caption"></div>
     </div>
-    <div class="stage" id="stage">
-      <button class="nav-btn prev" id="prevBtn">‹</button>
-      <img id="view" src="" alt="Фото робіт"/>
-      <button class="nav-btn next" id="nextBtn">›</button>
-    </div>
-    <div class="dots" id="dots"></div>
-    <div class="caption" id="caption"></div>
+
+    <p class="muted" style="text-align:center;margin-top:10px">
+      Якщо потрібні додаткові приклади — напишіть нам у Telegram або зателефонуйте.
+    </p>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lb-close" id="lbClose">✕</button>
+    <button class="lb-prev" id="lbPrev">‹</button>
+    <button class="lb-next" id="lbNext">›</button>
+    <img id="lbImg" alt="Фото у повноекранному режимі">
   </div>
 
-  <p class="muted" style="text-align:center;margin-top:10px;">Якщо потрібні додаткові приклади — напишіть нам у Telegram або зателефонуйте.</p>
-  <footer>© Потолок KH • Харків • <a href="tel:+380974546713">+38 (097) 454-67-13</a></footer>
-</div>
+  <script>
+  // ===== список фото (30 + 20) =====
+  function seq(prefix, from, to){
+    const arr=[]; for(let i=from;i<=to;i++){arr.push(images/${prefix}${String(i).padStart(2,'0')}.jpg);} return arr;
+  }
+  const images = [
+    ...seq('img',1,30),
+    ...seq('new_img',1,20)
+  ];
 
-<div class="lightbox" id="lightbox">
-  <span class="lb-close" id="lbClose">✕</span>
-  <span class="lb-prev" id="lbPrev">‹</span>
-  <span class="lb-next" id="lbNext">›</span>
-  <img id="lbImg" alt="Фото у повноекранному режимі">
-</div>
-<script>
-const INTERVAL=2000;
-const candidates=[...Array.from({length:30},(_,i)=>/images/img${String(i+1).padStart(2,'0')}.jpg),
-                  ...Array.from({length:20},(_,i)=>/images/new_img${String(i+1).padStart(2,'0')}.jpg)];
-const makeCaption=(i,src)=>Фото ${i+1} із ${images.length};
+  // ===== елементи
+  const view = document.getElementById('view');
+  const dotsWrap = document.getElementById('dots');
+  const cap = document.getElementById('caption');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const fullBtn = document.getElementById('fullBtn');
+  const stage = document.getElementById('stage');
 
-let images=[],idx=0,timer=null,playing=true;
-const view=document.getElementById('view'),
-dots=document.getElementById('dots'),
-cap=document.getElementById('caption'),
-pauseBtn=document.getElementById('pauseBtn'),
-nextBtn=document.getElementById('nextBtn'),
-prevBtn=document.getElementById('prevBtn'),
-lb=document.getElementById('lightbox'),
-lbImg=document.getElementById('lbImg'),
-lbClose=document.getElementById('lbClose'),
-lbPrev=document.getElementById('lbPrev'),
-lbNext=document.getElementById('lbNext'),
-fullBtn=document.getElementById('fullBtn');
+  // lightbox
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbClose = document.getElementById('lbClose');
+  const lbPrev = document.getElementById('lbPrev');
+  const lbNext = document.getElementById('lbNext');
 
-function show(n){if(!images.length)return;idx=(n+images.length)%images.length;view.src=images[idx];cap.textContent=makeCaption(idx,images[idx]);
-[...dots.children].forEach((d,i)=>d.classList.toggle('active',i===idx))}
-function next(){show(idx+1)}function prev(){show(idx-1)}
-function play(){playing=true;pauseBtn.textContent='⏸️';clearInterval(timer);timer=setInterval(next,INTERVAL)}
-function pause(){playing=false;pauseBtn.textContent='▶️';clearInterval(timer)}
-pauseBtn.onclick=()=>playing?pause():play();
-nextBtn.onclick=()=>{pause();next()};prevBtn.onclick=()=>{pause();prev()};
-function buildDots(){dots.textContent='';images.forEach((_,i)=>{let d=document.createElement('span');d.className='dot';d.onclick=()=>{pause();show(i)};dots.appendChild(d)})}
-window.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){pause();next()}if(e.key==='ArrowLeft'){pause();prev()}if(e.key==='f'){toggleFull()}if(e.key==='Escape'){closeLightbox()}});
-function toggleFull(){const el=document.documentElement;!document.fullscreenElement?el.requestFullscreen():document.exitFullscreen()}
-fullBtn.onclick=toggleFull;
-function openLightbox(){lbImg.src=images[idx];lb.classList.add('open')}
-function closeLightbox(){lb.classList.remove('open')}
-document.getElementById('stage').onclick=openLightbox;
-lbClose.onclick=closeLightbox;lb.onclick=e=>{if(e.target===lb)closeLightbox()};
-lbPrev.onclick=()=>{show(idx-1);lbImg.src=images[idx]};
-lbNext.onclick=()=>{show(idx+1);lbImg.src=images[idx]};
+  // ===== стан
+  let idx = 0;
+  let playing = true;
+  let timer = null;
+  const INTERVAL = 2000;
 
-let checked=0;
-candidates.forEach(src=>{
- let im=new Image();
- im.onload=()=>{images.push(src);done()};
- im.onerror=done;
- im.src=src+'?v='+Date.now()
-});
-function done(){checked++;if(checked===candidates.length){if(!images.length){cap.textContent='Фото тимчасово недоступні 😕';return}
- buildDots();show(0);play()}}
-</script>
+  // точки
+  const dots = images.map((_,i)=>{
+    const d=document.createElement('span');
+    d.className='dot'; d.title = ${i+1}/${images.length};
+    d.addEventListener('click',()=>{ idx=i; show(); play(); });
+    dotsWrap.appendChild(d);
+    return d;
+  });
+
+  // показ
+  function show(){
+    idx = (idx + images.length) % images.length;
+    view.src = images[idx];
+    cap.textContent = ${idx+1} / ${images.length};
+    dots.forEach((d,j)=>d.classList.toggle('active', j===idx));
+  }
+  function next(n=1){ idx+=n; show(); }
+  function prev(){ next(-1); }
+
+  // автоплей
+  function play(){ playing=true; pauseBtn.textContent='⏸'; clearInterval(timer); timer=setInterval(()=>next(1), INTERVAL); }
+  function pause(){ playing=false; pauseBtn.textContent='▶'; clearInterval(timer); }
+
+  // навігація
+  prevBtn.addEventListener('click',()=>{ pause(); prev(); });
+  nextBtn.addEventListener('click',()=>{ pause(); next(); });
+  pauseBtn.addEventListener('click',()=>{ playing ? pause() : play(); });
+
+  // свайп
+  let touchX=null;
+  stage.addEventListener('touchstart',e=>{ touchX = e.touches[0].clientX; },{passive:true});
+  stage.addEventListener('touchend',e=>{
+    if(touchX==null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if(Math.abs(dx)>40){ pause(); (dx>0?prev():next()); }
+    touchX=null;
+  },{passive:true});
+
+  // клавіатура
+  window.addEventListener('keydown',e=>{
+    if(e.key==='ArrowLeft'){ pause(); prev(); }
+    else if(e.key==='ArrowRight'){ pause(); next(); }
+    else if(e.key==='f'){ toggleFull(); }
+    else if(e.key==='Escape'){ if(document.fullscreenElement) document.exitFullscreen(); if(lb.classList.contains('open')) closeLightbox(); }
+  });
+
+  // фулскрін
+  function toggleFull(){
+    const el=document.documentElement;
+    if(!document.fullscreenElement){ (el.requestFullscreenel.webkitRequestFullscreenel.msRequestFullscreen||el.mozRequestFullScreen).call(el); }
+    else { (document.exitFullscreendocument.webkitExitFullscreendocument.msExitFullscreen).call(document); }
+  }
+  fullBtn.addEventListener('click',toggleFull);
+
+  // лайтбокс
+  function openLightbox(){ lb.classList.add('open'); lbImg.src = images[idx]; }
+  function closeLightbox(){ lb.classList.remove('open'); }
+  stage.addEventListener('click', (e)=>{ if(e.target===view) openLightbox(); });
+  lbClose.addEventListener('click',closeLightbox);
+  lbPrev.addEventListener('click',()=>{ prev(); lbImg.src=images[idx]; });
+  lbNext.addEventListener('click',()=>{ next(); lbImg.src=images[idx]; });
+
+  // передзагрузка першої порції
+  const preload = images.slice(0,6);
+  let loaded=0;
+  function done(){ loaded++; if(loaded>=Math.min(preload.length, images.length)){ show(); play(); } }
+  preload.forEach(src=>{ const im=new Image(); im.onload=done; im.onerror=done; im.src=src; });
+
+  // якщо фото менше 6 — все одно стартуємо
+  if(images.length===0){ cap.textContent='Фото тимчасово недоступні'; }
+  </script>
 </body>
 </html>
