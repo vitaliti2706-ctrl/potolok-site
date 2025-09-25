@@ -125,19 +125,17 @@
   </div>
 
   <script>
-    // Захист від NaN
     const num = v => Number.isFinite(+v) ? +v : 0;
     const UAH = n => new Intl.NumberFormat('uk-UA').format(Math.round(n));
     const $ = id => document.getElementById(id);
 
     function compute() {
       const area     = num($('#area').value);
-      const perim    = num($('#perimeter').value); // про запас
+      const perim    = num($('#perimeter').value);
       const baseType = $('#baseType').value;
 
-      const basePrice = baseType === 'al' ? 450 : 400;     // грн/м²
+      const basePrice = baseType === 'al' ? 450 : 400;
 
-      // допи метражем
       const shadow   = num($('#shadowLen').value)  * 150;
       const floating = num($('#floatLen').value)   * 550;
       const cornice  = num($('#corniceLen').value) * 1000;
@@ -145,7 +143,6 @@
       const tracks   = num($('#tracksLen').value)  * 300;
       const cable    = num($('#cableLen').value)   * 30;
 
-      // поштучно
       const spots    = num($('#spots').value)       * 150;
       const chand    = num($('#chandeliers').value) * 400;
       const vents    = num($('#vents').value)       * 1000;
@@ -156,11 +153,9 @@
 
       let subtotal   = base + byMeter + byPieces;
 
-      // ручна знижка/націнка
       const adjPct = num($('#adjPct').value);
       if (adjPct !== 0) subtotal *= (100 + adjPct) / 100;
 
-      // авто-знижка за площу
       let autoDiscApplied = false;
       if (area > 50) { subtotal *= 0.9; autoDiscApplied = true; }
 
@@ -210,7 +205,6 @@ try {
       }
     }
 
-    // ініціалізація + live-перерахунок
     function bindLive() {
       compute();
       document.getElementById('calcBtn').addEventListener('click', compute);
@@ -220,7 +214,6 @@ try {
         node.addEventListener('change', compute);
       });
     }
-    // гарантовано після побудови DOM
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', bindLive);
     } else {
