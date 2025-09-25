@@ -84,13 +84,13 @@
           <div style="flex:1">
             <label>Накладні треки, м.пог (300 грн/м)</label>
             <input id="tracksLen" type="number" min="0" step="0.1" value="0" />
-</div>
+          </div>
           <div style="flex:1">
             <label>Магнітна витяжка, шт (1000 грн/шт)</label>
             <input id="vents" type="number" min="0" step="1" value="0" />
           </div>
         </div>
-        <label style="margin-top:10px">Прокладка кабелю, м.пог (30 грн/м)</label>
+<label style="margin-top:10px">Прокладка кабелю, м.пог (30 грн/м)</label>
         <input id="cableLen" type="number" min="0" step="0.1" value="0" />
       </div>
 
@@ -125,99 +125,67 @@
   </div>
 
   <script>
-    const num = v => Number.isFinite(+v) ? +v : 0;
-    const UAH = n => new Intl.NumberFormat('uk-UA').format(Math.round(n));
-    const $ = id => document.getElementById(id);
+    // утиліти
+    function num(v){ var n = +v; return isFinite(n) ? n : 0; }
+    function UAH(n){ return new Intl.NumberFormat('uk-UA').format(Math.round(n)); }
+    function $(id){ return document.getElementById(id); }
 
-    function compute() {
-      const area     = num($('#area').value);
-      const perim    = num($('#perimeter').value);
-      const baseType = $('#baseType').value;
+    function compute(){
+      var area     = num($('area').value);
+      var perim    = num($('perimeter').value);
+      var baseType = $('baseType').value;
 
-      const basePrice = baseType === 'al' ? 450 : 400;
+      var basePrice = baseType === 'al' ? 450 : 400;
 
-      const shadow   = num($('#shadowLen').value)  * 150;
-      const floating = num($('#floatLen').value)   * 550;
-      const cornice  = num($('#corniceLen').value) * 1000;
-      const decor    = num($('#decorLen').value)   * 40;
-      const tracks   = num($('#tracksLen').value)  * 300;
-      const cable    = num($('#cableLen').value)   * 30;
+      var shadow   = num($('shadowLen').value)  * 150;
+      var floating = num($('floatLen').value)   * 550;
+      var cornice  = num($('corniceLen').value) * 1000;
+      var decor    = num($('decorLen').value)   * 40;
+      var tracks   = num($('tracksLen').value)  * 300;
+      var cable    = num($('cableLen').value)   * 30;
 
-      const spots    = num($('#spots').value)       * 150;
-      const chand    = num($('#chandeliers').value) * 400;
-      const vents    = num($('#vents').value)       * 1000;
+      var spots    = num($('spots').value)       * 150;
+      var chand    = num($('chandeliers').value) * 400;
+      var vents    = num($('vents').value)       * 1000;
 
-      const base     = area * basePrice;
-      const byMeter  = shadow + floating + cornice + decor + tracks + cable;
-      const byPieces = spots + chand + vents;
+      var base     = area * basePrice;
+      var byMeter  = shadow + floating + cornice + decor + tracks + cable;
+      var byPieces = spots + chand + vents;
 
-      let subtotal   = base + byMeter + byPieces;
+      var subtotal = base + byMeter + byPieces;
 
-      const adjPct = num($('#adjPct').value);
-      if (adjPct !== 0) subtotal *= (100 + adjPct) / 100;
+      var adjPct = num($('adjPct').value);
+      if (adjPct !== 0) subtotal = subtotal * (100 + adjPct) / 100;
 
-      let autoDiscApplied = false;
-      if (area > 50) { subtotal *= 0.9; autoDiscApplied = true; }
+      var autoDiscApplied = false;
+      if (area > 50) { subtotal = subtotal * 0.9; autoDiscApplied = true; }
 
-      const MIN = 5000;
-      const total = Math.max(MIN, Math.round(subtotal));
+      var MIN = 5000;
+      var total = Math.max(MIN, Math.round(subtotal));
 
-      const parts = [
-        База: ${area} м² × ${basePrice} = ${UAH(base)} грн,
-        Довжина/м.пог: ${UAH(byMeter)} грн,
-        Поштучно: ${UAH(byPieces)} грн
+      var parts = [
+        'База: ' + area + ' м² × ' + basePrice + ' =  + UAH(base) + ' грн',
+        'Довжина/м.пог: ' + UAH(byMeter) + ' грн',
+        'Поштучно: ' + UAH(byPieces) + ' грн'
       ];
-      if (adjPct) parts.push(${adjPct > 0 ? 'Націнка' : 'Знижка'} ${adjPct}% застосована);
+      if (adjPct) parts.push((adjPct > 0 ? 'Націнка ' : 'Знижка ') + adjPct + '% застосована');
       if (autoDiscApplied) parts.push('Авто-знижка 10% (площа > 50 м²)');
 
-      $('#explain').innerText = parts.join(' · ');
-      $('#total').innerText   = ${UAH(total)} грн;
-      $('#minNote').innerText = total === MIN
+      $('explain').innerText = parts.join(' · ');
+      $('total').innerText   = UAH(total) + ' грн';
+      $('minNote').innerText = (total === MIN)
         ? 'Застосовано мінімальне замовлення 5000 грн. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.'
         : '';
 
-      return { total, area, perim, basePrice };
-    }
-async function openOrder() {
-      const { total } = compute();
-      const name = prompt("Вкажіть ваше ім'я:");
-      if (!name) return;
-      const phone = prompt('Ваш телефон (+380…):');
-      if (!phone) return;
-      const message = prompt('Коментар (необовʼязково):') || '';
-      try {
-        const resp = await fetch('/api/telegram-submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name,
-            phone,
-            message: Замовлення з калькулятора. Сума: ${total} грн. ${message},
-            source: location.pathname
-          })
-        });
-        if (!resp.ok) throw new Error(await resp.text());
-        alert('Дякуємо! Заявку надіслано, ми зв’яжемось з вами.');
-      } catch (e) {
-        console.error(e);
-        alert('Не вдалось надіслати. Спробуйте ще раз або напишіть у Telegram.');
-      }
+      return { total: total, area: area, perim: perim, basePrice: basePrice };
     }
 
-    function bindLive() {
-      compute();
-      document.getElementById('calcBtn').addEventListener('click', compute);
-      document.getElementById('orderBtn').addEventListener('click', openOrder);
-      document.querySelectorAll('input,select').forEach(node=>{
-        node.addEventListener('input', compute);
-        node.addEventListener('change', compute);
-      });
-    }
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', bindLive);
-    } else {
-      bindLive();
-    }
-  </script>
-</body>
-</html>
+    async function openOrder(){
+      var data = compute();
+      var total = data.total;
+
+      var name  = prompt("Вкажіть ваше ім'я:");
+      if (!name) return;
+      var phone = prompt('Ваш телефон (+380…):');
+      if (!phone) return;
+      var note  = prompt('Коментар (необовʼязково):') || '';
