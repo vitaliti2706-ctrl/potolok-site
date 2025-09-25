@@ -24,9 +24,26 @@
     .flex{display:flex;gap:10px;flex-wrap:wrap}
     .footer{margin-top:22px;padding:14px;background:#0b1220;border-radius:12px;border:1px solid #22304b}
     .inline{display:inline-block}
+    /* Top nav (same style as index) */
+    .topnav { background:#111827; border-bottom:1px solid #1f2937; }
+    .topnav .inner { max-width:980px; margin:0 auto; padding:10px 16px; display:flex; gap:8px; flex-wrap:wrap; }
+    .navlink { padding:10px 14px; border-radius:10px; text-decoration:none; color:#e2e8f0; background:#0b1220; border:1px solid #253046; }
+    .navlink:hover { background:#0f172a; }
+    .navlink.active { background:#16a34a; border-color:#16a34a; color:#fff; }
   </style>
 </head>
 <body>
+  <!-- NAV DUPLICATE -->
+  <div class="topnav">
+    <div class="inner">
+      <a class="navlink" href="/">Головна</a>
+      <a class="navlink" href="/gallery.html">Галерея</a>
+      <a class="navlink" href="/price.html">Прайс</a>
+      <a class="navlink active" href="/calculator.html">Калькулятор</a>
+      <a class="navlink" href="/reviews.html">Відгуки</a>
+    </div>
+  </div>
+
   <div class="wrap">
     <h1>Калькулятор вартості</h1>
     <p class="note">
@@ -90,7 +107,8 @@
             <input id="vents" type="number" min="0" step="1" value="0" />
           </div>
         </div>
-<label style="margin-top:10px">Прокладка кабелю, м.пог (30 грн/м)</label>
+
+        <label style="margin-top:10px">Прокладка кабелю, м.пог (30 грн/м)</label>
         <input id="cableLen" type="number" min="0" step="0.1" value="0" />
       </div>
 
@@ -113,45 +131,22 @@
       <div class="muted" id="minNote"></div>
     </div>
 
-   <!-- FOOTER (safe: no impact on calculator JS) -->
-<div class="footer">
-  <div class="flex">
-    <a class="btn btn-primary inline" href="tel:+380974546713">Подзвонити зараз</a>
-
-    <!-- Відкриває Telegram у вебі/додатку без помилки в консолі -->
-    <a class="btn btn-secondary inline"
-       href="https://t.me/PotolokKhBot"
-       target="_blank" rel="noopener">
-      Залишити заявку в Telegram
-    </a>
-
-    <!-- Viber (стандартний deep-link) -->
-    <a class="btn btn-secondary inline"
-       href="viber://chat?number=%2B380974546713">
-      Viber
-    </a>
-
-    <!-- WhatsApp -->
-    <a class="btn btn-secondary inline"
-       href="https://wa.me/380974546713"
-       target="_blank" rel="noopener">
-      WhatsApp
-    </a>
-  </div>
-
-  <p class="muted" style="margin-top:8px">Графік роботи: Пн–Сб, 09:00–18:00.</p>
-</div>
+    <div class="footer">
+      <div class="flex">
+        <a class="btn btn-primary inline" href="tel:+380974546713">Подзвонити зараз</a>
+        <a class="btn btn-secondary inline" href="https://t.me/PotolokKhBot" target="_blank" rel="noopener">Залишити заявку в Telegram</a>
+        <a class="btn btn-secondary inline" href="viber://chat?number=%2B380974546713">Viber</a>
+        <a class="btn btn-secondary inline" href="https://wa.me/380974546713" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
       <p class="muted" style="margin-top:8px">Графік роботи: Пн–Сб, 09:00–18:00.</p>
     </div>
   </div>
 
   <script>
-    // Утиліти
     function num(v){ var n = +v; return isFinite(n) ? n : 0; }
     function UAH(n){ return new Intl.NumberFormat('uk-UA').format(Math.round(n)); }
     function $(id){ return document.getElementById(id); }
 
-    // Основний розрахунок
     function compute(){
       var area     = num($('area').value);
       var baseType = $('baseType').value;
@@ -175,19 +170,15 @@
 
       var subtotal = base + byMeter + byPieces;
 
-      // ручна знижка/націнка
       var adjPct = num($('adjPct').value);
       if (adjPct !== 0) subtotal = subtotal * (100 + adjPct) / 100;
 
-      // авто-знижка 10% за площу > 50 м²
       var autoDiscApplied = false;
       if (area > 50){ subtotal = subtotal * 0.9; autoDiscApplied = true; }
 
-      // мінімальне замовлення
       var MIN = 5000;
       var total = Math.max(MIN, Math.round(subtotal));
 
-      // пояснення (без шаблонних рядків!)
       var parts = [
         'База: ' + area + ' м² × ' + basePrice + ' = ' + UAH(base) + ' грн',
         'Довжина/м.пог: ' + UAH(byMeter) + ' грн',
@@ -202,10 +193,9 @@
         ? 'Застосовано мінімальне замовлення 5000 грн. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.'
         : '';
 
-      // повертаємо для заявки
       return { total: total, area: area, basePrice: basePrice };
     }
-// Відправка заявки у Telegram (через твою serverless-функцію)
+
     async function openOrder(){
       var data  = compute();
       var name  = prompt('Вкажіть ваше ім\'я:');
@@ -215,21 +205,9 @@
       var note  = prompt('Коментар (необов\'язково):') || '';
 
       try{
-        var payload = {
-          name: name,
-          phone: phone,
-          message: 'Замовлення з калькулятора. Сума: ' + data.total + ' грн. ' + note,
-          source: location.pathname
-        };
-        var resp = await fetch('/api/telegram-submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        if (!resp.ok){
-          var t = await resp.text();
-          throw new Error(t || ('HTTP ' + resp.status));
-        }
+        var payload = { name: name, phone: phone, message: 'Замовлення з калькулятора. Сума: ' + data.total + ' грн. ' + note, source: location.pathname };
+        var resp = await fetch('/api/telegram-submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        if (!resp.ok){ var t = await resp.text(); throw new Error(t || ('HTTP ' + resp.status)); }
         alert('Дякуємо! Заявку надіслано, ми зв’яжемось з вами.');
       }catch(e){
         console.error(e);
@@ -237,7 +215,6 @@
       }
     }
 
-    // Прив’язка подій і live-перерахунок
     function bindLive(){
       compute();
       $('calcBtn').addEventListener('click', compute);
