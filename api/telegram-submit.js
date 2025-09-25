@@ -6,40 +6,48 @@ module.exports = async (req, res) => {
       return;
     }
 
-    const { name, phone, message = '', source = '' } = req.body || {};
+    const b = req.body || {};
+    const name = b.name || '';
+    const phone = b.phone || '';
+    const message = b.message || '';
+    const source = b.source || '';
+
     if (!name || !phone) {
       res.status(400).json({ ok: false, error: 'Missing name or phone' });
       return;
     }
 
-    const TOKEN = process.env.TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_TOKEN;
-    const CHATID = process.env.TELEGRAM_CHAT_ID || process.env.CHAT_ID;
+    const TOKEN  = process.env.TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_TOKEN;
+    const CHATID = process.env.TELEGRAM_CHAT_ID   || process.env.CHAT_ID;
     if (!TOKEN || !CHATID) {
       res.status(500).json({ ok: false, error: 'Missing Telegram env vars' });
       return;
     }
 
-    const text =
-      Нова заявка з калькулятора\n +
-      Ім’я: ${name}\n +
-      Телефон: ${phone}\n +
-      (message ? Коментар: ${message}\n : '') +
-      (source ? Сторінка: ${source}\n : '');
+    const lines = [
+      '✉️ Нова заявка з сайту',
+      '👤 Імʼя: ' + name,
+      '📞 Телефон: ' + phone,
+      message ? '📝 Повідомлення: ' + message : null,
+      source  ? '🌐 Сторінка: ' + source : null
+    ].filter(Boolean);
 
-    const tgResp = await fetch(https://api.telegram.org/bot${TOKEN}/sendMessage, {
+    const text = lines.join('\n');
+
+    const r = await fetch('https://api.telegram.org/bot' + TOKEN + '/sendMessage', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CHATID, text })
+      body: JSON.stringify({ chat_id: CHATID, text: text })
     });
 
-    if (!tgResp.ok) {
-      const t = await tgResp.text();
-      throw new Error(t);
+    if (!r.ok) {
+      const t = await r.text();
+      throw new Error('Telegram error: ' + t);
     }
 
     res.status(200).json({ ok: true });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ ok: false, error: 'Server error' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ ok: false, error: String(err) });
   }
 };
