@@ -8,11 +8,11 @@
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0}
     .wrap{max-width:980px;margin:32px auto;padding:16px}
     h1{margin:0 0 8px}
-    .note{opacity:.8;margin:0 0 16px}
+    .note{opacity:.85;margin:0 0 16px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
     .card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:14px}
     label{display:block;font-size:13px;margin-bottom:6px;opacity:.9}
-    input,select,textarea{width:100%;box-sizing:border-box;background:#0b1220;border:1px solid #253046;border-radius:10px;padding:10px;color:#e5e7eb}
+    input,select{width:100%;box-sizing:border-box;background:#0b1220;border:1px solid #253046;border-radius:10px;padding:10px;color:#e5e7eb}
     input[type="number"]{appearance:textfield}
     .row{display:flex;gap:8px}
     .btn{cursor:pointer;border:0;border-radius:12px;padding:12px 16px;font-weight:600}
@@ -22,8 +22,6 @@
     .muted{opacity:.8}
     .hr{height:1px;background:#22304b;margin:14px 0}
     .flex{display:flex;gap:10px;flex-wrap:wrap}
-    .success{color:#22c55e}
-    .error{color:#ef4444}
     .footer{margin-top:22px;padding:14px;background:#0b1220;border-radius:12px;border:1px solid #22304b}
     .inline{display:inline-block}
   </style>
@@ -31,8 +29,11 @@
 <body>
   <div class="wrap">
     <h1>Калькулятор вартості</h1>
-    <p class="note">База: <b>400 грн/м²</b> (ПВХ-багет) • Алюмінієвий багет: <b>450 грн/м²</b>.<br>
-      При замовленні понад <b>50 м²</b> — знижка <b>10%</b>. Мінімальне замовлення — <b>5000 грн</b>. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.</p>
+    <p class="note">
+      База: <b>400 грн/м²</b> (ПВХ-багет) • Алюмінієвий багет: <b>450 грн/м²</b>.<br />
+      При замовленні понад <b>50 м²</b> — знижка <b>10%</b>.<br />
+      Мінімальне замовлення — <b>5000 грн</b>. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.
+    </p>
 
     <div class="grid">
       <div class="card">
@@ -126,44 +127,50 @@
   </div>
 
   <script>
+    // helpers
     const UAH = n => new Intl.NumberFormat('uk-UA').format(Math.round(n));
-    const els = id => document.getElementById(id);
+    const el = id => document.getElementById(id);
 
     function compute() {
-      const area       = +els('area').value || 0;
-      const perim      = +els('perimeter').value || 0;
-      const baseType   = els('baseType').value;
+      const area     = +el('area').value || 0;
+      const perim    = +el('perimeter').value || 0; // (про всяк)
+      const baseType = el('baseType').value;
 
       const basePrice = baseType === 'al' ? 450 : 400; // грн/м²
-      const shadow    = (+els('shadowLen').value  || 0) * 150;
-      const floating  = (+els('floatLen').value   || 0) * 550;
-      const cornice   = (+els('corniceLen').value || 0) * 1000;
-      const decor     = (+els('decorLen').value   || 0) * 40;
 
-      const spots     = (+els('spots').value       || 0) * 150;
-      const chand     = (+els('chandeliers').value || 0) * 400;
-      const tracks    = (+els('tracksLen').value   || 0) * 300;
-      const vents     = (+els('vents').value       || 0) * 1000;
-      const cable     = (+els('cableLen').value    || 0) * 30;
+      // допи метражем
+      const shadow   = (+el('shadowLen').value  || 0) * 150;
+      const floating = (+el('floatLen').value   || 0) * 550;
+      const cornice  = (+el('corniceLen').value || 0) * 1000;
+      const decor    = (+el('decorLen').value   || 0) * 40;
+      const tracks   = (+el('tracksLen').value  || 0) * 300;
+      const cable    = (+el('cableLen').value   || 0) * 30;
 
-      const base      = area * basePrice;
-      const byMeter   = shadow + floating + cornice + decor + tracks + cable;
-      const byPieces  = spots + chand + vents;
+      // поштучно
+      const spots    = (+el('spots').value        || 0) * 150;
+      const chand    = (+el('chandeliers').value  || 0) * 400;
+      const vents    = (+el('vents').value        || 0) * 1000;
 
-      let subtotal    = base + byMeter + byPieces;
+      const base     = area * basePrice;
+      const byMeter  = shadow + floating + cornice + decor + tracks + cable;
+      const byPieces = spots + chand + vents;
+
+      let subtotal   = base + byMeter + byPieces;
 
       // ручна знижка/націнка
-      const adjPct = +els('adjPct').value || 0;
-      if (adjPct !== 0) subtotal *= (100 + adjPct) / 100;
-
-      // авто-знижка за площу
-      let autoDisc = 0;
-      if (area > 50) {
-        autoDisc = 0.10;
-        subtotal *= 0.90;
+      const adjPct = +el('adjPct').value || 0;
+      if (adjPct !== 0) {
+        subtotal *= (100 + adjPct) / 100;
       }
 
-      // мінімальне замовлення
+      // авто-знижка за площу
+      let autoDiscApplied = false;
+      if (area > 50) {
+        subtotal *= 0.9;
+        autoDiscApplied = true;
+      }
+
+      // мінімалка
       const MIN = 5000;
       const total = Math.max(MIN, Math.round(subtotal));
 
@@ -171,52 +178,55 @@
       const parts = [
         База: ${area} м² × ${basePrice} = ${UAH(base)} грн,
         Довжина/м.пог: ${UAH(byMeter)} грн,
-        Поштучно: ${UAH(byPieces)} грн,
+        Поштучно: ${UAH(byPieces)} грн
       ];
       if (adjPct) parts.push(${adjPct > 0 ? 'Націнка' : 'Знижка'} ${adjPct}% застосована);
-      if (autoDisc) parts.push(Авто-знижка 10% (площа > 50 м²));
+      if (autoDiscApplied) parts.push('Авто-знижка 10% (площа > 50 м²)');
 
-      els('explain').innerText = parts.join(' · ');
-      els('total').innerText   = ${UAH(total)} грн;
-      els('minNote').innerText = total === MIN
+      el('explain').innerText = parts.join(' · ');
+      el('total').innerText = ${UAH(total)} грн;
+      el('minNote').innerText = total === MIN
         ? 'Застосовано мінімальне замовлення 5000 грн. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.'
         : '';
-
-      return { total, area, perim, basePrice };
+return { total, area, perim, basePrice };
     }
-function openOrder() {
+
+    async function openOrder() {
       const { total } = compute();
-      const name  = prompt('Вкажіть ваше ім’я:');
+
+      const name = prompt("Вкажіть ваше ім'я:");
       if (!name) return;
       const phone = prompt('Ваш телефон (+380…):');
       if (!phone) return;
-      const message = prompt('Коментар\n(необовʼязково):') || '';
+      const message = prompt('Коментар (необовʼязково):') || '';
 
-      fetch('/api/telegram-submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name, phone,
-          message: Замовлення з калькулятора. Сума: ${total} грн. ${message},
-          source: location.pathname
-        })
-      })
-        .then(r => r.ok ? r.json() : r.text().then(t => Promise.reject(t)))
-        .then(() => alert('Дякуємо! Заявку надіслано, ми зв’яжемось з вами.'))
-        .catch(err => {
-          console.error(err);
-          alert('Не вдалось надіслати. Спробуйте ще раз або напишіть у Telegram.');
+      try {
+        const resp = await fetch('/api/telegram-submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            phone,
+            message: Замовлення з калькулятора. Сума: ${total} грн. ${message},
+            source: location.pathname
+          })
         });
+
+        if (!resp.ok) throw new Error(await resp.text());
+        alert('Дякуємо! Заявку надіслано, ми зв’яжемось з вами.');
+      } catch (e) {
+        console.error(e);
+        alert('Не вдалось надіслати. Спробуйте ще раз або напишіть у Telegram.');
+      }
     }
 
-    // init
+    // init & live
     compute();
     document.getElementById('calcBtn').addEventListener('click', compute);
     document.getElementById('orderBtn').addEventListener('click', openOrder);
-
     ['input','change'].forEach(ev=>{
-      document.querySelectorAll('input,select').forEach(el=>{
-        el.addEventListener(ev,()=>{ compute(); });
+      document.querySelectorAll('input,select').forEach(node=>{
+        node.addEventListener(ev, compute);
       });
     });
   </script>
