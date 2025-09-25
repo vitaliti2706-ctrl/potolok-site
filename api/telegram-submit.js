@@ -1,42 +1,45 @@
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    res.status(405).json({ ok: false, error: 'Method Not Allowed' });
-    return;
-  }
-
+// api/telegram-submit.js
+module.exports = async (req, res) => {
   try {
-    const b = req.body || {};
-    const lines = [
-      '📩 Нова заявка з сайту',
-      "👤 Ім'я: " + (b.name || '-'),
-      '📞 Телефон: ' + (b.phone || '-'),
-      '📝 Повідомлення: ' + (b.message || '-'),
-      '🌐 Сторінка: ' + (b.source || '-')
-    ];
-    const text = lines.join('\n');
+    if (req.method !== 'POST') {
+      res.status(405).json({ ok: false, error: 'Method not allowed' });
+      return;
+    }
 
-    const r = await fetch(
-      'https://api.telegram.org/bot' +
-        process.env.TELEGRAM_BOT_TOKEN +
-        '/sendMessage',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: process.env.TELEGRAM_CHAT_ID,
-          text: text
-        })
-      }
-    );
+    const { name, phone, message = '', source = '' } = req.body || {};
+    if (!name || !phone) {
+      res.status(400).json({ ok: false, error: 'Missing name or phone' });
+      return;
+    }
 
-    if (!r.ok) {
-      const t = await r.text();
-      throw new Error('Telegram error: ' + t);
+    const TOKEN = process.env.TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_TOKEN;
+    const CHATID = process.env.TELEGRAM_CHAT_ID || process.env.CHAT_ID;
+    if (!TOKEN || !CHATID) {
+      res.status(500).json({ ok: false, error: 'Missing Telegram env vars' });
+      return;
+    }
+
+    const text =
+      Нова заявка з калькулятора\n +
+      Ім’я: ${name}\n +
+      Телефон: ${phone}\n +
+      (message ? Коментар: ${message}\n : '') +
+      (source ? Сторінка: ${source}\n : '');
+
+    const tgResp = await fetch(https://api.telegram.org/bot${TOKEN}/sendMessage, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: CHATID, text })
+    });
+
+    if (!tgResp.ok) {
+      const t = await tgResp.text();
+      throw new Error(t);
     }
 
     res.status(200).json({ ok: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ ok: false, error: String(err) });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ ok: false, error: 'Server error' });
   }
-}
+};
