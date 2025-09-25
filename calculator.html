@@ -9,7 +9,7 @@
     .wrap{max-width:980px;margin:32px auto;padding:16px}
     h1{margin:0 0 8px}
     .note{opacity:.85;margin:0 0 16px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
     .card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:14px}
     label{display:block;font-size:13px;margin-bottom:6px;opacity:.9}
     input,select{width:100%;box-sizing:border-box;background:#0b1220;border:1px solid #253046;border-radius:10px;padding:10px;color:#e5e7eb}
@@ -39,7 +39,7 @@
         <h3>Площа та тип</h3>
         <label>Площа, м²</label>
         <input id="area" type="number" min="0" step="0.1" value="20" />
-        <label style="margin-top:10px">Периметр, м.пог (для профілів/вставок)</label>
+        <label style="margin-top:10px">Периметр, м.пог (для довідки)</label>
         <input id="perimeter" type="number" min="0" step="0.1" value="18" />
         <label style="margin-top:10px">Тип багета</label>
         <select id="baseType">
@@ -125,28 +125,28 @@
   </div>
 
   <script>
-    // утиліти
+    // Утиліти
     function num(v){ var n = +v; return isFinite(n) ? n : 0; }
     function UAH(n){ return new Intl.NumberFormat('uk-UA').format(Math.round(n)); }
     function $(id){ return document.getElementById(id); }
 
+    // Основний розрахунок
     function compute(){
       var area     = num($('area').value);
-      var perim    = num($('perimeter').value);
       var baseType = $('baseType').value;
 
-      var basePrice = baseType === 'al' ? 450 : 400;
+      var basePrice = (baseType === 'al') ? 450 : 400;
 
       var shadow   = num($('shadowLen').value)  * 150;
       var floating = num($('floatLen').value)   * 550;
       var cornice  = num($('corniceLen').value) * 1000;
       var decor    = num($('decorLen').value)   * 40;
-      var tracks   = num($('tracksLen').value)  * 300;
-      var cable    = num($('cableLen').value)   * 30;
 
       var spots    = num($('spots').value)       * 150;
       var chand    = num($('chandeliers').value) * 400;
+      var tracks   = num($('tracksLen').value)   * 300;
       var vents    = num($('vents').value)       * 1000;
+      var cable    = num($('cableLen').value)    * 30;
 
       var base     = area * basePrice;
       var byMeter  = shadow + floating + cornice + decor + tracks + cable;
@@ -154,22 +154,26 @@
 
       var subtotal = base + byMeter + byPieces;
 
+      // ручна знижка/націнка
       var adjPct = num($('adjPct').value);
       if (adjPct !== 0) subtotal = subtotal * (100 + adjPct) / 100;
 
+      // авто-знижка 10% за площу > 50 м²
       var autoDiscApplied = false;
-      if (area > 50) { subtotal = subtotal * 0.9; autoDiscApplied = true; }
+      if (area > 50){ subtotal = subtotal * 0.9; autoDiscApplied = true; }
 
+      // мінімальне замовлення
       var MIN = 5000;
       var total = Math.max(MIN, Math.round(subtotal));
 
+      // пояснення (без шаблонних рядків!)
       var parts = [
-        'База: ' + area + ' м² × ' + basePrice + ' =  + UAH(base) + ' грн',
+        'База: ' + area + ' м² × ' + basePrice + ' = ' + UAH(base) + ' грн',
         'Довжина/м.пог: ' + UAH(byMeter) + ' грн',
         'Поштучно: ' + UAH(byPieces) + ' грн'
       ];
-      if (adjPct) parts.push((adjPct > 0 ? 'Націнка ' : 'Знижка ') + adjPct + '% застосована');
-      if (autoDiscApplied) parts.push('Авто-знижка 10% (площа > 50 м²)');
+      if (adjPct){ parts.push((adjPct > 0 ? 'Націнка ' : 'Знижка ') + adjPct + '% застосована'); }
+      if (autoDiscApplied){ parts.push('Авто-знижка 10% (площа > 50 м²)'); }
 
       $('explain').innerText = parts.join(' · ');
       $('total').innerText   = UAH(total) + ' грн';
@@ -177,15 +181,54 @@
         ? 'Застосовано мінімальне замовлення 5000 грн. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.'
         : '';
 
-      return { total: total, area: area, perim: perim, basePrice: basePrice };
+      // повертаємо для заявки
+      return { total: total, area: area, basePrice: basePrice };
     }
-
+// Відправка заявки у Telegram (через твою serverless-функцію)
     async function openOrder(){
-      var data = compute();
-      var total = data.total;
-
-      var name  = prompt("Вкажіть ваше ім'я:");
+      var data  = compute();
+      var name  = prompt('Вкажіть ваше ім\'я:');
       if (!name) return;
       var phone = prompt('Ваш телефон (+380…):');
       if (!phone) return;
-      var note  = prompt('Коментар (необовʼязково):') || '';
+      var note  = prompt('Коментар (необов\'язково):') || '';
+
+      try{
+        var payload = {
+          name: name,
+          phone: phone,
+          message: 'Замовлення з калькулятора. Сума: ' + data.total + ' грн. ' + note,
+          source: location.pathname
+        };
+        var resp = await fetch('/api/telegram-submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!resp.ok){
+          var t = await resp.text();
+          throw new Error(t || ('HTTP ' + resp.status));
+        }
+        alert('Дякуємо! Заявку надіслано, ми зв’яжемось з вами.');
+      }catch(e){
+        console.error(e);
+        alert('Не вдалось надіслати. Спробуйте ще раз або напишіть у Telegram.');
+      }
+    }
+
+    // Прив’язка подій і live-перерахунок
+    function bindLive(){
+      compute();
+      $('calcBtn').addEventListener('click', compute);
+      $('orderBtn').addEventListener('click', openOrder);
+      var nodes = document.querySelectorAll('input,select');
+      for (var i=0;i<nodes.length;i++){
+        nodes[i].addEventListener('input', compute);
+        nodes[i].addEventListener('change', compute);
+      }
+    }
+    if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', bindLive); }
+    else { bindLive(); }
+  </script>
+</body>
+</html>
