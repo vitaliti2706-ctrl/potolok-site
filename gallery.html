@@ -71,8 +71,7 @@
     const images = [
       ...Array.from({length:30}, (_,i)=>/images/img${String(i+1).padStart(2,'0')}.jpg`),
       ...Array.from({length:20}, (_,i)=>`/images/new_img${String(i+1).padStart(2,'0')}.jpg`)
-    ];
-</script>
+    ];</script>
     // Підпис для активного фото
     function makeCaption(i,total){
       const name = images[i].split('/').pop();
