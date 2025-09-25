@@ -84,13 +84,13 @@
           <div style="flex:1">
             <label>Накладні треки, м.пог (300 грн/м)</label>
             <input id="tracksLen" type="number" min="0" step="0.1" value="0" />
-          </div>
+</div>
           <div style="flex:1">
             <label>Магнітна витяжка, шт (1000 грн/шт)</label>
             <input id="vents" type="number" min="0" step="1" value="0" />
           </div>
         </div>
-<label style="margin-top:10px">Прокладка кабелю, м.пог (30 грн/м)</label>
+        <label style="margin-top:10px">Прокладка кабелю, м.пог (30 грн/м)</label>
         <input id="cableLen" type="number" min="0" step="0.1" value="0" />
       </div>
 
@@ -178,13 +178,12 @@
 
       return { total, area, perim, basePrice };
     }
-
-    async function openOrder() {
+async function openOrder() {
       const { total } = compute();
       const name = prompt("Вкажіть ваше ім'я:");
       if (!name) return;
       const phone = prompt('Ваш телефон (+380…):');
-if (!phone) return;
+      if (!phone) return;
       const message = prompt('Коментар (необовʼязково):') || '';
       try {
         const resp = await fetch('/api/telegram-submit', {
