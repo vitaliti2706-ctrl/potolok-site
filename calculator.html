@@ -31,8 +31,7 @@
     <h1>Калькулятор вартості</h1>
     <p class="note">
       База: <b>400 грн/м²</b> (ПВХ-багет) • Алюмінієвий багет: <b>450 грн/м²</b>.<br />
-      При замовленні понад <b>50 м²</b> — знижка <b>10%</b>.<br />
-      Мінімальне замовлення — <b>5000 грн</b>. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.
+      При замовленні понад <b>50 м²</b> — знижка <b>10%</b>. Мінімальне замовлення — <b>5000 грн</b>. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.
     </p>
 
     <div class="grid">
@@ -84,15 +83,14 @@
         <div class="row" style="margin-top:10px">
           <div style="flex:1">
             <label>Накладні треки, м.пог (300 грн/м)</label>
-<input id="tracksLen" type="number" min="0" step="0.1" value="0" />
+            <input id="tracksLen" type="number" min="0" step="0.1" value="0" />
           </div>
           <div style="flex:1">
             <label>Магнітна витяжка, шт (1000 грн/шт)</label>
             <input id="vents" type="number" min="0" step="1" value="0" />
           </div>
         </div>
-
-        <label style="margin-top:10px">Прокладка кабелю, м.пог (30 грн/м)</label>
+<label style="margin-top:10px">Прокладка кабелю, м.пог (30 грн/м)</label>
         <input id="cableLen" type="number" min="0" step="0.1" value="0" />
       </div>
 
@@ -127,29 +125,30 @@
   </div>
 
   <script>
-    // helpers
+    // Захист від NaN
+    const num = v => Number.isFinite(+v) ? +v : 0;
     const UAH = n => new Intl.NumberFormat('uk-UA').format(Math.round(n));
-    const el = id => document.getElementById(id);
+    const $ = id => document.getElementById(id);
 
     function compute() {
-      const area     = +el('area').value || 0;
-      const perim    = +el('perimeter').value || 0; // (про всяк)
-      const baseType = el('baseType').value;
+      const area     = num($('#area').value);
+      const perim    = num($('#perimeter').value); // про запас
+      const baseType = $('#baseType').value;
 
-      const basePrice = baseType === 'al' ? 450 : 400; // грн/м²
+      const basePrice = baseType === 'al' ? 450 : 400;     // грн/м²
 
       // допи метражем
-      const shadow   = (+el('shadowLen').value  || 0) * 150;
-      const floating = (+el('floatLen').value   || 0) * 550;
-      const cornice  = (+el('corniceLen').value || 0) * 1000;
-      const decor    = (+el('decorLen').value   || 0) * 40;
-      const tracks   = (+el('tracksLen').value  || 0) * 300;
-      const cable    = (+el('cableLen').value   || 0) * 30;
+      const shadow   = num($('#shadowLen').value)  * 150;
+      const floating = num($('#floatLen').value)   * 550;
+      const cornice  = num($('#corniceLen').value) * 1000;
+      const decor    = num($('#decorLen').value)   * 40;
+      const tracks   = num($('#tracksLen').value)  * 300;
+      const cable    = num($('#cableLen').value)   * 30;
 
       // поштучно
-      const spots    = (+el('spots').value        || 0) * 150;
-      const chand    = (+el('chandeliers').value  || 0) * 400;
-      const vents    = (+el('vents').value        || 0) * 1000;
+      const spots    = num($('#spots').value)       * 150;
+      const chand    = num($('#chandeliers').value) * 400;
+      const vents    = num($('#vents').value)       * 1000;
 
       const base     = area * basePrice;
       const byMeter  = shadow + floating + cornice + decor + tracks + cable;
@@ -158,23 +157,16 @@
       let subtotal   = base + byMeter + byPieces;
 
       // ручна знижка/націнка
-      const adjPct = +el('adjPct').value || 0;
-      if (adjPct !== 0) {
-        subtotal *= (100 + adjPct) / 100;
-      }
+      const adjPct = num($('#adjPct').value);
+      if (adjPct !== 0) subtotal *= (100 + adjPct) / 100;
 
       // авто-знижка за площу
       let autoDiscApplied = false;
-      if (area > 50) {
-        subtotal *= 0.9;
-        autoDiscApplied = true;
-      }
+      if (area > 50) { subtotal *= 0.9; autoDiscApplied = true; }
 
-      // мінімалка
       const MIN = 5000;
       const total = Math.max(MIN, Math.round(subtotal));
 
-      // пояснення
       const parts = [
         База: ${area} м² × ${basePrice} = ${UAH(base)} грн,
         Довжина/м.пог: ${UAH(byMeter)} грн,
@@ -183,24 +175,23 @@
       if (adjPct) parts.push(${adjPct > 0 ? 'Націнка' : 'Знижка'} ${adjPct}% застосована);
       if (autoDiscApplied) parts.push('Авто-знижка 10% (площа > 50 м²)');
 
-      el('explain').innerText = parts.join(' · ');
-      el('total').innerText = ${UAH(total)} грн;
-      el('minNote').innerText = total === MIN
+      $('#explain').innerText = parts.join(' · ');
+      $('#total').innerText   = ${UAH(total)} грн;
+      $('#minNote').innerText = total === MIN
         ? 'Застосовано мінімальне замовлення 5000 грн. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.'
         : '';
-return { total, area, perim, basePrice };
+
+      return { total, area, perim, basePrice };
     }
 
     async function openOrder() {
       const { total } = compute();
-
       const name = prompt("Вкажіть ваше ім'я:");
       if (!name) return;
       const phone = prompt('Ваш телефон (+380…):');
       if (!phone) return;
       const message = prompt('Коментар (необовʼязково):') || '';
-
-      try {
+try {
         const resp = await fetch('/api/telegram-submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -211,7 +202,6 @@ return { total, area, perim, basePrice };
             source: location.pathname
           })
         });
-
         if (!resp.ok) throw new Error(await resp.text());
         alert('Дякуємо! Заявку надіслано, ми зв’яжемось з вами.');
       } catch (e) {
@@ -220,15 +210,22 @@ return { total, area, perim, basePrice };
       }
     }
 
-    // init & live
-    compute();
-    document.getElementById('calcBtn').addEventListener('click', compute);
-    document.getElementById('orderBtn').addEventListener('click', openOrder);
-    ['input','change'].forEach(ev=>{
+    // ініціалізація + live-перерахунок
+    function bindLive() {
+      compute();
+      document.getElementById('calcBtn').addEventListener('click', compute);
+      document.getElementById('orderBtn').addEventListener('click', openOrder);
       document.querySelectorAll('input,select').forEach(node=>{
-        node.addEventListener(ev, compute);
+        node.addEventListener('input', compute);
+        node.addEventListener('change', compute);
       });
-    });
+    }
+    // гарантовано після побудови DOM
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bindLive);
+    } else {
+      bindLive();
+    }
   </script>
 </body>
 </html>
