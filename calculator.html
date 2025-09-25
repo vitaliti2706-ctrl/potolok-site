@@ -1,262 +1,225 @@
 <!doctype html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Калькулятор — Potolok.kh</title>
-  <link rel="stylesheet" href="styles.css">
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-61EMVPPMDT"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-61EMVPPMDT');
-  </script>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Калькулятор натяжних стель</title>
   <style>
-    /* Лёгкая стилизация страницы + кнопок калькулятора */
-    .nav-inline{padding:8px 12px}
-    .container{max-width:1100px;margin:0 auto;padding:16px}
-    .row{display:flex;gap:12px;flex-wrap:wrap}
-    .card{background:#0f172a;color:#e5e7eb;border:1px solid #1f2a44;border-radius:12px}
-    .card .pad{padding:16px}
-    .input{width:100%;padding:10px 12px;border:1px solid #1f2a44;border-radius:8px;background:#0b1220;color:#e5e7eb}
-    label{display:block;margin:6px 0 6px;font-weight:600}
-    .btn{background:#16a34a;color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
-    .btn:hover{filter:brightness(1.06)}
-    .small{font-size:14px;opacity:.9}
-    .badge{display:inline-block;background:#22c55e;color:#052e12;padding:4px 10px;border-radius:999px;margin-left:6px}
-    footer.footer{padding:16px 0;text-align:center;opacity:.85}
-    /* FAB на мобилке */
-    @media (max-width: 768px){
-      .callback-fab{
-        position: fixed; right: 14px; bottom: 18px; z-index: 10000;
-        background:#16a34a;color:#fff;border:0;border-radius:999px;
-        padding:14px 18px;font-weight:700;text-decoration:none;
-        box-shadow:0 8px 24px rgba(0,0,0,.25);
-      }
-      .callback-fab:hover{background:#15803d}
-    }
-
-    /* Модалка «Заявка на дзвінок» */
-    .callback-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);
-      display:flex;align-items:center;justify-content:center;z-index:9999}
-    .callback-card{background:#fff;color:#111;padding:25px 20px;border-radius:12px;
-      box-shadow:0 8px 30px rgba(0,0,0,.2);width:min(420px,92vw);position:relative}
-    .close-btn{position:absolute;top:10px;right:14px;font-size:22px;border:none;background:transparent;cursor:pointer}
-    #callbackForm label{display:block;margin:10px 0 4px;font-weight:600}
-    #callbackForm input{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px}
-    #callbackForm .submit-btn{margin-top:14px;width:100%;padding:12px;border:0;border-radius:8px;
-      font-size:16px;background:#16a34a;color:#fff;cursor:pointer;font-weight:600}
-    #callbackForm .submit-btn:hover{background:#15803d}
-    .status{min-height:20px;margin-top:10px;font-size:14px}
-    .status.ok{color:#16a34a}.status.err{color:#dc2626}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0}
+    .wrap{max-width:980px;margin:32px auto;padding:16px}
+    h1{margin:0 0 8px}
+    .note{opacity:.8;margin:0 0 16px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    .card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:14px}
+    label{display:block;font-size:13px;margin-bottom:6px;opacity:.9}
+    input,select,textarea{width:100%;box-sizing:border-box;background:#0b1220;border:1px solid #253046;border-radius:10px;padding:10px;color:#e5e7eb}
+    input[type="number"]{appearance:textfield}
+    .row{display:flex;gap:8px}
+    .btn{cursor:pointer;border:0;border-radius:12px;padding:12px 16px;font-weight:600}
+    .btn-primary{background:#16a34a;color:#fff}
+    .btn-secondary{background:#334155;color:#e2e8f0}
+    .sum{font-size:28px;font-weight:800;margin:6px 0}
+    .muted{opacity:.8}
+    .hr{height:1px;background:#22304b;margin:14px 0}
+    .flex{display:flex;gap:10px;flex-wrap:wrap}
+    .success{color:#22c55e}
+    .error{color:#ef4444}
+    .footer{margin-top:22px;padding:14px;background:#0b1220;border-radius:12px;border:1px solid #22304b}
+    .inline{display:inline-block}
   </style>
 </head>
 <body>
+  <div class="wrap">
+    <h1>Калькулятор вартості</h1>
+    <p class="note">База: <b>400 грн/м²</b> (ПВХ-багет) • Алюмінієвий багет: <b>450 грн/м²</b>.<br>
+    При замовленні понад <b>50 м²</b> — знижка <b>10%</b>. Мінімальне замовлення — <b>5000 грн</b>. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.</p>
 
-  <nav class="nav">
-    <div class="row container" style="align-items:center;justify-content:space-between">
-      <div class="brand">Potolok.kh</div>
-      <div class="links">
-        <a href="index.html">Головна</a>
-        <a href="gallery.html">Галерея</a>
-        <a href="price.html">Прайс</a>
-        <a href="calculator.html" class="active">Калькулятор</a>
-        <a href="reviews.html">Відгуки</a>
+    <div class="grid">
+      <div class="card">
+        <h3>Площа та тип</h3>
+        <label>Площа, м²</label>
+        <input id="area" type="number" min="0" step="0.1" value="20" />
+        <label style="margin-top:10px">Периметр, м.пог (для профілів/вставок)</label>
+        <input id="perimeter" type="number" min="0" step="0.1" value="18" />
+        <label style="margin-top:10px">Тип багета</label>
+        <select id="baseType">
+          <option value="pvc">ПВХ (400 грн/м²)</option>
+          <option value="al">Алюмінієвий (450 грн/м²)</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <h3>Профілі</h3>
+        <div class="row">
+          <div style="flex:1">
+            <label>Тіньовий профіль, м.пог (150 грн/м)</label>
+            <input id="shadowLen" type="number" min="0" step="0.1" value="0" />
+          </div>
+          <div style="flex:1">
+            <label>Парящий профіль, м.пог (550 грн/м)</label>
+            <input id="floatLen" type="number" min="0" step="0.1" value="0" />
+          </div>
+        </div>
+
+        <label style="margin-top:10px">Карниз під штору, м.пог (1000 грн/м)</label>
+        <input id="corniceLen" type="number" min="0" step="0.1" value="0" />
+
+        <label style="margin-top:10px">Декоративна вставка, м.пог (40 грн/м)</label>
+        <input id="decorLen" type="number" min="0" step="0.1" value="0" />
+      </div>
+
+      <div class="card">
+        <h3>Електрика / точки</h3>
+        <div class="row">
+          <div style="flex:1">
+            <label>Точкові світильники, шт (150 грн/шт)</label>
+            <input id="spots" type="number" min="0" step="1" value="0" />
+          </div>
+          <div style="flex:1">
+            <label>Люстри, шт (400 грн/шт)</label>
+            <input id="chandeliers" type="number" min="0" step="1" value="0" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <div style="flex:1">
+            <label>Накладні треки, м.пог (300 грн/м)</label>
+<input id="tracksLen" type="number" min="0" step="0.1" value="0" />
+          </div>
+          <div style="flex:1">
+            <label>Магнітна витяжка, шт (1000 грн/шт)</label>
+            <input id="vents" type="number" min="0" step="1" value="0" />
+          </div>
+        </div>
+
+        <label style="margin-top:10px">Прокладка кабелю, м.пог (30 грн/м)</label>
+        <input id="cableLen" type="number" min="0" step="0.1" value="0" />
+      </div>
+
+      <div class="card">
+        <h3>Знижка / націнка</h3>
+        <label>Вкажіть, % (мінус = знижка, плюс = націнка)</label>
+        <input id="adjPct" type="number" step="1" value="0" />
+        <p class="muted">Автоматично застосовується знижка 10%, якщо площа &gt; 50 м².</p>
+
+        <div class="hr"></div>
+        <button id="calcBtn" class="btn btn-primary">Перерахувати</button>
+        <button id="orderBtn" class="btn btn-secondary">Залишити заявку</button>
       </div>
     </div>
-  </nav>
 
-  <main class="container">
-    <h1>Калькулятор вартості</h1>
+    <div class="card" style="margin-top:12px">
+      <h3>Результат</h3>
+      <div id="explain" class="muted"></div>
+      <div class="sum" id="total">0 грн</div>
+      <div class="muted" id="minNote"></div>
+    </div>
 
-    <div class="card"><div class="pad">
-      <div class="row">
-        <div style="flex:1 1 180px">
-          <label for="area">Площа (м²)</label>
-          <input id="area" type="number" class="input" value="15" min="1" step="0.1">
-        </div>
-        <div style="flex:1 1 180px">
-          <label for="perimeter">Периметр (м.п.)</label>
-          <input id="perimeter" type="number" class="input" value="16" min="1" step="0.1">
-        </div>
-        <div style="flex:1 1 160px">
-<label for="corners">Кути (шт)</label>
-          <input id="corners" type="number" class="input" value="4" min="0" step="1">
-        </div>
-        <div style="flex:1 1 200px">
-          <label for="spots">Точкові світильники (шт)</label>
-          <input id="spots" type="number" class="input" value="8" min="0" step="1">
-        </div>
+    <div class="footer">
+      <div class="flex">
+        <a class="btn btn-primary inline" href="tel:+380974546713">Подзвонити зараз</a>
+        <a class="btn btn-secondary inline" href="https://t.me/PotolokKhBot" target="_blank" rel="noopener">Залишити заявку в Telegram</a>
+        <a class="btn btn-secondary inline" href="viber://chat?number=%2B380974546713">Viber</a>
+        <a class="btn btn-secondary inline" href="https://wa.me/380974546713" target="_blank" rel="noopener">WhatsApp</a>
       </div>
-
-      <div class="row" style="margin-top:12px">
-        <div style="flex:1 1 180px">
-          <label for="chandQty">Люстри (шт)</label>
-          <input id="chandQty" type="number" class="input" value="1" min="0" step="1">
-        </div>
-        <div style="flex:1 1 220px">
-          <label for="len_cornice">Карниз вбудований (м.п.)</label>
-          <input id="len_cornice" class="input" type="number" value="0" min="0" step="0.1">
-        </div>
-      </div>
-
-      <h3 style="margin-top:14px">Тарифи</h3>
-      <div class="row">
-        <div style="flex:1 1 200px"><label for="p_base">Стеля базова (грн/м²)</label><input id="p_base" class="input" type="number" value="400"></div>
-        <div style="flex:1 1 200px"><label for="p_floating">Паряща лінія (грн/м.п.)</label><input id="p_floating" class="input" type="number" value="550"></div>
-        <div style="flex:1 1 200px"><label for="p_track">Трек-системи (грн/м.п.)</label><input id="p_track" class="input" type="number" value="200"></div>
-        <div style="flex:1 1 200px"><label for="p_spot">Світильник (грн/шт)</label><input id="p_spot" class="input" type="number" value="150"></div>
-        <div style="flex:1 1 200px"><label for="p_corner">Кут (грн/шт)</label><input id="p_corner" class="input" type="number" value="50"></div>
-      </div>
-
-      <div class="row" style="margin-top:12px">
-        <div style="flex:1 1 200px"><label for="p_chandelier">Люстра (грн/шт)</label><input id="p_chandelier" class="input" type="number" value="400"></div>
-        <div style="flex:1 1 220px"><label for="p_cornice">Карниз вбудований (грн/м.п.)</label><input id="p_cornice" class="input" type="number" value="1000"></div>
-      </div>
-
-      <div class="row" style="margin-top:12px">
-        <div style="flex:1 1 200px"><label for="len_floating">Довжина парячої лінії (м.п.)</label><input id="len_floating" class="input" type="number" value="0" min="0" step="0.1"></div>
-        <div style="flex:1 1 200px"><label for="len_track">Довжина треку (м.п.)</label><input id="len_track" class="input" type="number" value="0" min="0" step="0.1"></div>
-      </div>
-
-      <p style="margin-top:14px">
-        <button class="btn" onclick="calc()">Порахувати</button>
-        <a id="openCallback" class="btn" style="background:#0ea5e9">Залишити заявку</a>
-      </p>
-
-      <div id="result" class="small"></div>
-    </div></div>
-  </main>
-
-  <footer class="footer">© 2025 Potolok.kh • Харків • Монтаж натяжних стель</footer>
-
-  <!-- Модалка -->
-  <div id="callbackModal" class="callback-modal" style="display:none;">
-    <div class="callback-card">
-      <button id="closeCallback" class="close-btn" aria-label="Закрити">×</button>
-      <h3>Заявка на дзвінок</h3>
-      <form id="callbackForm" novalidate>
-        <label for="cbName">Ваше ім'я (необов'язково)</label>
-        <input type="text" id="cbName" name="name" placeholder="Іван">
-        <label for="cbPhone">Номер телефону</label>
-        <input type="tel" id="cbPhone" name="phone" placeholder="+380XXXXXXXXX" required>
-        <input type="text" name="company" id="cbCompany" style="display:none" tabindex="-1" autocomplete="off">
-        <button type="submit" class="submit-btn">Відправити</button>
-        <p id="cbStatus" class="status"></p>
-      </form>
+      <p class="muted" style="margin-top:8px">Графік роботи: Пн–Сб, 09:00–18:00.</p>
     </div>
   </div>
 
-  <!-- Плавающая кнопка на мобилке -->
-  <a id="openCallbackFab" href="#" class="callback-fab">Залишити заявку</a>
-
+  <!-- Форма-заявка (плаваюча, простий prompt) -->
   <script>
-    // ===== Калькулятор =====
-function fmt(n){return new Intl.NumberFormat('uk-UA').format(Math.round(n));}
-    function val(id){return parseFloat(document.getElementById(id).value)||0;}
-    function calc(){
-      const area       = val('area');
-      const corners    = val('corners');
-      const spots      = val('spots');
-      const chandQty   = val('chandQty');
-      const lenCornice = val('len_cornice');
-      const lenFloat   = val('len_floating');
-      const lenTrack   = val('len_track');
+    const UAH = n => new Intl.NumberFormat('uk-UA').format(Math.round(n));
+    const els = id => document.getElementById(id);
 
-      const p_base       = val('p_base');
-      const p_float      = val('p_floating');
-      const p_track      = val('p_track');
-      const p_spot       = val('p_spot');
-      const p_corner     = val('p_corner');
-      const p_chandelier = val('p_chandelier');
-      const p_cornice    = val('p_cornice');
+    function compute() {
+      const area       = +els('area').value || 0;
+      const perim      = +els('perimeter').value || 0;
+      const baseType   = els('baseType').value;
 
-      const base   = area * p_base;
-      const floating = lenFloat * p_float;
-      const track    = lenTrack * p_track;
-      const spot     = spots * p_spot;
-      const corner   = corners * p_corner;
-      const chandelier = chandQty * p_chandelier;
-      const cornice    = lenCornice * p_cornice;
+      const basePrice = baseType === 'al' ? 450 : 400; // м²
+      const shadow    = (+els('shadowLen').value || 0) * 150;
+      const floating  = (+els('floatLen').value  || 0) * 550;
+      const cornice   = (+els('corniceLen').value|| 0) * 1000;
+      const decor     = (+els('decorLen').value  || 0) * 40;
 
-      const total = base + floating + track + spot + corner + chandelier + cornice;
+      const spots     = (+els('spots').value      || 0) * 150;
+      const chand     = (+els('chandeliers').value|| 0) * 400;
+      const tracks    = (+els('tracksLen').value  || 0) * 300;
+      const vents     = (+els('vents').value      || 0) * 1000;
+      const cable     = (+els('cableLen').value   || 0) * 30;
 
-      const html = 
-        <div class="card" style="margin-top:10px"><div class="pad">
-          <strong>Орієнтовна вартість:</strong>
-          <span class="badge">${fmt(total)} грн</span><br>
-          <span class="small">
-            База: ${fmt(base)} • Паряща: ${fmt(floating)} • Трек: ${fmt(track)} •
-            Світильники: ${fmt(spot)} • Кути: ${fmt(corner)} • Люстри: ${fmt(chandelier)} •
-            Карниз: ${fmt(cornice)}
-          </span>
-        </div></div>;
-      document.getElementById('result').innerHTML = html;
+      const base      = area * basePrice;
+      const byMeter   = shadow + floating + cornice + decor + tracks + cable;
+      const byPieces  = spots + chand + vents;
+
+      let subtotal    = base + byMeter + byPieces;
+
+      // ручна знижка/націнка
+      const adjPct    = +els('adjPct').value || 0;
+      if (adjPct !== 0) subtotal *= (100 + adjPct) / 100;
+
+      // авто-знижка за площу
+      let autoDisc = 0;
+      if (area > 50) {
+        autoDisc = 0.10;
+        subtotal *= 0.90;
+      }
+
+      // мінімальне замовлення
+      const MIN = 5000;
+      const total = Math.max(MIN, Math.round(subtotal));
+
+      // пояснення
+      const parts = [
+        База: ${area} м² × ${basePrice} = ${UAH(base)} грн,
+        Довжина/м.пог: ${UAH(byMeter)} грн,
+        Поштучно: ${UAH(byPieces)} грн,
+      ];
+      if (adjPct) parts.push(${adjPct > 0 ? 'Націнка' : 'Знижка'} ${adjPct}% застосована);
+      if (autoDisc) parts.push(Авто-знижка 10% (площа > 50 м²));
+
+      els('explain').innerText = parts.join(' · ');
+      els('total').innerText   = ${UAH(total)} грн;
+      els('minNote').innerText = total === MIN
+        ? 'Застосовано мінімальне замовлення 5000 грн. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.'
+        : '';
+return { total, area, perim, basePrice };
     }
-    calc();
 
-    // ===== Модалка «Заявка на дзвінок» =====
-    (function(){
-      const openBtn  = document.getElementById('openCallback');
-      const fab      = document.getElementById('openCallbackFab');
-      const modal    = document.getElementById('callbackModal');
-      const closeBtn = document.getElementById('closeCallback');
-      const form     = document.getElementById('callbackForm');
-      const phone    = document.getElementById('cbPhone');
-      const status   = document.getElementById('cbStatus');
-      const honeypot = document.getElementById('cbCompany');
+    function openOrder() {
+      const { total } = compute();
+      const name  = prompt('Вкажіть ваше ім’я:');
+      if (!name) return;
+      const phone = prompt('Ваш телефон (+380…):');
+      if (!phone) return;
+      const message = prompt('Коментар (необовʼязково):') || '';
 
-      function open(){ modal.style.display='flex'; }
-      function close(){ modal.style.display='none'; status.textContent=''; status.className='status'; }
+      fetch('/api/telegram-submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name, phone,
+          message: Замовлення з калькулятора. Сума: ${total} грн. ${message},
+          source: location.pathname
+        })
+      })
+      .then(r => r.ok ? r.json() : r.text().then(t=>Promise.reject(t)))
+      .then(() => alert('Дякуємо! Заявку надіслано, ми зв’яжемось з вами.'))
+      .catch(err => {
+        console.error(err);
+        alert('Не вдалось надіслати. Спробуйте ще раз або напишіть у Telegram.');
+      });
+    }
 
-      if(openBtn) openBtn.addEventListener('click', (e)=>{e.preventDefault(); open();});
-      if(fab)     fab.addEventListener('click', (e)=>{e.preventDefault(); open();});
-      if(closeBtn) closeBtn.addEventListener('click', close);
-      if(modal) modal.addEventListener('click', (e)=>{ if(e.target===modal) close(); });
+    // init
+    compute();
+    document.getElementById('calcBtn').addEventListener('click', compute);
+    document.getElementById('orderBtn').addEventListener('click', openOrder);
 
-      if(phone){
-        phone.addEventListener('input', ()=>{
-          let v = phone.value.replace(/[^\d+]/g,'');
-          if(!v.startsWith('+')) v = '+38' + v.replace(/^\+/,'');
-          phone.value = v;
-        });
-      }
-
-      if(form){
-        form.addEventListener('submit', async (e)=>{
-          e.preventDefault(); status.textContent=''; status.className='status';
-          if(honeypot.value){ return; } // спам-бот
-          const name = (document.getElementById('cbName')?.value || '').trim();
-          const ph   = phone.value.trim();
-          if(!/^\+?38\d{10}$/.test(ph.replace(/\s/g,''))){
-            status.textContent='Перевірте номер телефону у форматі +380XXXXXXXXX';
-            status.classList.add('err'); return;
-          }
-          try{
-            const res  = await fetch('/api/telegram-submit', {
-              method:'POST', headers:{'Content-Type':'application/json'},
-              body: JSON.stringify({ name, phone: ph })
-            });
-            const data = await res.json().catch(()=>({}));
-if(res.ok && (data.ok || data.result)){
-              status.textContent='Дякуємо! Ми передзвонимо найближчим часом.';
-              status.classList.add('ok'); form.reset();
-              setTimeout(close, 1200);
-            }else{
-              status.textContent='Помилка відправки. Спробуйте ще раз або напишіть нам.';
-              status.classList.add('err');
-            }
-          }catch{
-            status.textContent='Сталася помилка. Спробуйте ще раз або напишіть нам.';
-            status.classList.add('err');
-          }
-        });
-      }
-    })();
+    ['input','change'].forEach(ev=>{
+      document.querySelectorAll('input,select').forEach(el=>{
+        el.addEventListener(ev,()=>{ /* live preview */ compute(); });
+      });
+    });
   </script>
 </body>
 </html>
