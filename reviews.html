@@ -1,165 +1,44 @@
 <!doctype html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Відгуки — Potolok.kh</title>
-  <link rel="stylesheet" href="styles.css">
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-61EMVPPMDT"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-61EMVPPMDT');
-</script>
-
-
-<style>
-/* === Callback button & modal (polished) === */
-.callback-btn-primary{
-  background:#16a34a; color:#fff !important;
-  padding:8px 14px; margin-right:10px;
-  border-radius:8px; font-weight:600;
-  text-decoration:none; display:inline-block;
-  line-height:1; transition:background .2s ease;
-}
-.callback-btn-primary:hover{ background:#15803d; }
-.callback-btn-primary:focus{ outline:2px solid rgba(22,163,74,.35); outline-offset:2px; }
-
-.callback-modal{ position:fixed; inset:0; background:rgba(0,0,0,.5);
-  display:flex; align-items:center; justify-content:center; z-index:9999; }
-.callback-card{ background:#fff; padding:25px 20px; border-radius:12px;
-  box-shadow:0 8px 30px rgba(0,0,0,.2); width:min(420px,92vw); position:relative; }
-.close-btn{ position:absolute; top:10px; right:14px; font-size:22px;
-  border:none; background:transparent; cursor:pointer; }
-#callbackForm label{ display:block; margin:10px 0 4px; font-weight:600; }
-#callbackForm input{ width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; }
-#callbackForm .submit-btn{ margin-top:14px; width:100%; padding:12px; border:0; border-radius:8px;
-  font-size:16px; background:#16a34a; color:#fff; cursor:pointer; font-weight:600; }
-#callbackForm .submit-btn:hover{ background:#15803d; }
-.status{ min-height:20px; margin-top:10px; font-size:14px; }
-.status.ok{ color:#16a34a; } .status.err{ color:#dc2626; }
-</style>
-
-
-<style>
-/* Floating CTA on mobile */
-@media (max-width: 768px){
-  .callback-fab{
-    position: fixed; right: 14px; bottom: 18px;
-    background:#16a34a; color:#fff; border:0;
-    border-radius: 999px; padding: 14px 18px;
-    font-weight:700; box-shadow:0 8px 24px rgba(0,0,0,.25);
-    z-index: 10000; text-decoration:none;
-  }
-  .callback-fab:hover{ background:#15803d; }
-}
-</style>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reviews</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:0}
+    header,footer{background:#111827;padding:14px;text-align:center}
+    nav a{color:#e2e8f0;margin:0 10px;text-decoration:none;font-weight:bold}
+    .wrap{max-width:960px;margin:20px auto;padding:20px}
+    .btn{display:inline-block;padding:10px 16px;border-radius:8px;font-weight:bold;margin:5px}
+    .btn-primary{background:#16a34a;color:#fff}
+    .btn-secondary{background:#334155;color:#e2e8f0}
+    .muted{opacity:.8;font-size:14px}
+  </style>
 </head>
 <body>
-<div class="nav-inline"><a class="btn" href="gallery.html">Наші роботи</a></div>
-
-  
-<nav class="nav">
-  <div class="row container">
-    <div class="brand">Potolok.kh</div>
-    <div class="links"><a href="index.html" class="">Головна</a><a href="gallery.html" class="">Галерея</a><a href="price.html" class="">Прайс</a><a href="calculator.html" class="">Калькулятор</a><a href="reviews.html" class="active">Відгуки</a></div>
-  </div>
-</nav>
-
-  <main class="container">
-    <h1>Відгуки клієнтів</h1>
-    <div class="grid">
-      <div class="card"><div class="pad">
-        <p>“Зроблено швидко та охайно. Рекомендую!”</p>
-        <p class="small">— Олександр, Харків</p>
-      </div></div>
-      <div class="card"><div class="pad">
-        <p>“Гарна ціна та якість. Повернусь ще.”</p>
-        <p class="small">— Наталія, Рогань</p>
-      </div></div>
-    </div>
-
-    <h3 style="margin-top:16px">Залишити відгук</h3>
-    <form name="reviews" method="POST" data-netlify="true" class="card">
-      <div class="pad">
-        <input type="hidden" name="form-name" value="reviews">
-        <div class="row">
-          <div><label>Ім’я</label><input class="input" type="text" name="name" required></div>
-          <div><label>Телефон</label><input class="input" type="tel" name="phone"></div>
-        </div>
-        <div style="margin-top:10px">
-          <label>Відгук</label>
-          <textarea class="input" name="message" rows="4" required></textarea>
-        </div>
-        <div style="margin-top:12px"><button class="btn" type="submit">Надіслати</button></div>
-        <p class="small" style="margin-top:6px">Форма підтримує Netlify Forms — відгуки будуть збиратися в адмінці Netlify.</p>
-      </div>
-    </form>
-  </main>
-  <footer class="footer">© 2025 Potolok.kh • Харків • Монтаж натяжних стель</footer>
-
-<div id="callbackModal" class="callback-modal" style="display:none;">
-  <div class="callback-card">
-    <button id="closeCallback" class="close-btn" aria-label="Закрити">×</button>
-    <h3>Заявка на дзвінок</h3>
-    <form id="callbackForm" novalidate>
-      <label for="cbName">Ваше ім'я (необов'язково)</label>
-      <input type="text" id="cbName" name="name" placeholder="Іван">
-      <label for="cbPhone">Номер телефону</label>
-      <input type="tel" id="cbPhone" name="phone" placeholder="+380XXXXXXXXX" required>
-      <input type="text" name="company" id="cbCompany" style="display:none" tabindex="-1" autocomplete="off">
-      <button type="submit" class="submit-btn">Відправити</button>
-      <p id="cbStatus" class="status"></p>
-    </form>
-  </div>
+<header>
+  <nav>
+    <a href="index.html">Головна</a>
+    <a href="gallery.html">Галерея</a>
+    <a href="price.html">Прайс</a>
+    <a href="calculator.html">Калькулятор</a>
+    <a href="reviews.html">Відгуки</a>
+  </nav>
+</header>
+<div class="wrap">
+<h1>Відгуки</h1><p>Відгуки наших клієнтів.</p>
 </div>
-
-
-<script>(function(){
-  const openBtn=document.getElementById('openCallback');
-  const modal=document.getElementById('callbackModal');
-  const closeBtn=document.getElementById('closeCallback');
-  const form=document.getElementById('callbackForm');
-  const phone=document.getElementById('cbPhone');
-  const status=document.getElementById('cbStatus');
-  const honeypot=document.getElementById('cbCompany');
-  if(openBtn&&modal){openBtn.addEventListener('click',e=>{e.preventDefault();modal.style.display='flex';});}
-  if(closeBtn){closeBtn.addEventListener('click',()=>{modal.style.display='none';status.textContent='';status.className='status';});}
-  if(modal){modal.addEventListener('click',e=>{if(e.target===modal){modal.style.display='none';status.textContent='';status.className='status';}});}
-  if(phone){phone.addEventListener('input',()=>{let v=phone.value.replace(/[^\d+]/g,'');if(!v.startsWith('+')) v='+38'+v.replace(/^\+/,'');phone.value=v;});}
-  if(form){form.addEventListener('submit',async e=>{
-    e.preventDefault();status.textContent='';status.className='status';
-    if(honeypot.value){return;}
-    const name=(document.getElementById('cbName')||{}).value?.trim()||'';
-    const ph=phone.value.trim();
-    if(!/^\+?38\d{10}$/.test(ph.replace(/\s/g,''))){status.textContent='Перевірте номер телефону у форматі +380XXXXXXXXX';status.classList.add('err');return;}
-    try{
-      const res=await fetch('/.netlify/functions/telegram-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone:ph})});
-      const data=await res.json().catch(()=>({}));
-      if(res.ok&&data.ok){status.textContent='Дякуємо! Ми передзвонимо найближчим часом.';status.classList.add('ok');form.reset();setTimeout(()=>{modal.style.display='none';status.textContent='';status.className='status';},1200);}
-      else{status.textContent='Помилка відправки. Спробуйте ще раз або напишіть нам.';status.classList.add('err');}
-    }catch(e){status.textContent='Сталася помилка. Спробуйте ще раз або напишіть нам.';status.classList.add('err');}
-  });}
-})();</script>
-
-
-<a id="openCallbackFab" href="#" class="callback-fab">Залишити заявку</a>
-
-
-<script>
-// Link floating CTA to modal
-(function(){
-  const fab=document.getElementById('openCallbackFab');
-  const modal=document.getElementById('callbackModal');
-  if(fab&&modal){
-    fab.addEventListener('click',function(e){ e.preventDefault(); modal.style.display='flex'; });
-  }
-})();
-</script>
-
+<footer>
+  <div class="flex">
+    <a class="btn btn-primary inline" href="tel:+380974546713">Подзвонити зараз</a>
+    <a class="btn btn-secondary inline"
+       href="https://t.me/PotolokKhBot" target="_blank" rel="noopener">Telegram</a>
+    <a class="btn btn-secondary inline"
+       href="viber://chat?number=%2B380974546713">Viber</a>
+    <a class="btn btn-secondary inline"
+       href="https://wa.me/380974546713" target="_blank" rel="noopener">WhatsApp</a>
+  </div>
+  <p class="muted">Графік роботи: Пн–Сб, 09:00–18:00.</p>
+</footer>
 </body>
 </html>
