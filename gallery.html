@@ -1,47 +1,43 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Наші роботи — Potolok.kh</title>
-  <meta name="description" content="Галерея натяжних стель: 50 фото, автоперегортання, повноекранний перегляд.">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Potolok.kh — Наші роботи</title>
+  <meta name="description" content="Галерея натяжних стель. 50 фото. Автоперегортання, повноекранний перегляд.">
   <style>
-    :root{
+    :root {
       --bg:#0b1220; --panel:#0f172a; --ring:#1f2a44; --text:#e5e7eb;
       --muted:#94a3b8; --accent:#22d3ee; --btn:#16a34a;
       --shadow:0 8px 30px rgba(2,6,23,.35); --radius:16px;
     }
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif}
-    a{color:inherit;text-decoration:none}
+    body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:sans-serif}
+    a{text-decoration:none;color:inherit}
     .container{max-width:1100px;margin:0 auto;padding:16px}
-
     header{display:flex;justify-content:space-between;align-items:center}
-    .brand{font-weight:800;display:flex;gap:8px;align-items:center}
+    .brand{font-weight:800;display:flex;align-items:center;gap:8px}
     .phone{background:var(--btn);color:#fff;padding:8px 12px;border-radius:12px;box-shadow:var(--shadow)}
-    h1{margin:12px 0 6px;font-size:28px}
+    h1{margin:12px 0;font-size:28px}
     .muted{color:var(--muted)}
-
-    .stage-wrap{background:var(--panel);border:1px solid var(--ring);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;margin-top:12px}
+    .stage-wrap{background:var(--panel);border:1px solid var(--ring);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .stage{position:relative;aspect-ratio:16/10;width:100%;background:#050a18;display:flex;align-items:center;justify-content:center}
+    .stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
     .top-controls{display:flex;justify-content:flex-end;gap:8px;padding:8px;border-bottom:1px solid var(--ring)}
     .tiny-btn{background:#101b33;border:1px solid var(--ring);color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer}
-
-    .stage{position:relative;width:100%;aspect-ratio:16/10;background:#050a18;display:flex;align-items:center;justify-content:center}
-    #view{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-
-    .nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(17,24,39,.6);border:1px solid var(--ring);color:#fff;width:42px;height:42px;border-radius:50%;cursor:pointer}
-    .prev{left:10px} .next{right:10px}
+    .nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(17,24,39,.6);border:1px solid var(--ring);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer}
+    .prev{left:10px}.next{right:10px}
     .dots{display:flex;gap:6px;justify-content:center;padding:10px}
-    .dot{width:8px;height:8px;border-radius:999px;background:#415175;border:1px solid var(--ring);opacity:.7;cursor:pointer}
+    .dot{width:12px;height:12px;border-radius:50%;background:#555;border:1px solid var(--ring);opacity:.7;cursor:pointer}
     .dot.active{background:#22d3ee;opacity:1}
-    .caption{color:var(--muted);text-align:center;padding:2px 0 12px}
+    .caption{color:var(--muted);text-align:center;padding:10px}
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <div class="brand">Potolok.kh — Наші роботи</div>
-      <a class="phone" href="tel:+380974546713">+38 (097) 454-67-13</a>
+      <div class="brand">Potolok.kh</div>
+      <div class="phone">+38 (097) 454-67-13</div>
     </header>
 
     <h1>Наші роботи</h1>
@@ -49,130 +45,84 @@
 
     <div class="stage-wrap">
       <div class="top-controls">
-        <button id="pauseBtn" class="tiny-btn" title="Пауза">⏸</button>
-        <button id="fullBtn" class="tiny-btn" title="Повний екран">⛶</button>
+        <button id="pauseBtn" class="tiny-btn">⏸</button>
+        <button id="fullBtn" class="tiny-btn">⛶</button>
       </div>
-      <div class="stage" id="stage">
-        <button class="nav-btn prev" id="prevBtn" aria-label="Попереднє">❮</button>
-        <img id="view" alt="Фото робіт" />
-        <button class="nav-btn next" id="nextBtn" aria-label="Наступне">❯</button>
+      <div class="stage">
+        <img id="view" alt="Фото робіт"/>
+        <button id="prevBtn" class="nav-btn prev">‹</button>
+        <button id="nextBtn" class="nav-btn next">›</button>
       </div>
       <div class="dots" id="dots"></div>
       <div class="caption" id="cap"></div>
     </div>
 
-    <p style="text-align:center;margin-top:10px;">Якщо потрібні додаткові приклади — напишіть нам у Telegram або зателефонуйте.</p>
-
-    <footer style="margin-top:14px;color:#94a3b8">© Potolok.kh • Харків • <a href="tel:+380974546713">+38 (097) 454-67-13</a></footer>
+    <footer style="margin-top:14px;color:#94a3b8">© Potolok.kh · Харків · <a href="tel:+380974546713">+38 (097) 454-67-13</a></footer>
   </div>
 
   <script>
     // Список файлів у /images
     const images = [
-      ...Array.from({length:30}, (_,i)=>/images/img${String(i+1).padStart(2,'0')}.jpg`),
-      ...Array.from({length:20}, (_,i)=>`/images/new_img${String(i+1).padStart(2,'0')}.jpg`)
-    ];</script>
+      ...Array.from({length:30}, (_,i)=>/images/img${String(i+1).padStart(2,'0')}.jpg),
+      ...Array.from({length:20}, (_,i)=>/images/new_img${String(i+1).padStart(2,'0')}.jpg)
+    ];
+
     // Підпис для активного фото
     function makeCaption(i,total){
       const name = images[i].split('/').pop();
       return Фото ${i+1} / ${total} — ${name};
     }
-// DOM
+
+    // DOM
     const view = document.getElementById('view');
-    const cap  = document.getElementById('cap');
+    const cap = document.getElementById('cap');
     const dotsWrap = document.getElementById('dots');
-    const prevBtn  = document.getElementById('prevBtn');
-    const nextBtn  = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
     const pauseBtn = document.getElementById('pauseBtn');
-    const fullBtn  = document.getElementById('fullBtn');
-    const stage    = document.getElementById('stage');
-
-    // Стан
-    let idx = 0;
-    let timer = null;
-    const INTERVAL = 2000;
-
-    // Крапки
-    const dots = images.map((_,i)=>{
-      const d = document.createElement('span');
-      d.className = 'dot';
-      d.title = ${i+1}/${images.length};
-      d.addEventListener('click', ()=>{ idx = i; show(); play(); });
+    const fullBtn = document.getElementById('fullBtn');
+// Створюємо точки
+    images.forEach((_,i)=>{
+      const d=document.createElement('div');
+      d.className='dot';
+      d.addEventListener('click',()=>show(i));
       dotsWrap.appendChild(d);
-      return d;
     });
 
-    function show(){
-      idx = (idx + images.length) % images.length;
-      const src = images[idx];
-      view.src = src;
-      cap.textContent = makeCaption(idx, images.length);
-      dots.forEach((d,j)=> d.classList.toggle('active', j===idx));
-      // Попередньо підвантажуємо наступне
-      const next = new Image();
-      next.src = images[(idx+1) % images.length];
+    let idx=0,timer=null,playing=true;
+    function show(i){
+      idx=(i+images.length)%images.length;
+      view.src=images[idx];
+      cap.textContent=makeCaption(idx,images.length);
+      [...dotsWrap.children].forEach((d,j)=>d.classList.toggle('active',j===idx));
     }
 
-    function next(){ idx++; show(); }
-    function prev(){ idx--; show(); }
+    function next(){ show(idx+1); }
+    function prev(){ show(idx-1); }
 
     function play(){
-      clearInterval(timer);
-      timer = setInterval(next, INTERVAL);
-      pauseBtn.textContent = '⏸';
+      timer=setInterval(next,2000);
+      pauseBtn.textContent='⏸';
+      playing=true;
     }
     function pause(){
       clearInterval(timer);
-      timer = null;
-      pauseBtn.textContent = '▶';
+      pauseBtn.textContent='▶';
+      playing=false;
     }
 
-    // Клік-обробники
-    nextBtn.addEventListener('click', ()=>{ pause(); next(); play(); });
-    prevBtn.addEventListener('click', ()=>{ pause(); prev(); play(); });
-    pauseBtn.addEventListener('click', ()=>{ timer ? pause() : play(); });
+    pauseBtn.addEventListener('click',()=>playing?pause():play());
+    nextBtn.addEventListener('click',next);
+    prevBtn.addEventListener('click',prev);
 
-    // Свайпи
-    stage.addEventListener('touchstart', e=>{
-      const t = e.touches[0];
-      stage.dataset.sx = t.clientX;
-    }, {passive:true});
-    stage.addEventListener('touchend', e=>{
-      const sx = Number(stage.dataset.sx||0);
-      const dx = (e.changedTouches&&e.changedTouches[0]? e.changedTouches[0].clientX : sx) - sx;
-      if(Math.abs(dx) > 40){ pause(); (dx>0 ? prev() : next()); play(); }
-    }, {passive:true});
-
-    // Клавіші
-    window.addEventListener('keydown', e=>{
-      if(e.key==='ArrowRight'){ pause(); next(); play(); }
-      if(e.key==='ArrowLeft') { pause(); prev(); play(); }
-      if(e.key==='f'){ toggleFull(); }
-      if(e.key==='Escape'){ if(document.fullscreenElement) document.exitFullscreen(); }
+    fullBtn.addEventListener('click',()=>{
+      if(!document.fullscreenElement)document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
     });
 
-    // Повний екран
-    function toggleFull(){
-      const el = document.documentElement;
-      if(!document.fullscreenElement){
-        el.requestFullscreen?.()  el.webkitRequestFullscreen?.()  el.msRequestFullscreen?.();
-      }else{
-        document.exitFullscreen?.()  document.webkitExitFullscreen?.()  document.msExitFullscreen?.();
-      }
-    }
-    fullBtn.addEventListener('click', toggleFull);
-
-    // Старт
-    // Перевіряємо перше фото: якщо відсутнє — спробуємо наступні
-    const candidates = images.slice(0, 3);
-    const test = new Image();
-    test.onload = ()=>{ view.src = test.src; cap.textContent = makeCaption(0, images.length); dots[0].classList.add('active'); play(); };
-    test.onerror = ()=>{
-      cap.textContent = 'Фото тимчасово недоступні';
-      // все одно запустимо слайдер (раптом наступні існують)
-      show(); play();
-    };
-    test.src = candidates[0];
+    // Запускаємо
+    show(0);
+    play();
   </script>
 </body>
 </html>
