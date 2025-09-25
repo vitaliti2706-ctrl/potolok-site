@@ -4,175 +4,65 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Наші роботи — Potolok.kh</title>
-  <meta name="description" content="Галерея натяжних стель у Харкові. 50 фото. Автоперегортання, повноекранний перегляд.">
   <style>
-    :root{--bg:#0b1220;--panel:#0f172a;--ring:#1f2a44;--text:#e5e7eb;--muted:#94a3b8;--accent:#22d3ee;--btn:#16a34a;--shadow:0 8px 30px rgba(2,6,23,.35);--radius:16px}
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif}
-    a{color:inherit;text-decoration:none} .container{max-width:1100px;margin:0 auto;padding:16px}
-    header{display:flex;justify-content:space-between;align-items:center}
-    .brand{font-weight:800;display:flex;align-items:center;gap:10px}
-    .brand .dot{width:10px;height:10px;border-radius:999px;background:var(--accent)}
-    .phone{background:var(--btn);color:#fff;padding:8px 12px;border-radius:12px;box-shadow:var(--shadow)}
-    h1{margin:12px 0;font-size:28px} .muted{color:var(--muted)}
-    .stage-wrap{background:var(--panel);border:1px solid var(--ring);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-    .top-controls{display:flex;justify-content:flex-end;gap:8px;padding:8px;border-bottom:1px solid var(--ring)}
-    .tiny-btn{background:#101b33;border:1px solid var(--ring);color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer}
-    .stage{position:relative;aspect-ratio:16/10;width:100%;background:#050a18;display:flex;align-items:center;justify-content:center}
+    body{margin:0;background:#0b1220;color:#e5e7eb;font-family:sans-serif}
+    .container{max-width:1100px;margin:auto;padding:16px}
+    h1{margin:12px 0;font-size:28px;text-align:center}
+    .stage{position:relative;aspect-ratio:16/10;background:#050a18;overflow:hidden;border-radius:12px}
     .stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-    .nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(17,24,39,.6);border:1px solid var(--ring);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer}
+    .nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);color:#fff;
+      border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:22px}
     .prev{left:10px}.next{right:10px}
-    .dots{display:flex;gap:6px;justify-content:center;padding:10px}
-    .dot{width:8px;height:8px;border-radius:999px;background:#25314f;cursor:pointer}
-    .dot.active{background:#7dd3fc}
-    .caption{color:var(--muted);text-align:center;margin:0 0 14px}
-    /* lightbox */
-    .lightbox{position:fixed;inset:0;background:rgba(2,6,23,.9);display:none;align-items:center;justify-content:center;z-index:50}
-    .lightbox.open{display:flex} .lightbox img{max-width:92vw;max-height:92vh;border-radius:12px;border:1px solid var(--ring);box-shadow:var(--shadow)}
-    .lb-close,.lb-prev,.lb-next{position:absolute;top:20px;background:#101b33;border:1px solid var(--ring);color:#fff;padding:10px 12px;border-radius:10px;cursor:pointer}
-    .lb-close{right:20px} .lb-prev{left:20px;top:50%;transform:translateY(-50%)} .lb-next{right:20px;top:50%;transform:translateY(-50%)}
-    @media (max-width:700px){h1{font-size:24px}.nav-btn{width:36px;height:36px}}
+
+    /* водяний знак */
+    .caption{
+      position:absolute;
+      right:12px;
+      bottom:12px;
+      color:rgba(255,255,255,.88);
+      font-weight:800;
+      letter-spacing:.3px;
+      font-size:clamp(12px,2.2vw,18px);
+      text-shadow:0 3px 14px rgba(0,0,0,.65);
+      pointer-events:none;
+      user-select:none;
+    }
   </style>
 </head>
 <body>
-  <header class="container">
-    <div class="brand"><span class="dot"></span><span>Potolok.kh</span></div>
-    <a href="tel:+380974546713" class="phone">+38 (097) 454-67-13</a>
-  </header>
-
-  <main class="container">
+  <div class="container">
     <h1>Наші роботи</h1>
-    <p class="muted">50 фото. Автоперегортання кожні 2 секунди. Стрілки, точки, свайп і повноекранний перегляд.</p>
-
-    <div class="stage-wrap">
-      <div class="top-controls">
-        <button id="pauseBtn" class="tiny-btn" title="Пауза">⏸</button>
-        <button id="fullBtn" class="tiny-btn" title="Повний екран">⤢</button>
-      </div>
-      <div class="stage" id="stage">
-        <button class="nav-btn prev" id="prevBtn" aria-label="Попереднє">‹</button>
-        <img id="view" src="" alt="Фото робіт">
-        <button class="nav-btn next" id="nextBtn" aria-label="Наступне">›</button>
-      </div>
-      <div class="dots" id="dots"></div>
+    <div class="stage">
+      <img id="view" alt="Фото робіт">
+      <button class="nav-btn prev" id="prevBtn">‹</button>
+      <button class="nav-btn next" id="nextBtn">›</button>
       <div class="caption" id="caption"></div>
     </div>
-
-    <p class="muted" style="text-align:center;margin-top:10px">
-      Якщо потрібні додаткові приклади — напишіть нам у Telegram або зателефонуйте.
-    </p>
-  </main>
-
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox">
-    <button class="lb-close" id="lbClose">✕</button>
-    <button class="lb-prev" id="lbPrev">‹</button>
-    <button class="lb-next" id="lbNext">›</button>
-    <img id="lbImg" alt="Фото у повноекранному режимі">
   </div>
 
   <script>
-  // ===== список фото (30 + 20) =====
-  function seq(prefix, from, to){
-    const arr=[]; for(let i=from;i<=to;i++){arr.push(images/${prefix}${String(i).padStart(2,'0')}.jpg);} return arr;
-  }
-  const images = [
-    ...seq('img',1,30),
-    ...seq('new_img',1,20)
-  ];
+    // список фото
+    const images = [];
+    for(let i=1;i<=30;i++){ images.push(/images/img${String(i).padStart(2,'0')}.jpg); }
+    for(let i=1;i<=20;i++){ images.push(/images/new_img${String(i).padStart(2,'0')}.jpg); }
 
-  // ===== елементи
-  const view = document.getElementById('view');
-  const dotsWrap = document.getElementById('dots');
-  const cap = document.getElementById('caption');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const pauseBtn = document.getElementById('pauseBtn');
-  const fullBtn = document.getElementById('fullBtn');
-  const stage = document.getElementById('stage');
+    let idx=0;
+    const view=document.getElementById('view');
+    const cap=document.getElementById('caption');
 
-  // lightbox
-  const lb = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lbImg');
-  const lbClose = document.getElementById('lbClose');
-  const lbPrev = document.getElementById('lbPrev');
-  const lbNext = document.getElementById('lbNext');
+    function show(i){
+      idx=(i+images.length)%images.length;
+      view.src=images[idx];
+      cap.textContent=Фото ${idx+1} з ${images.length};
+    }
 
-  // ===== стан
-  let idx = 0;
-  let playing = true;
-  let timer = null;
-  const INTERVAL = 2000;
+    document.getElementById('prevBtn').onclick=()=>show(idx-1);
+    document.getElementById('nextBtn').onclick=()=>show(idx+1);
 
-  // точки
-  const dots = images.map((_,i)=>{
-    const d=document.createElement('span');
-    d.className='dot'; d.title = ${i+1}/${images.length};
-    d.addEventListener('click',()=>{ idx=i; show(); play(); });
-    dotsWrap.appendChild(d);
-    return d;
-  });
+    // автоперегортання кожні 2с
+    setInterval(()=>show(idx+1),2000);
 
-  // показ
-  function show(){
-    idx = (idx + images.length) % images.length;
-    view.src = images[idx];
-    cap.textContent = ${idx+1} / ${images.length};
-    dots.forEach((d,j)=>d.classList.toggle('active', j===idx));
-  }
-  function next(n=1){ idx+=n; show(); }
-  function prev(){ next(-1); }
-
-  // автоплей
-  function play(){ playing=true; pauseBtn.textContent='⏸'; clearInterval(timer); timer=setInterval(()=>next(1), INTERVAL); }
-  function pause(){ playing=false; pauseBtn.textContent='▶'; clearInterval(timer); }
-
-  // навігація
-  prevBtn.addEventListener('click',()=>{ pause(); prev(); });
-  nextBtn.addEventListener('click',()=>{ pause(); next(); });
-  pauseBtn.addEventListener('click',()=>{ playing ? pause() : play(); });
-
-  // свайп
-  let touchX=null;
-  stage.addEventListener('touchstart',e=>{ touchX = e.touches[0].clientX; },{passive:true});
-  stage.addEventListener('touchend',e=>{
-    if(touchX==null) return;
-    const dx = e.changedTouches[0].clientX - touchX;
-    if(Math.abs(dx)>40){ pause(); (dx>0?prev():next()); }
-    touchX=null;
-  },{passive:true});
-
-  // клавіатура
-  window.addEventListener('keydown',e=>{
-    if(e.key==='ArrowLeft'){ pause(); prev(); }
-    else if(e.key==='ArrowRight'){ pause(); next(); }
-    else if(e.key==='f'){ toggleFull(); }
-    else if(e.key==='Escape'){ if(document.fullscreenElement) document.exitFullscreen(); if(lb.classList.contains('open')) closeLightbox(); }
-  });
-
-  // фулскрін
-  function toggleFull(){
-    const el=document.documentElement;
-    if(!document.fullscreenElement){ (el.requestFullscreenel.webkitRequestFullscreenel.msRequestFullscreen||el.mozRequestFullScreen).call(el); }
-    else { (document.exitFullscreendocument.webkitExitFullscreendocument.msExitFullscreen).call(document); }
-  }
-  fullBtn.addEventListener('click',toggleFull);
-
-  // лайтбокс
-  function openLightbox(){ lb.classList.add('open'); lbImg.src = images[idx]; }
-  function closeLightbox(){ lb.classList.remove('open'); }
-  stage.addEventListener('click', (e)=>{ if(e.target===view) openLightbox(); });
-  lbClose.addEventListener('click',closeLightbox);
-  lbPrev.addEventListener('click',()=>{ prev(); lbImg.src=images[idx]; });
-  lbNext.addEventListener('click',()=>{ next(); lbImg.src=images[idx]; });
-
-  // передзагрузка першої порції
-  const preload = images.slice(0,6);
-  let loaded=0;
-  function done(){ loaded++; if(loaded>=Math.min(preload.length, images.length)){ show(); play(); } }
-  preload.forEach(src=>{ const im=new Image(); im.onload=done; im.onerror=done; im.src=src; });
-
-  // якщо фото менше 6 — все одно стартуємо
-  if(images.length===0){ cap.textContent='Фото тимчасово недоступні'; }
+    show(0);
   </script>
 </body>
 </html>
