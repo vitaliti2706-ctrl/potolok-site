@@ -1,53 +1,63 @@
-// api/telegram-submit.js
+// Папка: /api
+// Файл: telegram-submit.js
+// CommonJS-варіант без "export", щоб не було помилки "Unexpected token 'export'"
+
+const send = (res, code, payload) => {
+  res.statusCode = code;
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.end(JSON.stringify(payload));
+};
+
 module.exports = async (req, res) => {
   try {
+    // лише POST
     if (req.method !== 'POST') {
-      res.status(405).json({ ok: false, error: 'Method not allowed' });
-      return;
+      res.setHeader('Allow', 'POST');
+      return send(res, 405, { ok: false, error: 'Method Not Allowed' });
     }
 
-    const b = req.body || {};
-    const name = b.name || '';
-    const phone = b.phone || '';
-    const message = b.message || '';
-    const source = b.source || '';
+    // іноді Vercel уже парсить body, іноді ні — підтримуємо обидва варіанти
+    const raw = req.body ?? (await new Promise((resolve) => {
+      let data = '';
+      req.on('data', (c) => (data += c));
+      req.on('end', () => resolve(data));
+    }));
+    const b = typeof raw === 'string' && raw.length ? JSON.parse(raw) : raw || {};
+
+    const name    = (b.name || '').toString().trim();
+    const phone   = (b.phone || '').toString().trim();
+    const message = (b.message || '').toString();
+    const source  = (b.source || '').toString();
 
     if (!name || !phone) {
-      res.status(400).json({ ok: false, error: 'Missing name or phone' });
-      return;
+      return send(res, 400, { ok: false, error: 'Missing name or phone' });
     }
 
-    const TOKEN  = process.env.TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_TOKEN;
-    const CHATID = process.env.TELEGRAM_CHAT_ID   || process.env.CHAT_ID;
+    const TOKEN  = process.env.TELEGRAM_BOT_TOKEN;
+    const CHATID = process.env.TELEGRAM_CHAT_ID;
     if (!TOKEN || !CHATID) {
-      res.status(500).json({ ok: false, error: 'Missing Telegram env vars' });
-      return;
+      return send(res, 500, { ok: false, error: 'Bot credentials are not set' });
     }
 
-    const lines = [
+    const text = [
       '✉️ Нова заявка з сайту',
-      '👤 Імʼя: ' + name,
-      '📞 Телефон: ' + phone,
-      message ? '📝 Повідомлення: ' + message : null,
-      source  ? '🌐 Сторінка: ' + source : null
-    ].filter(Boolean);
+      👤 Імʼя: ${name},
+      📞 Телефон: ${phone},
+      📝 Повідомлення: ${message || '-'},
+      🌐 Сторінка: ${source || '-'}
+    ].join('\n');
 
-    const text = lines.join('\n');
-
-    const r = await fetch('https://api.telegram.org/bot' + TOKEN + '/sendMessage', {
+    const tg = await fetch(https://api.telegram.org/bot${TOKEN}/sendMessage, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CHATID, text: text })
+      body: JSON.stringify({ chat_id: CHATID, text })
     });
 
-    if (!r.ok) {
-      const t = await r.text();
-      throw new Error('Telegram error: ' + t);
-    }
+    const bodyText = await tg.text();
+    if (!tg.ok) return send(res, 502, { ok: false, error: bodyText });
 
-    res.status(200).json({ ok: true });
+    return send(res, 200, { ok: true });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ ok: false, error: String(err) });
+    return send(res, 500, { ok: false, error: String(err) });
   }
 };
