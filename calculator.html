@@ -32,7 +32,7 @@
   <div class="wrap">
     <h1>Калькулятор вартості</h1>
     <p class="note">База: <b>400 грн/м²</b> (ПВХ-багет) • Алюмінієвий багет: <b>450 грн/м²</b>.<br>
-    При замовленні понад <b>50 м²</b> — знижка <b>10%</b>. Мінімальне замовлення — <b>5000 грн</b>. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.</p>
+      При замовленні понад <b>50 м²</b> — знижка <b>10%</b>. Мінімальне замовлення — <b>5000 грн</b>. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.</p>
 
     <div class="grid">
       <div class="card">
@@ -125,7 +125,6 @@
     </div>
   </div>
 
-  <!-- Форма-заявка (плаваюча, простий prompt) -->
   <script>
     const UAH = n => new Intl.NumberFormat('uk-UA').format(Math.round(n));
     const els = id => document.getElementById(id);
@@ -135,17 +134,17 @@
       const perim      = +els('perimeter').value || 0;
       const baseType   = els('baseType').value;
 
-      const basePrice = baseType === 'al' ? 450 : 400; // м²
-      const shadow    = (+els('shadowLen').value || 0) * 150;
-      const floating  = (+els('floatLen').value  || 0) * 550;
-      const cornice   = (+els('corniceLen').value|| 0) * 1000;
-      const decor     = (+els('decorLen').value  || 0) * 40;
+      const basePrice = baseType === 'al' ? 450 : 400; // грн/м²
+      const shadow    = (+els('shadowLen').value  || 0) * 150;
+      const floating  = (+els('floatLen').value   || 0) * 550;
+      const cornice   = (+els('corniceLen').value || 0) * 1000;
+      const decor     = (+els('decorLen').value   || 0) * 40;
 
-      const spots     = (+els('spots').value      || 0) * 150;
-      const chand     = (+els('chandeliers').value|| 0) * 400;
-      const tracks    = (+els('tracksLen').value  || 0) * 300;
-      const vents     = (+els('vents').value      || 0) * 1000;
-      const cable     = (+els('cableLen').value   || 0) * 30;
+      const spots     = (+els('spots').value       || 0) * 150;
+      const chand     = (+els('chandeliers').value || 0) * 400;
+      const tracks    = (+els('tracksLen').value   || 0) * 300;
+      const vents     = (+els('vents').value       || 0) * 1000;
+      const cable     = (+els('cableLen').value    || 0) * 30;
 
       const base      = area * basePrice;
       const byMeter   = shadow + floating + cornice + decor + tracks + cable;
@@ -154,7 +153,7 @@
       let subtotal    = base + byMeter + byPieces;
 
       // ручна знижка/націнка
-      const adjPct    = +els('adjPct').value || 0;
+      const adjPct = +els('adjPct').value || 0;
       if (adjPct !== 0) subtotal *= (100 + adjPct) / 100;
 
       // авто-знижка за площу
@@ -182,16 +181,16 @@
       els('minNote').innerText = total === MIN
         ? 'Застосовано мінімальне замовлення 5000 грн. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.'
         : '';
-return { total, area, perim, basePrice };
-    }
 
-    function openOrder() {
+      return { total, area, perim, basePrice };
+    }
+function openOrder() {
       const { total } = compute();
       const name  = prompt('Вкажіть ваше ім’я:');
       if (!name) return;
       const phone = prompt('Ваш телефон (+380…):');
       if (!phone) return;
-      const message = prompt('Коментар (необовʼязково):') || '';
+      const message = prompt('Коментар\n(необовʼязково):') || '';
 
       fetch('/api/telegram-submit', {
         method: 'POST',
@@ -202,12 +201,12 @@ return { total, area, perim, basePrice };
           source: location.pathname
         })
       })
-      .then(r => r.ok ? r.json() : r.text().then(t=>Promise.reject(t)))
-      .then(() => alert('Дякуємо! Заявку надіслано, ми зв’яжемось з вами.'))
-      .catch(err => {
-        console.error(err);
-        alert('Не вдалось надіслати. Спробуйте ще раз або напишіть у Telegram.');
-      });
+        .then(r => r.ok ? r.json() : r.text().then(t => Promise.reject(t)))
+        .then(() => alert('Дякуємо! Заявку надіслано, ми зв’яжемось з вами.'))
+        .catch(err => {
+          console.error(err);
+          alert('Не вдалось надіслати. Спробуйте ще раз або напишіть у Telegram.');
+        });
     }
 
     // init
@@ -217,7 +216,7 @@ return { total, area, perim, basePrice };
 
     ['input','change'].forEach(ev=>{
       document.querySelectorAll('input,select').forEach(el=>{
-        el.addEventListener(ev,()=>{ /* live preview */ compute(); });
+        el.addEventListener(ev,()=>{ compute(); });
       });
     });
   </script>
