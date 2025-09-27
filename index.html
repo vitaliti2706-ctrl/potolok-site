@@ -1,53 +1,201 @@
 <!doctype html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Potolok.kh – Натяжні стелі</title>
-  <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif; background:#0f172a; color:#e2e8f0; margin:0; }
-    .wrap { max-width:980px; margin:32px auto; padding:16px; }
-    h1 { margin:0 0 16px; font-size:32px; }
-    .btn { display:inline-block; cursor:pointer; border:0; border-radius:12px; padding:14px 24px; font-weight:600; text-decoration:none; }
-    .btn-primary { background:#16a34a; color:#fff; }
-    .cta { text-align:center; margin:40px 0; }
-    .footer { margin-top:40px; padding:16px; background:#0b1220; border-radius:12px; border:1px solid #22304b; text-align:center; font-size:14px; opacity:.8; }
-    /* Simple top nav (same style family) */
-    .topnav { background:#111827; border-bottom:1px solid #1f2937; }
-    .topnav .inner { max-width:980px; margin:0 auto; padding:10px 16px; display:flex; gap:8px; flex-wrap:wrap; }
-    .navlink { padding:10px 14px; border-radius:10px; text-decoration:none; color:#e2e8f0; background:#0b1220; border:1px solid #253046; }
-    .navlink:hover { background:#0f172a; }
-    .navlink.active { background:#16a34a; border-color:#16a34a; color:#fff; }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Potolok.kh — Натяжні стелі у Харкові</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Монтаж натяжних стель у Харкові: класичні, тіньові, парящі, трек-системи, підсвітка. Гарантія та чіткі терміни.">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-61EMVPPMDT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-61EMVPPMDT');
+</script>
+
+
+<style>
+/* === Callback button & modal (polished) === */
+.callback-btn-primary{
+  background:#16a34a; color:#fff !important;
+  padding:8px 14px; margin-right:10px;
+  border-radius:8px; font-weight:600;
+  text-decoration:none; display:inline-block;
+  line-height:1; transition:background .2s ease;
+}
+.callback-btn-primary:hover{ background:#15803d; }
+.callback-btn-primary:focus{ outline:2px solid rgba(22,163,74,.35); outline-offset:2px; }
+
+.callback-modal{ position:fixed; inset:0; background:rgba(0,0,0,.5);
+  display:flex; align-items:center; justify-content:center; z-index:9999; }
+.callback-card{ background:#fff; padding:25px 20px; border-radius:12px;
+  box-shadow:0 8px 30px rgba(0,0,0,.2); width:min(420px,92vw); position:relative; }
+.close-btn{ position:absolute; top:10px; right:14px; font-size:22px;
+  border:none; background:transparent; cursor:pointer; }
+#callbackForm label{ display:block; margin:10px 0 4px; font-weight:600; }
+#callbackForm input{ width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; }
+#callbackForm .submit-btn{ margin-top:14px; width:100%; padding:12px; border:0; border-radius:8px;
+  font-size:16px; background:#16a34a; color:#fff; cursor:pointer; font-weight:600; }
+#callbackForm .submit-btn:hover{ background:#15803d; }
+.status{ min-height:20px; margin-top:10px; font-size:14px; }
+.status.ok{ color:#16a34a; } .status.err{ color:#dc2626; }
+</style>
+
+
+<style>
+/* Floating CTA on mobile */
+@media (max-width: 768px){
+  .callback-fab{
+    position: fixed; right: 14px; bottom: 18px;
+    background:#16a34a; color:#fff; border:0;
+    border-radius: 999px; padding: 14px 18px;
+    font-weight:700; box-shadow:0 8px 24px rgba(0,0,0,.25);
+    z-index: 10000; text-decoration:none;
+  }
+  .callback-fab:hover{ background:#15803d; }
+}
+</style>
+
 </head>
 <body>
-  <div class="topnav">
-    <div class="inner">
-      <a class="navlink active" href="/">Головна</a>
-      <a class="navlink" href="/gallery.html">Галерея</a>
-      <a class="navlink" href="/price.html">Прайс</a>
-      <a class="navlink" href="/calculator.html">Калькулятор</a>
-      <a class="navlink" href="/reviews.html">Відгуки</a>
-    </div>
+<div class="nav-inline"><a class="btn" href="gallery.html">Наші роботи</a></div>
+
+  
+<nav class="nav">
+  <div class="row container">
+    <div class="brand">Potolok.kh</div>
+    <div class="links"><a href="index.html" class="active">Головна</a><a href="gallery.html" class="">Галерея</a><a href="price.html" class="">Прайс</a><a href="calculator.html" class="">Калькулятор</a><a href="reviews.html" class="">Відгуки</a></div>
   </div>
+</nav>
 
-  <div class="wrap">
-    <h1>Натяжні стелі Potolok.kh</h1>
-    <p>Якісний монтаж, сучасні матеріали, гарантія та індивідуальний підхід.</p>
+  <main class="container hero">
+    <section class="panel">
+      <h1>Натяжні стелі під ключ</h1>
+      <p>Класичні, тіньові, парящі, з трек‑системами, підсвіткою та точковими світильниками. Швидко, акуратно, з гарантією.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+        <a class="cta" href="calculator.html">💡 Розрахувати вартість</a>
+        <a class="btn-secondary" href="galereya.html">📷 Дивитись галерею</a>
+      </div>
+    </section>
 
-    <div class="cta">
-      <a class="btn btn-primary" href="https://t.me/PotolokKhBot" target="_blank" rel="noopener">Залишити заявку</a>
-    </div>
+    <section class="grid">
+      <div class="card">
+        <div class="pad">
+          <h3>Чому ми?</h3>
+          <ul class="list">
+            <li>Власний монтаж — без посередників</li>
+            <li>Якісні матеріали (MSD Premium тощо)</li>
+            <li>Акуратний демонтаж та прибирання</li>
+            <li>Гарантія та підтримка після робіт</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="pad">
+          <h3>Послуги</h3>
+          <ul class="list">
+            <li>Класичні натяжні стелі</li>
+            <li>Тіньовий профіль, парящі лінії</li>
+            <li>Трек‑системи, ніші під штори</li>
+            <li>Електрика: треки, точкові, підсвітка</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="pad">
+          <h3>Контакти</h3>
+          <p class="small">Тел.: 097‑454‑67‑13 (Viber / Telegram)</p>
+          <p class="small">Сайт: potolok-kharkov.netlify.app</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">© 2025 Potolok.kh • Харків • Монтаж натяжних стель</footer>
 
-    <h2>Наші переваги</h2>
-    <ul>
-      <li>Монтаж «під ключ»</li>
-      <li>Доступні ціни</li>
-      <li>Гарантія якості</li>
-      <li>Індивідуальні рішення</li>
-    </ul>
+<script>(function(){
+  const openBtn=document.getElementById('openCallback');
+  const modal=document.getElementById('callbackModal');
+  const closeBtn=document.getElementById('closeCallback');
+  const form=document.getElementById('callbackForm');
+  const phone=document.getElementById('cbPhone');
+  const status=document.getElementById('cbStatus');
+  const honeypot=document.getElementById('cbCompany');
+  if(openBtn&&modal){openBtn.addEventListener('click',e=>{e.preventDefault();modal.style.display='flex';});}
+  if(closeBtn){closeBtn.addEventListener('click',()=>{modal.style.display='none';status.textContent='';status.className='status';});}
+  if(modal){modal.addEventListener('click',e=>{if(e.target===modal){modal.style.display='none';status.textContent='';status.className='status';}});}
+  if(phone){phone.addEventListener('input',()=>{let v=phone.value.replace(/[^\d+]/g,'');if(!v.startsWith('+')) v='+38'+v.replace(/^\+/,'');phone.value=v;});}
+  <script>(function(){
+  const openBtn=document.getElementById('openCallback');
+  const modal=document.getElementById('callbackModal');
+  const closeBtn=document.getElementById('closeCallback');
+  const form=document.getElementById('callbackForm');
+  const phone=document.getElementById('cbPhone');
+  const status=document.getElementById('cbStatus');
+  const honeypot=document.getElementById('cbCompany');
 
-    <div class="footer">© 2025 Potolok.kh — Натяжні стелі. Пн–Сб, 09:00–18:00.</div>
-  </div>
-</body>
-</html>
+  if(openBtn&&modal){
+    openBtn.addEventListener('click',e=>{
+      e.preventDefault();
+      modal.style.display='block';
+    });
+  }
+
+  if(closeBtn){
+    closeBtn.addEventListener('click',()=>{
+      modal.style.display='none';
+    });
+  }
+
+  if(modal){
+    modal.addEventListener('click',e=>{
+      if(e.target===modal) modal.style.display='none';
+    });
+  }
+
+  if(phone){
+    phone.addEventListener('input',()=>{
+      let v=phone.value.replace(/[^0-9\+]/g,'');
+      phone.value=v;
+    });
+  }
+
+  // обработка отправки формы
+  if(form){
+    form.addEventListener('submit', async e=>{
+      e.preventDefault();
+      status.textContent = "Відправка...";
+      status.className = "status sending";
+
+      if(honeypot.value){return;}
+
+      const formData = {
+        name: document.getElementById('cbName').value,
+        phone: document.getElementById('cbPhone').value,
+        message: "Заявка з сайту"
+      };
+
+      try {
+        const res = await fetch("/api/telegram-submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await res.json();
+
+        if(data.ok){
+          status.textContent = "✅ Заявку відправлено!";
+          form.reset();
+        } else {
+          status.textContent = "❌ Помилка: " + (data.error || "невідома");
+        }
+      } catch (err) {
+        console.error(err);
+        status.textContent = "⚠️ Сервер недоступний";
+      }
+    });
+  }
+})();</script>
