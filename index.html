@@ -3,42 +3,51 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Index</title>
+  <title>Potolok.kh – Натяжні стелі</title>
   <style>
-    body{font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:0}
-    header,footer{background:#111827;padding:14px;text-align:center}
-    nav a{color:#e2e8f0;margin:0 10px;text-decoration:none;font-weight:bold}
-    .wrap{max-width:960px;margin:20px auto;padding:20px}
-    .btn{display:inline-block;padding:10px 16px;border-radius:8px;font-weight:bold;margin:5px}
-    .btn-primary{background:#16a34a;color:#fff}
-    .btn-secondary{background:#334155;color:#e2e8f0}
-    .muted{opacity:.8;font-size:14px}
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif; background:#0f172a; color:#e2e8f0; margin:0; }
+    .wrap { max-width:980px; margin:32px auto; padding:16px; }
+    h1 { margin:0 0 16px; font-size:32px; }
+    .btn { display:inline-block; cursor:pointer; border:0; border-radius:12px; padding:14px 24px; font-weight:600; text-decoration:none; }
+    .btn-primary { background:#16a34a; color:#fff; }
+    .cta { text-align:center; margin:40px 0; }
+    .footer { margin-top:40px; padding:16px; background:#0b1220; border-radius:12px; border:1px solid #22304b; text-align:center; font-size:14px; opacity:.8; }
+    /* Simple top nav (same style family) */
+    .topnav { background:#111827; border-bottom:1px solid #1f2937; }
+    .topnav .inner { max-width:980px; margin:0 auto; padding:10px 16px; display:flex; gap:8px; flex-wrap:wrap; }
+    .navlink { padding:10px 14px; border-radius:10px; text-decoration:none; color:#e2e8f0; background:#0b1220; border:1px solid #253046; }
+    .navlink:hover { background:#0f172a; }
+    .navlink.active { background:#16a34a; border-color:#16a34a; color:#fff; }
   </style>
 </head>
 <body>
-<header>
-  <nav>
-    <a href="index.html">Головна</a>
-    <a href="gallery.html">Галерея</a>
-    <a href="price.html">Прайс</a>
-    <a href="calculator.html">Калькулятор</a>
-    <a href="reviews.html">Відгуки</a>
-  </nav>
-</header>
-<div class="wrap">
-<h1>Ласкаво просимо в Potolok.kh</h1><p>Натяжні стелі преміум якості у Харкові.</p>
-</div>
-<footer>
-  <div class="flex">
-    <a class="btn btn-primary inline" href="tel:+380974546713">Подзвонити зараз</a>
-    <a class="btn btn-secondary inline"
-       href="https://t.me/PotolokKhBot" target="_blank" rel="noopener">Telegram</a>
-    <a class="btn btn-secondary inline"
-       href="viber://chat?number=%2B380974546713">Viber</a>
-    <a class="btn btn-secondary inline"
-       href="https://wa.me/380974546713" target="_blank" rel="noopener">WhatsApp</a>
+  <div class="topnav">
+    <div class="inner">
+      <a class="navlink active" href="/">Головна</a>
+      <a class="navlink" href="/gallery.html">Галерея</a>
+      <a class="navlink" href="/price.html">Прайс</a>
+      <a class="navlink" href="/calculator.html">Калькулятор</a>
+      <a class="navlink" href="/reviews.html">Відгуки</a>
+    </div>
   </div>
-  <p class="muted">Графік роботи: Пн–Сб, 09:00–18:00.</p>
-</footer>
+
+  <div class="wrap">
+    <h1>Натяжні стелі Potolok.kh</h1>
+    <p>Якісний монтаж, сучасні матеріали, гарантія та індивідуальний підхід.</p>
+
+    <div class="cta">
+      <a class="btn btn-primary" href="https://t.me/PotolokKhBot" target="_blank" rel="noopener">Залишити заявку</a>
+    </div>
+
+    <h2>Наші переваги</h2>
+    <ul>
+      <li>Монтаж «під ключ»</li>
+      <li>Доступні ціни</li>
+      <li>Гарантія якості</li>
+      <li>Індивідуальні рішення</li>
+    </ul>
+
+    <div class="footer">© 2025 Potolok.kh — Натяжні стелі. Пн–Сб, 09:00–18:00.</div>
+  </div>
 </body>
 </html>
