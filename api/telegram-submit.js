@@ -6,11 +6,11 @@ export default async function handler(req, res) {
   try {
     const { name = "", phone = "", message = "" } = req.body || {};
 
-    const text = 📩 Нова заявка з сайту
+    const text = `📩 Нова заявка з сайту
 👤 Ім'я: ${name}
 📞 Телефон: ${phone}
 ✏️ Повідомлення: ${message}
-🌐 Сторінка: ${req.headers.referer || "невідомо"};
+🌐 Сторінка: ${req.headers.referer || "невідомо"}`;
 
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ ok: false, error: "Missing TELEGRAM_* env vars" });
     }
 
-    const tgResp = await fetch(https://api.telegram.org/bot${token}/sendMessage, {
+    const tgResp = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" }),
@@ -32,10 +32,16 @@ export default async function handler(req, res) {
 
     let data;
     try { data = JSON.parse(raw); }
-    catch { return res.status(500).json({ ok: false, error: "TG non-JSON", raw, http: tgResp.status }); }
+    catch { 
+      return res.status(500).json({ ok: false, error: "TG non-JSON", raw, http: tgResp.status }); 
+    }
 
     if (!tgResp.ok || !data.ok) {
-      return res.status(500).json({ ok: false, error: data?.description || Telegram HTTP ${tgResp.status}, data });
+      return res.status(500).json({ 
+        ok: false, 
+        error: data?.description || `Telegram HTTP ${tgResp.status}`, 
+        data 
+      });
     }
 
     return res.status(200).json({ ok: true });
