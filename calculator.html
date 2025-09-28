@@ -229,48 +229,27 @@ function compute(){
       }catch(e){
         console.error(e);
         alert('Не вдалось надіслати. Спробуйте ще раз або напишіть у Telegram.');
-      }
     }
-
-    function bindLive(){
-  compute(); // одразу перший перерахунок при завантаженні
-  $('#calcBtn').addEventListener('click', compute);
-  $('#orderBtn').addEventListener('click', openOrder);
-
-  var nodes = document.querySelectorAll('input,select');
-  for (var i = 0; i < nodes.length; i++) {
-    nodes[i].addEventListener('input', compute);
-    nodes[i].addEventListener('change', compute);
-  }
 }
+</script>
 
-// чекаємо готовності DOM і підключаємо bindLive
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', bindLive);
-} else {
-  bindLive();
-}
-  </script>
-<script>let PR = null; // тут збережемо всі ціни з prices.json
+
+let PR = null; // тут збережемо всі ціни з prices.json
+
 async function loadPrices() {
-  const resp = await fetch('prices.json');
-  const prices = await resp.json();
-  console.log("Ціни завантажені:", prices);
-  return prices;
+    const resp = await fetch('prices.json');
+    const prices = await resp.json();
+    console.log("Ціни завантажені:", prices);
+    return prices;
 }
 
-async function initCalculator(){
-  PR = await loadPrices(); // зчитали з prices.json і зберегли глобально
-  compute();               // одразу перший перерахунок
-}
-initCalculator();
-
- 
-
-  // тут ми підключимо логіку калькулятора
+async function initCalculator() {
+    PR = await loadPrices(); // зчитали з prices.json і зберегли глобально
+    compute(); // одразу перший перерахунок
 }
 
 initCalculator();
 </script>
+
 </body>
 </html>
