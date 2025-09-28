@@ -245,7 +245,7 @@
     if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', bindLive); }
     else { bindLive(); }
   </script>
-<script>
+<script>let PR = null; // тут збережемо всі ціни з prices.json
 async function loadPrices() {
   const resp = await fetch('prices.json');
   const prices = await resp.json();
@@ -253,11 +253,13 @@ async function loadPrices() {
   return prices;
 }
 
-async function initCalculator() {
-  const prices = await loadPrices();
+async function initCalculator(){
+  PR = await loadPrices(); // зчитали з prices.json і зберегли глобально
+  compute();               // одразу перший перерахунок
+}
+initCalculator();
 
-  // приклад: як дістати ціну базового ПВХ
-  console.log("ПВХ:", prices.base.pvc);
+ 
 
   // тут ми підключимо логіку калькулятора
 }
