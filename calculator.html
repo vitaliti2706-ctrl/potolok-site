@@ -1,292 +1,249 @@
-<script>
-// ===== Helpers =====
-function num(v){ var n = +v; return isFinite(n) ? n : 0; }
-function UAH(n){ return new Intl.NumberFormat('uk-UA').format(Math.round(n)); }
-function $(id){ return document.getElementById(id); }
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Калькулятор натяжних стель</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0}
+    .wrap{max-width:980px;margin:32px auto;padding:16px}
+    h1{margin:0 0 8px}
+    .note{opacity:.85;margin:0 0 16px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+    .card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:14px}
+    label{display:block;font-size:13px;margin-bottom:6px;opacity:.9}
+    input,select{width:100%;box-sizing:border-box;background:#0b1220;border:1px solid #253046;border-radius:10px;padding:10px;color:#e5e7eb}
+    input[type="number"]{appearance:textfield}
+    .row{display:flex;gap:8px}
+    .btn{cursor:pointer;border:0;border-radius:12px;padding:12px 16px;font-weight:600}
+    .btn-primary{background:#16a34a;color:#fff}
+    .btn-secondary{background:#334155;color:#e2e8f0}
+    .sum{font-size:28px;font-weight:800;margin:6px 0}
+    .muted{opacity:.8}
+    .hr{height:1px;background:#22304b;margin:14px 0}
+    .flex{display:flex;gap:10px;flex-wrap:wrap}
+    .footer{margin-top:22px;padding:14px;background:#0b1220;border-radius:12px;border:1px solid #22304b}
+    .inline{display:inline-block}
+    /* Top nav (same style as index) */
+    .topnav { background:#111827; border-bottom:1px solid #1f2937; }
+    .topnav .inner { max-width:980px; margin:0 auto; padding:10px 16px; display:flex; gap:8px; flex-wrap:wrap; }
+    .navlink { padding:10px 14px; border-radius:10px; text-decoration:none; color:#e2e8f0; background:#0b1220; border:1px solid #253046; }
+    .navlink:hover { background:#0f172a; }
+    .navlink.active { background:#16a34a; border-color:#16a34a; color:#fff; }
+  </style>
+</head>
+<body>
+  <!-- NAV DUPLICATE -->
+  <div class="topnav">
+    <div class="inner">
+      <a class="navlink" href="/">Головна</a>
+      <a class="navlink" href="/gallery.html">Галерея</a>
+      <a class="navlink" href="/price.html">Прайс</a>
+      <a class="navlink active" href="/calculator.html">Калькулятор</a>
+      <a class="navlink" href="/reviews.html">Відгуки</a>
+    </div>
+  </div>
 
-// ===== Глобальні ціни з JSON =====
-let PR = null;
+  <div class="wrap">
+    <h1>Калькулятор вартості</h1>
+    <p class="note">
+      База: <b>400 грн/м²</b> (ПВХ-багет) • Алюмінієвий багет: <b>450 грн/м²</b>.<br />
+      При замовленні понад <b>50 м²</b> — знижка <b>10%</b>. Мінімальне замовлення — <b>5000 грн</b>. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.
+    </p>
 
-async function loadPrices(){
-  const resp   = await fetch('prices.json');
-  const prices = await resp.json();
-  console.log('Ціни завантажені:', prices);
-  return prices;
-}
+    <div class="grid">
+      <div class="card">
+        <h3>Площа та тип</h3>
+        <label>Площа, м²</label>
+        <input id="area" type="number" min="0" step="0.1" value="20" />
+        <label style="margin-top:10px">Периметр, м.пог (для довідки)</label>
+        <input id="perimeter" type="number" min="0" step="0.1" value="18" />
+        <label style="margin-top:10px">Тип багета</label>
+        <select id="baseType">
+          <option value="pvc">ПВХ (400 грн/м²)</option>
+          <option value="al">Алюмінієвий (450 грн/м²)</option>
+        </select>
+      </div>
 
-// ===== Основний перерахунок =====
-function compute(){
-  // читання полів
-  var area     = num($('area').value);
-  var baseType = $('baseType').value;            // 'pvc' | 'al'
+      <div class="card">
+        <h3>Профілі</h3>
+        <div class="row">
+          <div style="flex:1">
+            <label>Тіньовий профіль, м.пог (150 грн/м)</label>
+            <input id="shadowLen" type="number" min="0" step="0.1" value="0" />
+          </div>
+          <div style="flex:1">
+            <label>Парящий профіль, м.пог (550 грн/м)</label>
+            <input id="floatLen" type="number" min="0" step="0.1" value="0" />
+          </div>
+        </div>
 
-  // перевірка: чи завантажені ціни
-  if (!PR){
-    console.warn('Ціни ще не завантажені');
-    $('total').innerText   = '0 грн';
-    $('explain').innerText = '';
-    $('minNote').innerText = '';
-    return { total:0, area:area, basePrice:0 };
-  }
+        <label style="margin-top:10px">Карниз під штору, м.пог (1000 грн/м)</label>
+        <input id="corniceLen" type="number" min="0" step="0.1" value="0" />
 
-  // база з JSON
-  var basePrice = (baseType === 'al') ? PR.base.aluminium : PR.base.pvc;
+        <label style="margin-top:10px">Декоративна вставка, м.пог (40 грн/м)</label>
+        <input id="decorLen" type="number" min="0" step="0.1" value="0" />
+      </div>
 
-  // за метри з JSON
-  var shadow   = num($('shadowLen').value)   * PR.perMeter.shadow.price;
-  var floating = num($('floatLen').value)    * PR.perMeter.floating.price;
-  var cornice  = num($('corniceLen').value)  * PR.perMeter.cornice.price;
-  var decor    = num($('decorLen').value)    * PR.perMeter.decor.price;
-  var tracks   = num($('tracksLen').value)   * PR.perMeter.tracks.price;
-  var cable    = num($('cableLen').value)    * PR.perMeter.cable.price;
+      <div class="card">
+        <h3>Електрика / точки</h3>
+        <div class="row">
+          <div style="flex:1">
+            <label>Точкові світильники, шт (150 грн/шт)</label>
+            <input id="spots" type="number" min="0" step="1" value="0" />
+          </div>
+          <div style="flex:1">
+            <label>Люстри, шт (400 грн/шт)</label>
+            <input id="chandeliers" type="number" min="0" step="1" value="0" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <div style="flex:1">
+            <label>Накладні треки, м.пог (300 грн/м)</label>
+            <input id="tracksLen" type="number" min="0" step="0.1" value="0" />
+          </div>
+          <div style="flex:1">
+            <label>Магнітна витяжка, шт (1000 грн/шт)</label>
+            <input id="vents" type="number" min="0" step="1" value="0" />
+          </div>
+        </div>
 
-  // по штуках з JSON
-  var spots = num($('spots').value)          * PR.perPiece.spots.price;
-  var chand = num($('chandeliers').value)    * PR.perPiece.chandeliers.price;
-  var vents = num($('vents').value)          * PR.perPiece.vents.price;
+        <label style="margin-top:10px">Прокладка кабелю, м.пог (30 грн/м)</label>
+        <input id="cableLen" type="number" min="0" step="0.1" value="0" />
+      </div>
 
-  // підсумки
-  var base     = area * basePrice;
-  var byMeter  = shadow + floating + cornice + decor + tracks + cable;
-  var byPieces = spots + chand + vents;
-  var subtotal = base + byMeter + byPieces;
+      <div class="card">
+        <h3>Знижка / націнка</h3>
+        <label>Вкажіть, % (мінус = знижка, плюс = націнка)</label>
+        <input id="adjPct" type="number" step="1" value="0" />
+        <p class="muted">Автоматично застосовується знижка 10%, якщо площа &gt; 50 м².</p>
 
-  // ручна націнка/знижка (%)
-  var adjPct = num($('adjPct').value);
-  if (adjPct !== 0) subtotal = subtotal * (100 + adjPct) / 100;
+        <div class="hr"></div>
+        <button id="calcBtn" class="btn btn-primary">Перерахувати</button>
+        <button id="orderBtn" class="btn btn-secondary">Залишити заявку</button>
+      </div>
+    </div>
 
-  // авто-знижка за великі площі
-  var autoDiscApplied = false;
-  if (area > PR.rules.discountThresholdM2){
-    subtotal *= (100 - PR.rules.discountPercent) / 100;
-    autoDiscApplied = true;
-  }
+    <div class="card" style="margin-top:12px">
+      <h3>Результат</h3>
+      <div id="explain" class="muted"></div>
+      <div class="sum" id="total">0 грн</div>
+      <div class="muted" id="minNote"></div>
+    </div>
 
-  // мінімальне замовлення
-  var MIN   = PR.rules.minOrderUAH;
-  var total = Math.max(MIN, Math.round(subtotal));
+    <div class="footer">
+  <div class="flex">
+    <a class="btn btn-primary inline" href="tel:+380974546713">Подзвонити зараз</a>
 
-  // пояснення
-  var parts = [
-    'База: ' + area + ' м² × ' + basePrice + ' = ' + UAH(base) + ' грн',
-    'Довжина/м.пог: ' + UAH(byMeter) + ' грн',
-    'Поштучно: ' + UAH(byPieces) + ' грн'
-  ];
-  if (adjPct){
-    parts.push((adjPct > 0 ? 'Націнка ' : 'Знижка ') + adjPct + '% застосована');
-  }
-  if (autoDiscApplied){
-    parts.push('Авто-знижка ' + PR.rules.discountPercent +
-               '% (площа > ' + PR.rules.discountThresholdM2 + ' м²)');
-  }
+    <!-- Telegram в веб/приложение без ошибок -->
+    <a class="btn btn-secondary inline"
+       href="https://t.me/PotolokKhBot"
+       target="_blank" rel="noopener">
+      Залишити заявку в Telegram
+    </a>
 
-  $('explain').innerText = parts.join(' · ');
-  $('total').innerText   = UAH(total) + ' грн';
-  $('minNote').innerText = (total === MIN)
-    ? 'Застосовано мінімальне замовлення ' + MIN + ' грн. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.'
-    : '';
+    <!-- Viber -->
+    <a class="btn btn-secondary inline"
+       href="viber://chat?number=%2B380974546713">
+      Viber
+    </a>
 
-  return { total: total, area: area, basePrice: basePrice };
-}
+    <!-- WhatsApp -->
+    <a class="btn btn-secondary inline"
+       href="https://wa.me/380974546713"
+       target="_blank" rel="noopener">
+      WhatsApp
+    </a>
+  </div>
 
-// ===== Надіслати заявку =====
-async function openOrder(){
-  try{
-    var data  = compute();
-    var name  = prompt("Вкажіть ваше ім'я:");
-    if (!name) return;
-    var phone = prompt("Ваш телефон (+380…):");
-    if (!phone) return;
-    var note  = prompt("Коментар (необов'язково):") || '';
+  <p class="muted" style="margin-top:8px">Графік роботи: Пн–Сб, 09:00–18:00.</p>
+</div>
 
-    var payload = {
-      name, phone,
-      message: 'Замовлення з калькулятора. Сума: ' + data.total + ' грн. ' + note
-    };
+  <script>
+    function num(v){ var n = +v; return isFinite(n) ? n : 0; }
+    function UAH(n){ return new Intl.NumberFormat('uk-UA').format(Math.round(n)); }
+    function $(id){ return document.getElementById(id); }
 
-    var resp = await fetch('/api/telegram-submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    if (!resp.ok){
-      var t = await resp.text();
-      throw new Error('HTTP ' + resp.status + ': ' + t);
+    function compute(){
+      var area     = num($('area').value);
+      var baseType = $('baseType').value;
+
+      var basePrice = (baseType === 'al') ? 450 : 400;
+
+      var shadow   = num($('shadowLen').value)  * 150;
+      var floating = num($('floatLen').value)   * 550;
+      var cornice  = num($('corniceLen').value) * 1000;
+      var decor    = num($('decorLen').value)   * 40;
+
+      var spots    = num($('spots').value)       * 150;
+      var chand    = num($('chandeliers').value) * 400;
+      var tracks   = num($('tracksLen').value)   * 300;
+      var vents    = num($('vents').value)       * 1000;
+      var cable    = num($('cableLen').value)    * 30;
+
+      var base     = area * basePrice;
+      var byMeter  = shadow + floating + cornice + decor + tracks + cable;
+      var byPieces = spots + chand + vents;
+
+      var subtotal = base + byMeter + byPieces;
+
+      var adjPct = num($('adjPct').value);
+      if (adjPct !== 0) subtotal = subtotal * (100 + adjPct) / 100;
+
+      var autoDiscApplied = false;
+      if (area > 50){ subtotal = subtotal * 0.9; autoDiscApplied = true; }
+
+      var MIN = 5000;
+      var total = Math.max(MIN, Math.round(subtotal));
+
+      var parts = [
+        'База: ' + area + ' м² × ' + basePrice + ' = ' + UAH(base) + ' грн',
+        'Довжина/м.пог: ' + UAH(byMeter) + ' грн',
+        'Поштучно: ' + UAH(byPieces) + ' грн'
+      ];
+      if (adjPct){ parts.push((adjPct > 0 ? 'Націнка ' : 'Знижка ') + adjPct + '% застосована'); }
+      if (autoDiscApplied){ parts.push('Авто-знижка 10% (площа > 50 м²)'); }
+
+      $('explain').innerText = parts.join(' · ');
+      $('total').innerText   = UAH(total) + ' грн';
+      $('minNote').innerText = (total === MIN)
+        ? 'Застосовано мінімальне замовлення 5000 грн. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.'
+        : '';
+
+      return { total: total, area: area, basePrice: basePrice };
     }
-    alert('Дякуємо! Заявку надіслано, ми зв\'яжемось з вами.');
-  }catch(e){
-    console.error(e);
-    alert('Не вдалося надіслати. Спробуйте ще раз або напишіть у Telegram.');
-  }
-}
-// ===== Прив’язка подій та старт =====
-function bindLive(){
-  // перший перерахунок після завантаження цін викликаємо окремо в initCalculator
-  $('calcBtn')  && $('calcBtn').addEventListener('click', compute);
-  $('orderBtn') && $('orderBtn').addEventListener('click', openOrder);
 
-  var nodes = document.querySelectorAll('input,select');
-  for (var i=0; i<nodes.length; i++){
-    nodes[i].addEventListener('input', compute);
-    nodes[i].addEventListener('change', compute);
-  }
-}
+    async function openOrder(){
+      var data  = compute();
+      var name  = prompt('Вкажіть ваше ім\'я:');
+      if (!name) return;
+      var phone = prompt('Ваш телефон (+380…):');
+      if (!phone) return;
+      var note  = prompt('Коментар (необов\'язково):') || '';
 
-async function initCalculator(){
-  PR = await loadPrices();
-  bindLive();
-  compute();
-}
-
-if (document.readyState === 'loading'){
-  document.addEventListener('DOMContentLoaded', initCalculator);
-}else{
-  initCalculator();
-}
-</script>
-<script>
-// ===== Helpers =====
-function num(v){ var n = +v; return isFinite(n) ? n : 0; }
-function UAH(n){ return new Intl.NumberFormat('uk-UA').format(Math.round(n)); }
-function $(id){ return document.getElementById(id); }
-
-// ===== Глобальні ціни з JSON =====
-let PR = null;
-
-async function loadPrices(){
-  const resp   = await fetch('prices.json');
-  const prices = await resp.json();
-  console.log('Ціни завантажені:', prices);
-  return prices;
-}
-
-// ===== Основний перерахунок =====
-function compute(){
-  // читання полів
-  var area     = num($('area').value);
-  var baseType = $('baseType').value;            // 'pvc' | 'al'
-
-  // перевірка: чи завантажені ціни
-  if (!PR){
-    console.warn('Ціни ще не завантажені');
-    $('total').innerText   = '0 грн';
-    $('explain').innerText = '';
-    $('minNote').innerText = '';
-    return { total:0, area:area, basePrice:0 };
-  }
-
-  // база з JSON
-  var basePrice = (baseType === 'al') ? PR.base.aluminium : PR.base.pvc;
-
-  // за метри з JSON
-  var shadow   = num($('shadowLen').value)   * PR.perMeter.shadow.price;
-  var floating = num($('floatLen').value)    * PR.perMeter.floating.price;
-  var cornice  = num($('corniceLen').value)  * PR.perMeter.cornice.price;
-  var decor    = num($('decorLen').value)    * PR.perMeter.decor.price;
-  var tracks   = num($('tracksLen').value)   * PR.perMeter.tracks.price;
-  var cable    = num($('cableLen').value)    * PR.perMeter.cable.price;
-
-  // по штуках з JSON
-  var spots = num($('spots').value)          * PR.perPiece.spots.price;
-  var chand = num($('chandeliers').value)    * PR.perPiece.chandeliers.price;
-  var vents = num($('vents').value)          * PR.perPiece.vents.price;
-
-  // підсумки
-  var base     = area * basePrice;
-  var byMeter  = shadow + floating + cornice + decor + tracks + cable;
-  var byPieces = spots + chand + vents;
-  var subtotal = base + byMeter + byPieces;
-
-  // ручна націнка/знижка (%)
-  var adjPct = num($('adjPct').value);
-  if (adjPct !== 0) subtotal = subtotal * (100 + adjPct) / 100;
-
-  // авто-знижка за великі площі
-  var autoDiscApplied = false;
-  if (area > PR.rules.discountThresholdM2){
-    subtotal *= (100 - PR.rules.discountPercent) / 100;
-    autoDiscApplied = true;
-  }
-
-  // мінімальне замовлення
-  var MIN   = PR.rules.minOrderUAH;
-  var total = Math.max(MIN, Math.round(subtotal));
-
-  // пояснення
-  var parts = [
-    'База: ' + area + ' м² × ' + basePrice + ' = ' + UAH(base) + ' грн',
-    'Довжина/м.пог: ' + UAH(byMeter) + ' грн',
-    'Поштучно: ' + UAH(byPieces) + ' грн'
-  ];
-  if (adjPct){
-    parts.push((adjPct > 0 ? 'Націнка ' : 'Знижка ') + adjPct + '% застосована');
-  }
-  if (autoDiscApplied){
-    parts.push('Авто-знижка ' + PR.rules.discountPercent +
-               '% (площа > ' + PR.rules.discountThresholdM2 + ' м²)');
-  }
-
-  $('explain').innerText = parts.join(' · ');
-  $('total').innerText   = UAH(total) + ' грн';
-  $('minNote').innerText = (total === MIN)
-    ? 'Застосовано мінімальне замовлення ' + MIN + ' грн. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.'
-    : '';
-
-  return { total: total, area: area, basePrice: basePrice };
-}
-
-// ===== Надіслати заявку =====
-async function openOrder(){
-  try{
-    var data  = compute();
-    var name  = prompt("Вкажіть ваше ім'я:");
-    if (!name) return;
-    var phone = prompt("Ваш телефон (+380…):");
-    if (!phone) return;
-    var note  = prompt("Коментар (необов'язково):") || '';
-
-    var payload = {
-      name, phone,
-      message: 'Замовлення з калькулятора. Сума: ' + data.total + ' грн. ' + note
-    };
-
-    var resp = await fetch('/api/telegram-submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    if (!resp.ok){
-      var t = await resp.text();
-      throw new Error('HTTP ' + resp.status + ': ' + t);
+      try{
+        var payload = { name: name, phone: phone, message: 'Замовлення з калькулятора. Сума: ' + data.total + ' грн. ' + note, source: location.pathname };
+        var resp = await fetch('/api/telegram-submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        if (!resp.ok){ var t = await resp.text(); throw new Error(t || ('HTTP ' + resp.status)); }
+        alert('Дякуємо! Заявку надіслано, ми зв’яжемось з вами.');
+      }catch(e){
+        console.error(e);
+        alert('Не вдалось надіслати. Спробуйте ще раз або напишіть у Telegram.');
+      }
     }
-    alert('Дякуємо! Заявку надіслано, ми зв\'яжемось з вами.');
-  }catch(e){
-    console.error(e);
-    alert('Не вдалося надіслати. Спробуйте ще раз або напишіть у Telegram.');
-  }
-}
-// ===== Прив’язка подій та старт =====
-function bindLive(){
-  // перший перерахунок після завантаження цін викликаємо окремо в initCalculator
-  $('calcBtn')  && $('calcBtn').addEventListener('click', compute);
-  $('orderBtn') && $('orderBtn').addEventListener('click', openOrder);
 
-  var nodes = document.querySelectorAll('input,select');
-  for (var i=0; i<nodes.length; i++){
-    nodes[i].addEventListener('input', compute);
-    nodes[i].addEventListener('change', compute);
-  }
-}
-
-async function initCalculator(){
-  PR = await loadPrices();
-  bindLive();
-  compute();
-}
-
-if (document.readyState === 'loading'){
-  document.addEventListener('DOMContentLoaded', initCalculator);
-}else{
-  initCalculator();
-}
-</script>
+    function bindLive(){
+      compute();
+      $('calcBtn').addEventListener('click', compute);
+      $('orderBtn').addEventListener('click', openOrder);
+      var nodes = document.querySelectorAll('input,select');
+      for (var i=0;i<nodes.length;i++){
+        nodes[i].addEventListener('input', compute);
+        nodes[i].addEventListener('change', compute);
+      }
+    }
+    if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', bindLive); }
+    else { bindLive(); }
+  </script>
+</body>
+</html>
