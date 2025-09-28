@@ -233,17 +233,23 @@
     }
 
     function bindLive(){
-      compute();
-      $('calcBtn').addEventListener('click', compute);
-      $('orderBtn').addEventListener('click', openOrder);
-      var nodes = document.querySelectorAll('input,select');
-      for (var i=0;i<nodes.length;i++){
-        nodes[i].addEventListener('input', compute);
-        nodes[i].addEventListener('change', compute);
-      }
-    }
-    if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', bindLive); }
-    else { bindLive(); }
+  compute(); // одразу перший перерахунок при завантаженні
+  $('#calcBtn').addEventListener('click', compute);
+  $('#orderBtn').addEventListener('click', openOrder);
+
+  var nodes = document.querySelectorAll('input,select');
+  for (var i = 0; i < nodes.length; i++) {
+    nodes[i].addEventListener('input', compute);
+    nodes[i].addEventListener('change', compute);
+  }
+}
+
+// чекаємо готовності DOM і підключаємо bindLive
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindLive);
+} else {
+  bindLive();
+}
   </script>
 <script>let PR = null; // тут збережемо всі ціни з prices.json
 async function loadPrices() {
