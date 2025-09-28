@@ -1,0 +1,24 @@
+{
+  "base": {
+    "pvc": 400,
+    "aluminium": 450
+  },
+  "perMeter": {
+    "shadow": { "label": "Тіньовий профіль", "price": 150 },
+    "floating": { "label": "Парящий профіль", "price": 550 },
+    "cornice": { "label": "Карниз під штору", "price": 1000 },
+    "decor": { "label": "Декоративна вставка", "price": 40 },
+    "tracks": { "label": "Накладні треки", "price": 300 },
+    "cable": { "label": "Прокладка кабелю", "price": 30 }
+  },
+  "perPiece": {
+    "spots": { "label": "Точкові світильники", "price": 150 },
+    "chandeliers": { "label": "Люстри", "price": 400 },
+    "vents": { "label": "Магнітна витяжка", "price": 1000 }
+  },
+  "rules": {
+    "discountThresholdM2": 50,
+    "discountPercent": 10,
+    "minOrderUAH": 5000
+  }
+}
