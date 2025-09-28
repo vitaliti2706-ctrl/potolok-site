@@ -245,5 +245,24 @@
     if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', bindLive); }
     else { bindLive(); }
   </script>
+<script>
+async function loadPrices() {
+  const resp = await fetch('prices.json');
+  const prices = await resp.json();
+  console.log("Ціни завантажені:", prices);
+  return prices;
+}
+
+async function initCalculator() {
+  const prices = await loadPrices();
+
+  // приклад: як дістати ціну базового ПВХ
+  console.log("ПВХ:", prices.base.pvc);
+
+  // тут ми підключимо логіку калькулятора
+}
+
+initCalculator();
+</script>
 </body>
 </html>
