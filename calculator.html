@@ -164,62 +164,62 @@
     function UAH(n){ return new Intl.NumberFormat('uk-UA').format(Math.round(n)); }
     function $(id){ return document.getElementById(id); }
 
-    function compute(){
-      var area     = num($('area').value);
-      var baseType = $('baseType').value;
+function compute(){ 
+  var area     = num($('area').value); 
+  var baseType = $('baseType').value; 
 
-      var basePrice = (baseType === 'al') ? 450 : 400;
+  // беремо ціни з JSON (PR)
+  var basePrice = (baseType === 'al') ? PR.base.aluminium : PR.base.pvc; 
 
-      var shadow   = num($('shadowLen').value)  * 150;
-      var floating = num($('floatLen').value)   * 550;
-      var cornice  = num($('corniceLen').value) * 1000;
-      var decor    = num($('decorLen').value)   * 40;
+  var shadow   = num($('shadowLen').value)  * PR.perMeter.shadow.price; 
+  var floating = num($('floatLen').value)   * PR.perMeter.floating.price; 
+  var cornice  = num($('corniceLen').value) * PR.perMeter.cornice.price; 
+  var decor    = num($('decorLen').value)   * PR.perMeter.decor.price; 
 
-      var spots    = num($('spots').value)       * 150;
-      var chand    = num($('chandeliers').value) * 400;
-      var tracks   = num($('tracksLen').value)   * 300;
-      var vents    = num($('vents').value)       * 1000;
-      var cable    = num($('cableLen').value)    * 30;
+  var spots    = num($('spots').value)       * PR.perPiece.spots.price; 
+  var chand    = num($('chandeliers').value) * PR.perPiece.chandeliers.price; 
+  var tracks   = num($('tracksLen').value)   * PR.perMeter.tracks.price; 
+  var vents    = num($('vents').value)       * PR.perPiece.vents.price; 
+  var cable    = num($('cableLen').value)    * PR.perMeter.cable.price; 
 
-      var base     = area * basePrice;
-      var byMeter  = shadow + floating + cornice + decor + tracks + cable;
-      var byPieces = spots + chand + vents;
+  var base     = area * basePrice; 
+  var byMeter  = shadow + floating + cornice + decor + tracks + cable; 
+  var byPieces = spots + chand + vents; 
 
-      var subtotal = base + byMeter + byPieces;
+  var subtotal = base + byMeter + byPieces; 
 
-      var adjPct = num($('adjPct').value);
-      if (adjPct !== 0) subtotal = subtotal * (100 + adjPct) / 100;
+  var adjPct = num($('adjPct').value); 
+  if (adjPct !== 0) subtotal = subtotal * (100 + adjPct) / 100; 
 
-      var autoDiscApplied = false;
-      if (area > 50){ subtotal = subtotal * 0.9; autoDiscApplied = true; }
+  var autoDiscApplied = false; 
+  if (area > PR.rules.discountThresholdM2){ 
+    subtotal = subtotal * (100 - PR.rules.discountPercent) / 100; 
+    autoDiscApplied = true; 
+  } 
 
-      var MIN = 5000;
-      var total = Math.max(MIN, Math.round(subtotal));
+  var MIN = PR.rules.minOrderUAH; 
+  var total = Math.max(MIN, Math.round(subtotal)); 
 
-      var parts = [
-        'База: ' + area + ' м² × ' + basePrice + ' = ' + UAH(base) + ' грн',
-        'Довжина/м.пог: ' + UAH(byMeter) + ' грн',
-        'Поштучно: ' + UAH(byPieces) + ' грн'
-      ];
-      if (adjPct){ parts.push((adjPct > 0 ? 'Націнка ' : 'Знижка ') + adjPct + '% застосована'); }
-      if (autoDiscApplied){ parts.push('Авто-знижка 10% (площа > 50 м²)'); }
+  var parts = [ 
+    'База: ' + area + ' м² × ' + basePrice + ' = ' + UAH(base) + ' грн', 
+    'Довжина/м.пог: ' + UAH(byMeter) + ' грн', 
+    'Поштучно: ' + UAH(byPieces) + ' грн' 
+  ]; 
+  if (adjPct){ 
+    parts.push((adjPct > 0 ? 'Націнка ' : 'Знижка ') + adjPct + '% застосована'); 
+  } 
+  if (autoDiscApplied){ 
+    parts.push('Авто-знижка ' + PR.rules.discountPercent + '% (площа > ' + PR.rules.discountThresholdM2 + ' м²)'); 
+  } 
 
-      $('explain').innerText = parts.join(' · ');
-      $('total').innerText   = UAH(total) + ' грн';
-      $('minNote').innerText = (total === MIN)
-        ? 'Застосовано мінімальне замовлення 5000 грн. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.'
-        : '';
+  $('explain').innerText = parts.join(' · '); 
+  $('total').innerText   = UAH(total) + ' грн'; 
+  $('minNote').innerText = (total === MIN) 
+    ? 'Застосовано мінімальне замовлення ' + MIN + ' грн. Санвузли та ванні при окремому монтажі рахуються за мінімальним замовленням.' 
+    : ''; 
 
-      return { total: total, area: area, basePrice: basePrice };
-    }
-
-    async function openOrder(){
-      var data  = compute();
-      var name  = prompt('Вкажіть ваше ім\'я:');
-      if (!name) return;
-      var phone = prompt('Ваш телефон (+380…):');
-      if (!phone) return;
-      var note  = prompt('Коментар (необов\'язково):') || '';
+  return { total: total, area: area, basePrice: basePrice }; 
+}
 
       try{
         var payload = { name: name, phone: phone, message: 'Замовлення з калькулятора. Сума: ' + data.total + ' грн. ' + note, source: location.pathname };
