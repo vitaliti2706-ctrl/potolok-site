@@ -16,8 +16,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ ok: false, error: 'Missing name or phone' });
     }
 
-    // env з Vercel
-    const TOKEN  = process.env.TELEGRAM_BOT_TOKEN;
+    // env із Vercel
+    const TOKEN   = process.env.TELEGRAM_BOT_TOKEN;
     const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
     if (!TOKEN || !CHAT_ID) {
       return res.status(500).json({ ok: false, error: 'Missing TELEGRAM_* env vars' });
@@ -26,37 +26,32 @@ export default async function handler(req, res) {
     // 🕓 Дата і час
     const now = new Date();
     const formattedDate = now.toLocaleDateString('uk-UA', {
-      day: '2-digit', month: '2-digit', year: 'numeric'
+      day: '2-digit', month: '2-digit', year: 'numeric',
     });
     const formattedTime = now.toLocaleTimeString('uk-UA', {
-      hour: '2-digit', minute: '2-digit', second: '2-digit'
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
     });
 
     // 📩 Тіло повідомлення
-const lines = [
-  '📩 <b>Нова заявка з калькулятора</b>',
-  `👤 Ім'я: <b>${escapeHtml(name)}</b>`,
-  `📞 Телефон: <b>${escapeHtml(phone)}</b>`,
-  message ? `📝 Повідомлення: ${escapeHtml(message)}` : null,
-  `🗓 Дата: <b>${formattedDate}</b>`,
-  `🕒 Час: <b>${formattedTime}</b>`,
-].filter(Boolean);
+    const lines = [
+      📩 <b>Нова заявка з калькулятора</b>,
+      👤 Ім'я: <b>${escapeHtml(name)}</b>,
+      📞 Телефон: <b>${escapeHtml(phone)}</b>,
+      message ? 📝 Повідомлення: ${escapeHtml(message)} : null,
+      🗓 Дата: <b>${formattedDate}</b>,
+      🕒 Час: <b>${formattedTime}</b>,
+    ].filter(Boolean);
 
-const text = lines.join('\n');
+    const text = lines.join('\n');
 
-const tgResp = await fetch(https://api.telegram.org/bot${TOKEN}/sendMessage, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: 'HTML' }),
-});
-
-const text = lines.join('\n');
-
-    const tgResp = await fetch(https://api.telegram.org/bot${TOKEN}/sendMessage, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: 'HTML' }),
-    });
+    const tgResp = await fetch(
+      https://api.telegram.org/bot${TOKEN}/sendMessage,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: 'HTML' }),
+      }
+    );
 
     if (!tgResp.ok) {
       const t = await tgResp.text().catch(() => '');
