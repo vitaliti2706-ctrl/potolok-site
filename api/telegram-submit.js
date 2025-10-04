@@ -1,6 +1,6 @@
 // /api/telegram-submit.js
 export default async function handler(req, res) {
-  // CORS (не завадить)
+  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -16,38 +16,34 @@ export default async function handler(req, res) {
       return res.status(400).json({ ok: false, error: 'Missing name or phone' });
     }
 
-    // ⬇️ назва змінної як у Vercel
+    // env з Vercel
     const TOKEN  = process.env.TELEGRAM_BOT_TOKEN;
     const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-
     if (!TOKEN || !CHAT_ID) {
       return res.status(500).json({ ok: false, error: 'Missing TELEGRAM_* env vars' });
     }
 
-    // 🕓 Дата і час відправки
-const now = new Date();
-const formattedDate = now.toLocaleDateString('uk-UA', {
-  day: '2-digit', month: '2-digit', year: 'numeric'
-});
-const formattedTime = now.toLocaleTimeString('uk-UA', {
-  hour: '2-digit', minute: '2-digit', second: '2-digit'
-});
+    // 🕓 Дата і час
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString('uk-UA', {
+      day: '2-digit', month: '2-digit', year: 'numeric'
+    });
+    const formattedTime = now.toLocaleTimeString('uk-UA', {
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
 
-// 📩 Текст повідомлення для Telegram
-const lines = [
-  '📩 <b>Нова заявка з калькулятора</b>',
-  👤 Ім'я: <b>${escapeHtml(name)}</b>,
-  📞 Телефон: <b>${escapeHtml(phone)}</b>,
-  message ? 📝 Повідомлення: ${escapeHtml(message)} : null,
-  🗓 Дата: <b>${formattedDate}</b>,
-  🕒 Час: <b>${formattedTime}</b>,
-].filter(Boolean);
-
-const text = lines.join('\n');
-
+    // 📩 Тіло повідомлення
+    const lines = [
+      '📩 <b>Нова заявка з калькулятора</b>',
+      👤 Ім'я: <b>${escapeHtml(name)}</b>,
+      📞 Телефон: <b>${escapeHtml(phone)}</b>,
+      message ? 📝 Повідомлення: ${escapeHtml(message)} : null,
+      🗓 Дата: <b>${formattedDate}</b>,
+      🕒 Час: <b>${formattedTime}</b>,
+    ].filter(Boolean);
     const text = lines.join('\n');
 
-    const tgResp = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+    const tgResp = await fetch(https://api.telegram.org/bot${TOKEN}/sendMessage, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: 'HTML' }),
@@ -64,6 +60,7 @@ const text = lines.join('\n');
   }
 }
 
+// Екранер
 function escapeHtml(s = '') {
   return String(s)
     .replace(/&/g, '&amp;')
