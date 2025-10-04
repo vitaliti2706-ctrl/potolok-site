@@ -229,5 +229,37 @@
     });
   })();
   </script>
+<script>
+(function () {
+  const SHEETS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxyw2D96qoon3m_BPSl7WuAA015zWPX5WhtZwLJxie3Wn7YHB7nvz4qjl9r-kyoJAlk/exec';
+
+  const form = document.querySelector('form[name="reviews"]');
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
+
+    try {
+      const resp = await fetch(SHEETS_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await resp.json().catch(() => ({}));
+      if (resp.ok && data.result === 'success') {
+        console.log('Відгук успішно збережено в таблиці');
+      } else {
+        console.error('Помилка збереження в таблицю', data);
+      }
+    } catch (err) {
+      console.error('Помилка мережі', err);
+    }
+  });
+})();
+</script>
 </body>
 </html>
