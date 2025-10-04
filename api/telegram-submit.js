@@ -33,15 +33,16 @@ export default async function handler(req, res) {
     });
 
     // 📩 Тіло повідомлення
-    const lines = [
-      '📩 <b>Нова заявка з калькулятора</b>',
-      👤 Ім'я: <b>${escapeHtml(name)}</b>,
-      📞 Телефон: <b>${escapeHtml(phone)}</b>,
-      message ? 📝 Повідомлення: ${escapeHtml(message)} : null,
-      🗓 Дата: <b>${formattedDate}</b>,
-      🕒 Час: <b>${formattedTime}</b>,
-    ].filter(Boolean);
-    const text = lines.join('\n');
+const lines = [
+  '📩 <b>Нова заявка з калькулятора</b>',
+  '👤 Ім'я: <b>${escapeHtml(name)}</b>',
+  '📞 Телефон: <b>${escapeHtml(phone)}</b>',
+  message ? '📝 Повідомлення: ${escapeHtml(message)}' : null,
+  '🗓 Дата: <b>${formattedDate}</b>',
+  '🕒 Час: <b>${formattedTime}</b>',
+].filter(Boolean);
+
+const text = lines.join('\n');
 
     const tgResp = await fetch(https://api.telegram.org/bot${TOKEN}/sendMessage, {
       method: 'POST',
