@@ -225,7 +225,7 @@
         var payload = { name: name, phone: phone, message: 'Замовлення з калькулятора. Сума: ' + data.total + ' грн. ' + note, source: location.pathname };
         var resp = await fetch('/api/telegram-submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!resp.ok){ var t = await resp.text(); throw new Error(t || ('HTTP ' + resp.status)); }
-        alert('Дякуємо! Заявку надіслано, ми зв’яжемось з вами.');
+        alert('✅ Дякуємо!\nВаша заявка успішно відправлена 📨\nМи зв’яжемося з вами протягом 10–15 хвилин ⏳');
       }catch(e){
         console.error(e);
         alert('Не вдалось надіслати. Спробуйте ще раз або напишіть у Telegram.');
