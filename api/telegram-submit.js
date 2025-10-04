@@ -24,12 +24,26 @@ export default async function handler(req, res) {
       return res.status(500).json({ ok: false, error: 'Missing TELEGRAM_* env vars' });
     }
 
-    const lines = [
-      '<b>Нова заявка з калькулятора</b>',
-      `Ім'я: <b>${escapeHtml(name)}</b>`,
-      `Телефон: <b>${escapeHtml(phone)}</b>`,
-      message ? escapeHtml(message) : null,
-    ].filter(Boolean);
+    // 🕓 Дата і час відправки
+const now = new Date();
+const formattedDate = now.toLocaleDateString('uk-UA', {
+  day: '2-digit', month: '2-digit', year: 'numeric'
+});
+const formattedTime = now.toLocaleTimeString('uk-UA', {
+  hour: '2-digit', minute: '2-digit', second: '2-digit'
+});
+
+// 📩 Текст повідомлення для Telegram
+const lines = [
+  '📩 <b>Нова заявка з калькулятора</b>',
+  👤 Ім'я: <b>${escapeHtml(name)}</b>,
+  📞 Телефон: <b>${escapeHtml(phone)}</b>,
+  message ? 📝 Повідомлення: ${escapeHtml(message)} : null,
+  🗓 Дата: <b>${formattedDate}</b>,
+  🕒 Час: <b>${formattedTime}</b>,
+].filter(Boolean);
+
+const text = lines.join('\n');
 
     const text = lines.join('\n');
 
