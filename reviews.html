@@ -83,22 +83,33 @@
       </div></div>
     </div>
 
-    <h3 style="margin-top:16px">Залишити відгук</h3>
-    <form name="reviews" method="POST" data-netlify="true" class="card">
-      <div class="pad">
-        <input type="hidden" name="form-name" value="reviews">
-        <div class="row">
-          <div><label>Ім’я</label><input class="input" type="text" name="name" required></div>
-          <div><label>Телефон</label><input class="input" type="tel" name="phone"></div>
-        </div>
-        <div style="margin-top:10px">
-          <label>Відгук</label>
-          <textarea class="input" name="message" rows="4" required></textarea>
-        </div>
-        <div style="margin-top:12px"><button class="btn" type="submit">Надіслати</button></div>
-        <p class="small" style="margin-top:6px">Форма підтримує Netlify Forms — відгуки будуть збиратися в адмінці Netlify.</p>
+   <h3 style="margin-top:16px">Залишити відгук</h3>
+
+<form id="reviewForm" class="card">
+  <div class="pad">
+    <div class="row">
+      <div>
+        <label>Ім’я</label>
+        <input class="input" type="text" name="name" id="rvName" placeholder="Ваше ім’я">
       </div>
-    </form>
+      <div>
+        <label>Телефон</label>
+        <input class="input" type="tel" name="phone" id="rvPhone" placeholder="+380XXXXXXXXX">
+      </div>
+    </div>
+
+    <div style="margin-top:10px">
+      <label>Відгук</label>
+      <textarea class="input" name="message" id="rvMsg" rows="4" required placeholder="Ваші враження…"></textarea>
+    </div>
+
+    <div style="margin-top:12px">
+      <button class="btn" type="submit">Надіслати</button>
+    </div>
+
+    <p id="rvStatus" class="small" style="margin-top:6px"></p>
+  </div>
+</form>
   </main>
   <footer class="footer">© 2025 Potolok.kh • Харків • Монтаж натяжних стель</footer>
 
@@ -161,5 +172,62 @@
 })();
 </script>
 
+<!-- інші скрипти, якщо є -->
+  
+  <script>
+  (function () {
+    const form   = document.getElementById('reviewForm');
+    const status = document.getElementById('rvStatus');
+    const nameEl = document.getElementById('rvName');
+    const phoneEl= document.getElementById('rvPhone');
+    const msgEl  = document.getElementById('rvMsg');
+
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.textContent = 'Відправляємо...';
+      status.style.color = '';
+
+      const name = (nameEl.value || '').trim();
+      const phone= (phoneEl.value || '').trim();
+      const msg  = (msgEl.value || '').trim();
+
+      if (!msg) {
+        status.textContent = 'Напишіть відгук.';
+        status.style.color = '#dc2626';
+        return;
+      }
+
+      try {
+        const payload = {
+          name,
+          phone,
+          message: 'Відгук зі сторінки reviews: ' + msg
+        };
+
+        const resp = await fetch('/api/telegram-submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await resp.json().catch(() => ({}));
+
+        if (resp.ok && data.ok) {
+          status.textContent = 'Дякуємо! Відгук надіслано.';
+          status.style.color = '#16a34a';
+          form.reset();
+        } else {
+          status.textContent = 'Не вдалось надіслати. Спробуйте ще раз.';
+          status.style.color = '#dc2626';
+        }
+      } catch (err) {
+        status.textContent = 'Помилка мережі. Спробуйте пізніше.';
+        status.style.color = '#dc2626';
+      }
+    });
+  })();
+  </script>
 </body>
 </html>
