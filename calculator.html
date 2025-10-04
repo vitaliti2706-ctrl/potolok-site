@@ -223,7 +223,7 @@
 
       try{
         var payload = { name: name, phone: phone, message: 'Замовлення з калькулятора. Сума: ' + data.total + ' грн. ' + note, source: location.pathname };
-        var resp = await fetch('https://potolok.in.ua/api/telegram-submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        var resp = await fetch('https://potolok-site.versel.app/api/telegram-submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!resp.ok){ var t = await resp.text(); throw new Error(t || ('HTTP ' + resp.status)); }
         alert('Дякуємо! Заявку надіслано, ми зв’яжемось з вами.');
       }catch(e){
