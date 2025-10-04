@@ -16,46 +16,45 @@ export default async function handler(req, res) {
       return res.status(400).json({ ok: false, error: 'Missing name or phone' });
     }
 
-    // env із Vercel
-    const TOKEN   = process.env.TELEGRAM_BOT_TOKEN;
+    // env з Vercel
+    const TOKEN  = process.env.TELEGRAM_BOT_TOKEN;
     const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
     if (!TOKEN || !CHAT_ID) {
       return res.status(500).json({ ok: false, error: 'Missing TELEGRAM_* env vars' });
     }
 
-    // 🕓 Дата і час
+    // Дата і час (Київ)
     const now = new Date();
     const formattedDate = now.toLocaleDateString('uk-UA', {
       day: '2-digit', month: '2-digit', year: 'numeric',
+      timeZone: 'Europe/Kyiv',
     });
     const formattedTime = now.toLocaleTimeString('uk-UA', {
       hour: '2-digit', minute: '2-digit', second: '2-digit',
+      timeZone: 'Europe/Kyiv',
     });
 
-    // 📩 Тіло повідомлення
+    // Тіло повідомлення (кожен рядок у лапках!)
     const lines = [
-      📩 <b>Нова заявка з калькулятора</b>,
-      👤 Ім'я: <b>${escapeHtml(name)}</b>,
-      📞 Телефон: <b>${escapeHtml(phone)}</b>,
-      message ? 📝 Повідомлення: ${escapeHtml(message)} : null,
-      🗓 Дата: <b>${formattedDate}</b>,
-      🕒 Час: <b>${formattedTime}</b>,
+      '📩 <b>Нова заявка з калькулятора</b>',
+      `👤 Ім'я: <b>${escapeHtml(name)}</b>`,
+      `📞 Телефон: <b>${escapeHtml(phone)}</b>`,
+      message ? `📝 Повідомлення: ${escapeHtml(message)}` : null,
+      `🗓 Дата: <b>${formattedDate}</b>`,
+      `🕒 Час: <b>${formattedTime}</b>`,
     ].filter(Boolean);
 
     const text = lines.join('\n');
 
-    const tgResp = await fetch(
-      https://api.telegram.org/bot${TOKEN}/sendMessage,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: 'HTML' }),
-      }
-    );
+    const tgResp = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: 'HTML' }),
+    });
 
     if (!tgResp.ok) {
-      const t = await tgResp.text().catch(() => '');
-      return res.status(500).json({ ok: false, error: 'Telegram send failed', detail: t });
+      const detail = await tgResp.text().catch(() => '');
+      return res.status(500).json({ ok: false, error: 'Telegram send failed', detail });
     }
 
     return res.status(200).json({ ok: true });
@@ -64,7 +63,7 @@ export default async function handler(req, res) {
   }
 }
 
-// Екранер
+// Екранер HTML
 function escapeHtml(s = '') {
   return String(s)
     .replace(/&/g, '&amp;')
