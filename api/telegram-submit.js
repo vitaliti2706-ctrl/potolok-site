@@ -1,6 +1,6 @@
 // /api/telegram-submit.js
 export default async function handler(req, res) {
-  // не обов'язково, але хай буде
+  // CORS (не завадить)
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -16,13 +16,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ ok: false, error: 'Missing name or phone' });
     }
 
-    // 1) Варіант із env (рекомендовано на Vercel)
-    const TOKEN  = process.env.TELEGRAM_TOKEN;
+    // ⬇️ назва змінної як у Vercel
+    const TOKEN  = process.env.TELEGRAM_BOT_TOKEN;
     const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-
-    // 2) Тимчасовий fallback (заповни, якщо ще не додав env у Vercel)
-    // const TOKEN  = process.env.TELEGRAM_TOKEN || 'PASTE_YOUR_BOT_TOKEN';
-    // const CHAT_ID = process.env.TELEGRAM_CHAT_ID || 'PASTE_YOUR_CHAT_ID';
 
     if (!TOKEN || !CHAT_ID) {
       return res.status(500).json({ ok: false, error: 'Missing TELEGRAM_* env vars' });
@@ -54,7 +50,6 @@ export default async function handler(req, res) {
   }
 }
 
-// простий екранер
 function escapeHtml(s = '') {
   return String(s)
     .replace(/&/g, '&amp;')
