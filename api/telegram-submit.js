@@ -35,12 +35,20 @@ export default async function handler(req, res) {
     // 📩 Тіло повідомлення
 const lines = [
   '📩 <b>Нова заявка з калькулятора</b>',
-  '👤 Ім'я: <b>${escapeHtml(name)}</b>',
-  '📞 Телефон: <b>${escapeHtml(phone)}</b>',
-  message ? '📝 Повідомлення: ${escapeHtml(message)}' : null,
-  '🗓 Дата: <b>${formattedDate}</b>',
-  '🕒 Час: <b>${formattedTime}</b>',
+  `👤 Ім'я: <b>${escapeHtml(name)}</b>`,
+  `📞 Телефон: <b>${escapeHtml(phone)}</b>`,
+  message ? `📝 Повідомлення: ${escapeHtml(message)}` : null,
+  `🗓 Дата: <b>${formattedDate}</b>`,
+  `🕒 Час: <b>${formattedTime}</b>`,
 ].filter(Boolean);
+
+const text = lines.join('\n');
+
+const tgResp = await fetch(https://api.telegram.org/bot${TOKEN}/sendMessage, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: 'HTML' }),
+});
 
 const text = lines.join('\n');
 
