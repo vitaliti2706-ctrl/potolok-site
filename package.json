@@ -1,5 +1,14 @@
 {
   "name": "potolok-site",
   "version": "1.0.0",
-  "type": "module"
+  "description": "Potolok.kh — натяжні стелі у Харкові",
+  "main": "index.html",
+  "scripts": {
+    "start": "vercel dev",
+    "build": "echo 'Static site build'",
+    "test": "echo 'No tests specified'"
+  },
+  "dependencies": {
+    "telegraf": "^4.16.3"
+  }
 }
